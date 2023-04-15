@@ -24,3 +24,11 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:${PORT}`));
 
 /* End Running The Server */
+
+/* Start Handle The Routes */
+
+const usersRouter = require("./routes/users.router");
+
+app.use("/api/users", usersRouter);
+
+/* End Handle The Routes */
