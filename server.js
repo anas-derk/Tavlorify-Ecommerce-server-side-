@@ -11,7 +11,9 @@ const app = express();
 const cors = require("cors"),
     bodyParser = require("body-parser");
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://127.0.0.1:3000',
+}));
 
 app.use(bodyParser.json());
 
