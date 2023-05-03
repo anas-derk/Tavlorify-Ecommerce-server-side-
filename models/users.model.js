@@ -31,6 +31,7 @@ async function createNewUser(email, password, name) {
         // Check If Email Is Exist
         let user = await userModel.findOne({ email });
         if (user) {
+            await mongoose.disconnect();
             return "Sorry, Can't Insert Admin Data To Database Because it is Exist !!!";
         } else {
             // Encrypting The Password
@@ -64,12 +65,32 @@ async function login(email, password) {
         if (user) {
             // Check From Password
             let isTruePassword = await bcrypt.compare(password, user.password);
+            await mongoose.disconnect();
             if (isTruePassword) return user;
             else return "Sorry, The Password Entereted Is Not True !!"
         }
-        else return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
+        else {
+            mongoose.disconnect();
+            return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
+        }
     }
     catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
+async function getUserInfo(userId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        // Check If User Is Exist
+        let user = await userModel.findById(userId);
+        await mongoose.disconnect();
+        if (user) return user;
+        return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
+    } catch(err) {
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
@@ -79,4 +100,5 @@ async function login(email, password) {
 module.exports = {
     createNewUser,
     login,
+    getUserInfo,
 }

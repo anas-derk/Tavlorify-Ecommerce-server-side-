@@ -47,7 +47,20 @@ function login(req, res) {
     }
 }
 
+function getUserInfo(req, res) {
+    let userId = req.params.userId;
+    if (!userId) res.status(500).json("Sorry, Please Send User Id !!");
+    else {
+        const { getUserInfo } = require("../models/users.model");
+        getUserInfo(userId).then((user) => {
+            res.json(user);
+        })
+        .catch((err) => res.json(err));
+    }
+}
+
 module.exports = {
     createNewUser,
-    login
+    login,
+    getUserInfo,
 }
