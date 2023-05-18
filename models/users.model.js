@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
     email: String,
     password: String,
-    name: String
+    firstName: String,
+    lastName: String,
 });
 
 // Create User Model From User Schema
@@ -24,7 +25,7 @@ const bcrypt = require("bcryptjs");
 
 // Define Create New User Function
 
-async function createNewUser(email, password, name) {
+async function createNewUser(email, password, firstName, lastName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -32,7 +33,7 @@ async function createNewUser(email, password, name) {
         let user = await userModel.findOne({ email });
         if (user) {
             await mongoose.disconnect();
-            return "Sorry, Can't Insert Admin Data To Database Because it is Exist !!!";
+            return "Sorry, Can't Create User Because it is Exist !!!";
         } else {
             // Encrypting The Password
             let encrypted_password = await bcrypt.hash(password, 10);
@@ -40,7 +41,8 @@ async function createNewUser(email, password, name) {
             let newUser = new userModel({
                 email,
                 password: encrypted_password,
-                name
+                firstName,
+                lastName,
             });
             // Save The New User As Document In User Collection
             await newUser.save();
@@ -52,7 +54,7 @@ async function createNewUser(email, password, name) {
     catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error("Sorry, Something Went Wrong !!");
     }
 }
 
