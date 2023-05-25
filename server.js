@@ -29,11 +29,14 @@ app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:$
 
 /* Start Handle The Routes */
 
-const usersRouter = require("./routes/users.router"),
-        textToImageGenerateRouter = require("./routes/textToImageGenerate.router");
+const   usersRouter = require("./routes/users.router"),
+        textToImageGenerateRouter = require("./routes/textToImageGenerate.router"),
+        adminRouter = require("./routes/admin.router");
 
 app.use("/users", usersRouter);
 
 app.use("/text-to-image-generate", textToImageGenerateRouter);
+
+app.use("/admin", adminRouter);
 
 /* End Handle The Routes */
