@@ -6,6 +6,13 @@ function getCategoryData(req, res) {
     .catch((err) => req.status(500).json(err));
 }
 
+function getAllCategoriesData(req, res) {
+    const { getAllCategoriesData } = require("../models/categories.model");
+    getAllCategoriesData()
+    .then((result) => res.json(result))
+    .catch((err) => res.status(500).json(err));
+}
+
 function putCategoryData(req, res) {
 
 }
@@ -13,4 +20,5 @@ function putCategoryData(req, res) {
 module.exports = {
     getCategoryData,
     putCategoryData,
+    getAllCategoriesData,
 }
