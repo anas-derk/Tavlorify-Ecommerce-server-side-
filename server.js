@@ -19,6 +19,14 @@ require('dotenv').config();
 
 /* End Config The Server */
 
+/* Start direct the browser to statics files path */
+
+const path = require("path");
+
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+/* End direct the browser to statics files path */
+
 /* Start Running The Server */
 
 const PORT = process.env.PORT || 4000;
@@ -31,12 +39,15 @@ app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:$
 
 const   usersRouter = require("./routes/users.router"),
         textToImageGenerateRouter = require("./routes/textToImageGenerate.router"),
-        adminRouter = require("./routes/admin.router");
+        adminRouter = require("./routes/admin.router"),
+        categoriesRouter = require("./routes/categories.router");
 
 app.use("/users", usersRouter);
 
 app.use("/text-to-image-generate", textToImageGenerateRouter);
 
 app.use("/admin", adminRouter);
+
+app.use("/categories", categoriesRouter);
 
 /* End Handle The Routes */
