@@ -11,7 +11,7 @@ const adminSchema = mongoose.Schema({
 
 // Create User Model From User Schema
 
-const userModel = mongoose.model("admin", adminSchema);
+const adminModel = mongoose.model("admin", adminSchema);
 
 // Import Database URL
 
@@ -26,7 +26,7 @@ async function adminLogin(email, password) {
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let user = await adminSchema.findOne({ email });
+        let user = await adminModel.findOne({ email });
         if (user) {
             // Check From Password
             let isTruePassword = await bcrypt.compare(password, user.password);

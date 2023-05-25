@@ -9,6 +9,7 @@ function getAdminLogin(req, res) {
         if (isEmail(email)) {
             const { adminLogin } = require("../models/admin.model");
             adminLogin(email, password).then((user) => {
+                console.log(user);
                 res.json(user);
             })
                 .catch((err) => res.json(err));
