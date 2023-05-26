@@ -50,4 +50,6 @@ app.use("/admin", adminRouter);
 
 app.use("/categories", categoriesRouter);
 
+app.use("/styles", stylesRouter);
+
 /* End Handle The Routes */

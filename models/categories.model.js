@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const categorySchema = mongoose.Schema({
     imgSrc: String,
     name: String,
-    styles: Array,
 });
 
 // Create Category Model From User Schema

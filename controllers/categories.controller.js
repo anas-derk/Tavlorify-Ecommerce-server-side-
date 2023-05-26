@@ -13,19 +13,7 @@ function getAllCategoriesData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
-function putCategoryData(req, res) {
-    let categoryName = req.params.categoryName,
-        styleName = req.params.styleName;
-    let newPrompt = req.body.newPrompt,
-        newNegativePrompt = req.body.newNegativePrompt;
-    const { updateStyleData } = require("../models/categories.model");
-    updateStyleData(categoryName, styleName, newPrompt, newNegativePrompt)
-        .then((result) => res.json(result))
-        .catch((err) => res.status(500).json(err));
-}
-
 module.exports = {
     getCategoryData,
-    putCategoryData,
     getAllCategoriesData,
 }
