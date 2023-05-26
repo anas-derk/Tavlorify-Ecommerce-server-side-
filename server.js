@@ -40,7 +40,8 @@ app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:$
 const   usersRouter = require("./routes/users.router"),
         textToImageGenerateRouter = require("./routes/textToImageGenerate.router"),
         adminRouter = require("./routes/admin.router"),
-        categoriesRouter = require("./routes/categories.router");
+        categoriesRouter = require("./routes/categories.router"),
+        stylesRouter = require("./routes/styles.router");
 
 app.use("/users", usersRouter);
 
