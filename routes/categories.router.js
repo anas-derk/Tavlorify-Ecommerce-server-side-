@@ -6,6 +6,6 @@ categoriesRouter.get("/all-categories-data", categoriesController.getAllCategori
 
 categoriesRouter.get("/category-data", categoriesController.getCategoryData);
 
-categoriesRouter.get("/update-category-data/:categoryName", categoriesController.getCategoryData);
+categoriesRouter.put("/update-style-data/:categoryName/:styleName", categoriesController.putCategoryData);
 
 module.exports = categoriesRouter;

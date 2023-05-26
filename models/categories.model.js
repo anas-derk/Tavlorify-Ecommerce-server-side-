@@ -62,14 +62,16 @@ async function getCategoryData(categoryName) {
     }
 }
 
-async function updateStyleData(styleId, prompt, negative_prompt) {
+async function updateStyleData(categoryName, styleName, newPrompt, newNegativePrompt) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
         let categoryData = await categoryModel.updateOne({
+            name: categoryName,
+        }, {
             
-        }, {});
+        });
         if (categoryData) {
             await mongoose.disconnect();
             return categoryData;
