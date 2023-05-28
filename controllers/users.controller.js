@@ -28,6 +28,7 @@ function createNewUser(req, res) {
 function login(req, res) {
     let email = req.query.email.toLowerCase(),
         password = req.query.password;
+    console.log(email, password);
     // Start Handle Email Value To Check It Before Save In DB
     const { isEmail } = require("../global/functions");
     // Check If Email And Password Are Exist
@@ -35,8 +36,8 @@ function login(req, res) {
         // Check If Email Valid
         if (isEmail(email)) {
             const { login } = require("../models/users.model");
-            login(email, password).then((user) => {
-                res.json(user);
+            login(email, password).then((result) => {
+                res.json(result);
             })
                 .catch((err) => res.json(err));
         } else {

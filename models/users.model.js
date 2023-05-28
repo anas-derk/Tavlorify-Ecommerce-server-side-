@@ -69,11 +69,11 @@ async function login(email, password) {
             let isTruePassword = await bcrypt.compare(password, user.password);
             await mongoose.disconnect();
             if (isTruePassword) return user;
-            else return "Sorry, The Password Entereted Is Not True !!"
+            else return "Sorry, Email Or Password Incorrect !!";
         }
         else {
             mongoose.disconnect();
-            return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
+            return "Sorry, Email Or Password Incorrect !!";
         }
     }
     catch (err) {
