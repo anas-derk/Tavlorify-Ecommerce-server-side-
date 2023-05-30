@@ -63,10 +63,12 @@ function getUserInfo(req, res) {
 
 function putUserInfo(req, res) {
     let userId = req.params.userId;
-    if (!userId) res.status(500).json("Sorry, Please Send User Id !!");
+    let newUserData = req.body;
+    console.log(newUserData, userId);
+    if (!userId || !newUserData) res.status(500).json("Sorry, Please Send User Id !!");
     else {
         const { updateUserInfo } = require("../models/users.model");
-        updateUserInfo(userId).then((result) => {
+        updateUserInfo(userId, newUserData).then((result) => {
             res.json(result);
         })
         .catch((err) => res.json(err));

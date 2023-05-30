@@ -103,21 +103,21 @@ async function updateUserInfo(userId, newUserData) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
+        let encrypted_password = await bcrypt.hash(newUserData.password, 10);
         // Check If User Is Exist
-        let user = await userModel.updateOne({_id: userId }, {
+        await userModel.updateOne({ _id: userId }, {
             email: newUserData.email,
-            password: newUserData.password,
+            password: encrypted_password,
             firstName: newUserData.firstName,
             lastName: newUserData.lastName,
         });
-    console.log(user);
-    await mongoose.disconnect();
-    return "Update Process Successful ...";
-} catch (err) {
-    // Disconnect In DB
-    await mongoose.disconnect();
-    throw Error("Sorry, Error In Process, Please Repeated This Process !!");
-}
+        await mongoose.disconnect();
+        return "Update Process Successful ...";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
 }
 
 module.exports = {
