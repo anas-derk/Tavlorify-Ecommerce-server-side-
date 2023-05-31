@@ -3,7 +3,7 @@ function postNewProduct(req, res) {
     let productImageSrc = req.file.path;
     let productInfo = {
         ...Object.assign({}, bodyData),
-        productImageSrc,
+        imageSrc: productImageSrc,
     };
     if (!productInfo) res.json("Sorry, Please Send Product Info");
     else {
@@ -40,12 +40,25 @@ function getAllProducts(req, res) {
 }
 
 function deleteProduct(req, res) {
-    let productId = req.query.productId;
+    let productId = req.params.productId;
     if (!productId) res.json("Sorry, Please Send User Id !!");
     else {
         const { deleteProduct } = require("../models/products.model");
-        deleteProduct(productId).then((result) => {
-            res.json(result);
+        deleteProduct(productId).then(() => {
+            res.json({});
+        })
+            .catch((err) => res.json(err));
+    }
+}
+
+function putProduct(req, res) {
+    let productId = req.params.productId;
+    let newProductData = req.body;
+    if (!productId) res.json("Sorry, Please Send User Id !!");
+    else {
+        const { updateProduct } = require("../models/products.model");
+        updateProduct(productId, newProductData).then(() => {
+            res.json({});
         })
             .catch((err) => res.json(err));
     }
@@ -56,4 +69,5 @@ module.exports = {
     getProductInfo,
     deleteProduct,
     getAllProducts,
+    putProduct,
 }

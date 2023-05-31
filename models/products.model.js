@@ -82,15 +82,27 @@ async function deleteProduct(productId) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        let productInfo = await productModel.deleteOne(productId);
-        if (productInfo) {
-            await mongoose.disconnect();
-            return productInfo;
-        }
-        else {
-            await mongoose.disconnect();
-            return "Sorry, This Product It Not Exist !!!";
-        }
+        await productModel.deleteOne({
+            _id: productId,
+        });
+        await mongoose.disconnect();
+    }
+    catch (err) {
+        // Disconnect To DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Something Went Wrong !!");
+    }
+}
+
+async function updateProduct(productId, newData) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        await productModel.updateOne({_id: productId}, {
+            name: newData.name,
+            price: newData.price,
+        });
+        await mongoose.disconnect();
     }
     catch (err) {
         // Disconnect To DB
@@ -104,4 +116,5 @@ module.exports = {
     getProductInfo,
     deleteProduct,
     getAllProducts,
+    updateProduct,
 }
