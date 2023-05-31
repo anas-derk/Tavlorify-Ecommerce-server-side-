@@ -65,7 +65,7 @@ function putUserInfo(req, res) {
     let userId = req.params.userId;
     let newUserData = req.body;
     console.log(newUserData, userId);
-    if (!userId || !newUserData) res.status(500).json("Sorry, Please Send User Id !!");
+    if (!userId || !newUserData) res.status(500).json("Sorry, Please Send User Id And New User Data !!");
     else {
         const { updateUserInfo } = require("../models/users.model");
         updateUserInfo(userId, newUserData).then((result) => {

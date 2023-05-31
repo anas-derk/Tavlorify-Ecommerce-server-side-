@@ -41,7 +41,8 @@ const   usersRouter = require("./routes/users.router"),
         textToImageGenerateRouter = require("./routes/textToImageGenerate.router"),
         adminRouter = require("./routes/admin.router"),
         categoriesRouter = require("./routes/categories.router"),
-        stylesRouter = require("./routes/styles.router");
+        stylesRouter = require("./routes/styles.router"),
+        productsRouter = require("./routes/products.router");
 
 app.use("/users", usersRouter);
 
@@ -52,5 +53,7 @@ app.use("/admin", adminRouter);
 app.use("/categories", categoriesRouter);
 
 app.use("/styles", stylesRouter);
+
+app.use("/products", productsRouter);
 
 /* End Handle The Routes */
