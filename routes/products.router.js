@@ -2,7 +2,9 @@ const productsRouter = require("express").Router();
 
 const productsController = require("../controllers/products.controller");
 
-productsRouter.post("/add-new-product", productsController.postNewProduct);
+const upload = require("../global/multer.config");
+
+productsRouter.post("/add-new-product", upload.single("imageSrc"), productsController.postNewProduct);
 
 productsRouter.get("/:productId", productsController.getProductInfo);
 

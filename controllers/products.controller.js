@@ -1,12 +1,21 @@
 function postNewProduct(req, res) {
-    let productInfo = req.body;
+    let bodyData = req.body;
+    let productImageSrc = req.file.path;
+    let productInfo = {
+        ...Object.assign({}, bodyData),
+        productImageSrc,
+    };
     if (!productInfo) res.json("Sorry, Please Send Product Info");
     else {
         const { addNewProduct } = require("../models/products.model");
-        addNewProduct(newUserData).then((result) => {
+        addNewProduct(productInfo).then((result) => {
             res.json(result);
         })
-            .catch((err) => res.json(err));
+            .catch((err) => {
+                const { unlinkSync } = require("fs");
+                unlinkSync(productImageSrc);
+                res.json(err);
+            });
     }
 }
 
