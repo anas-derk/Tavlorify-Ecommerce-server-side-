@@ -20,7 +20,7 @@ function postNewProduct(req, res) {
 }
 
 function getProductInfo(req, res) {
-    let productId = req.query.productId;
+    let productId = req.params.productId;
     if (!productId) res.json("Sorry, Please Send User Id !!");
     else {
         const { getProductInfo } = require("../models/products.model");
