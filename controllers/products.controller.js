@@ -44,7 +44,9 @@ function deleteProduct(req, res) {
     if (!productId) res.json("Sorry, Please Send User Id !!");
     else {
         const { deleteProduct } = require("../models/products.model");
-        deleteProduct(productId).then(() => {
+        deleteProduct(productId).then((imagePath) => {
+            const { unlinkSync } = require("fs");
+            unlinkSync(imagePath);
             res.json({});
         })
             .catch((err) => res.json(err));

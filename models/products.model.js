@@ -82,10 +82,12 @@ async function deleteProduct(productId) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
+        let productInfo = await productModel.findById(productId);
         await productModel.deleteOne({
             _id: productId,
         });
         await mongoose.disconnect();
+        return productInfo.imageSrc;
     }
     catch (err) {
         // Disconnect To DB
