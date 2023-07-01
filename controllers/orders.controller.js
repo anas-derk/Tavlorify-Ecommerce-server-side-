@@ -12,7 +12,8 @@ async function postNewOrder(req, res) {
         const result = await response.data;
         res.json(result);
     } catch (err) {
-        res.json(err);
+        console.log(err);
+        res.status(500).json("Error !");
     }
 }
 
