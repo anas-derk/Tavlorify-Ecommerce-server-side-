@@ -63,6 +63,7 @@ app.post("/download-created-image", (req, res) => {
     const { get } = require('axios');
     const { createWriteStream } = require('fs');
     const imageData = req.body;
+    imageData.imageName = imageData.imageName.replaceAll(" ", "_");
     const randomImageName = `${Math.random()}_${Date.now()}__${imageData.imageName}`;
     const destination = path.join(__dirname, "assets", "images" , "generatedImages", randomImageName);
     get(imageData.imageUrl, { responseType: 'stream' })
