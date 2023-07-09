@@ -71,8 +71,8 @@ function textToImageGenerate(req, res) {
                 });
             break;
         }
-        case "anything-v4.0": {
-            runModel("cjwbw/anything-v4.0:42a996d39a96aedc57b2e0aa8105dea39c9c89d9d266caf6bb4327a1c191b061",
+        case "deliberate-v2": {
+            runModel("mcai/deliberate-v2:8e6663822bbbc982648e3c34214cf42d29fe421b2620cc33d8bda767fc57fe5a",
                 {
                     prompt: `${textPrompt}, ${category}, ${prompt}`,
                     negative_prompt,
