@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 
 const DB_URL = "mongodb://127.0.0.1:27017/e-commerce-canvas";
 
-// Create Category Schema
+// Create Text To Image Category Schema
 
-const categorySchema = mongoose.Schema({
+const textToImageCategorySchema = mongoose.Schema({
     imgSrc: String,
     name: String,
 });
 
-// Create Category Model From Category Schema
+// Create Text To Image Category Model From Category Schema
 
-const categoryModel = mongoose.model("categorie", categorySchema);
+const textToImageCategoryModel = mongoose.model("text-to-image-categorie", textToImageCategorySchema);
 
-const categoriesData = [
+const textToImageCategoriesData = [
     {
         imgSrc: "assets/images/categories/ART.png",
         name: "Art",
@@ -48,10 +48,10 @@ const categoriesData = [
     }
 ];
 
-async function insert_categories_data() {
+async function insert_text_to_image_categories_data() {
     try {
         await mongoose.connect(DB_URL);
-        await categoryModel.insertMany(categoriesData);
+        await textToImageCategoryModel.insertMany(textToImageCategoriesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Categories Data Process Is Successfuly !!";
     } catch (err) {
@@ -60,4 +60,4 @@ async function insert_categories_data() {
     }
 }
 
-insert_categories_data().then((result) => console.log(result));
+insert_text_to_image_categories_data().then((result) => console.log(result));

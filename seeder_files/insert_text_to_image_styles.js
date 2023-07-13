@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const DB_URL = "mongodb://127.0.0.1:27017/e-commerce-canvas";
 
-// Create Style Schema
+// Create Text To Image Style Schema
 
-const styleSchema = mongoose.Schema({
+const textToImageStyleSchema = mongoose.Schema({
     imgSrc: String,
     name: String,
     prompt: String,
@@ -13,11 +13,11 @@ const styleSchema = mongoose.Schema({
     categoryName: String,
 });
 
-// Create Style Model From Style Schema
+// Create Text To Image Style Model From Style Schema
 
-const styleModel = mongoose.model("style", styleSchema);
+const textToImageStyleModel = mongoose.model("text-to-image-style", textToImageStyleSchema);
 
-const stylesData = [
+const textToImageStylesData = [
     {
         imgSrc: "assets/images/styles/art/line_art.png",
         name: "line art",
@@ -596,10 +596,10 @@ const stylesData = [
     },
 ];
 
-async function insert_styles_data() {
+async function insert_text_to_image_styles_data() {
     try {
         await mongoose.connect(DB_URL);
-        await styleModel.insertMany(stylesData);
+        await textToImageStyleModel.insertMany(textToImageStylesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Categories Data Process Is Successfuly !!";
     } catch (err) {
@@ -608,4 +608,4 @@ async function insert_styles_data() {
     }
 }
 
-insert_styles_data().then((result) => console.log(result));
+insert_text_to_image_styles_data().then((result) => console.log(result));

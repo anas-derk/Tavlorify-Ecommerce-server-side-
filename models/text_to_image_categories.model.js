@@ -2,16 +2,16 @@
 
 const mongoose = require("mongoose");
 
-// Create User Schema
+// Create Text To Image Category Schema
 
-const categorySchema = mongoose.Schema({
+const textToImageCategorySchema = mongoose.Schema({
     imgSrc: String,
     name: String,
 });
 
-// Create Category Model From User Schema
+// Create Text To Image Category Model From Category Schema
 
-const categoryModel = mongoose.model("categorie", categorySchema);
+const textToImageCategoryModel = mongoose.model("text-to-image-categorie", textToImageCategorySchema);
 
 // Import Database URL
 
@@ -44,7 +44,7 @@ async function getCategoryData(categoryName) {
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let categoryData = await categoryModel.findOne({ name: categoryName });
+        let categoryData = await textToImageCategoryModel.findOne({ name: categoryName });
         if (categoryData) {
             await mongoose.disconnect();
             return categoryData;
@@ -66,7 +66,7 @@ async function updateStyleData(categoryName, styleName, newPrompt, newNegativePr
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let categoryData = await categoryModel.updateOne({
+        let categoryData = await textToImageCategoryModel.updateOne({
             name: categoryName,
         }, {
             

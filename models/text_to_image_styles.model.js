@@ -2,9 +2,9 @@
 
 const mongoose = require("mongoose");
 
-// Create User Schema
+// Create Text To Image Style Schema
 
-const styleSchema = mongoose.Schema({
+const textToImageStyleSchema = mongoose.Schema({
     imgSrc: String,
     name: String,
     prompt: String,
@@ -13,9 +13,9 @@ const styleSchema = mongoose.Schema({
     categoryName: String,
 });
 
-// Create Style Model From User Schema
+// Create Text To Image Style Model From Style Schema
 
-const styleModel = mongoose.model("style", styleSchema);
+const textToImageStyleModel = mongoose.model("text-to-image-style", textToImageStyleSchema);
 
 // Import Database URL
 
@@ -26,7 +26,7 @@ async function get_all_category_Styles_Data(categoryName){
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let categoryStylesData = await styleModel.find({ categoryName });
+        let categoryStylesData = await textToImageStyleModel.find({ categoryName });
         if (categoryStylesData) {
             await mongoose.disconnect();
             return categoryStylesData;
@@ -48,7 +48,7 @@ async function updateStyleData(styleId, newPrompt, newNegativePrompt){
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let newStyleData = await styleModel.updateOne({
+        let newStyleData = await textToImageStyleModel.updateOne({
             _id: styleId,
         }, {
             prompt: newPrompt,
