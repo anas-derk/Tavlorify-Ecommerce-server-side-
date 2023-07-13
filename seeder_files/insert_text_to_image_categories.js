@@ -15,35 +15,35 @@ const textToImageCategoryModel = mongoose.model("text-to-image-categorie", textT
 
 const textToImageCategoriesData = [
     {
-        imgSrc: "assets/images/categories/ART.png",
+        imgSrc: "assets/images/categories/textToImage/ART.png",
         name: "Art",
     },
     {
-        imgSrc: "assets/images/categories/Animals.png",
+        imgSrc: "assets/images/categories/textToImage/Animals.png",
         name: "Animals",
     },
     {
-        imgSrc: "assets/images/categories/photography.png",
+        imgSrc: "assets/images/categories/textToImage/photography.png",
         name: "Photography",
     },
     {
-        imgSrc: "assets/images/categories/People.png",
+        imgSrc: "assets/images/categories/textToImage/People.png",
         name: "People",
     },
     {
-        imgSrc: "assets/images/categories/LandscapeAndNature.png",
+        imgSrc: "assets/images/categories/textToImage/LandscapeAndNature.png",
         name: "Landscape And Nature",
     },
     {
-        imgSrc: "assets/images/categories/Vehicles.png",
+        imgSrc: "assets/images/categories/textToImage/Vehicles.png",
         name: "Vehicles",
     },
     {
-        imgSrc: "assets/images/categories/characters_Anime.png",
+        imgSrc: "assets/images/categories/textToImage/characters_Anime.png",
         name: "characters And Anime",
     },
     {
-        imgSrc: "assets/images/categories/Cityscapes.png",
+        imgSrc: "assets/images/categories/textToImage/Cityscapes.png",
         name: "Cityscapes",
     }
 ];

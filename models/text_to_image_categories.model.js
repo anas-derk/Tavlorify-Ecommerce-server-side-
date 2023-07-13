@@ -22,7 +22,7 @@ async function getAllCategoriesData() {
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let categorieData = await categoryModel.find({});
+        let categorieData = await textToImageCategoryModel.find({});
         if (categorieData) {
             await mongoose.disconnect();
             return categorieData;
