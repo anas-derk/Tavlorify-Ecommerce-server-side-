@@ -1,6 +1,6 @@
 const stylesRouter = require("express").Router();
 
-const stylesController = require("../controllers/styles.controller");
+const stylesController = require("../controllers/textToImageStyles.controller");
 
 stylesRouter.get("/category-styles-data", stylesController.get_all_category_Styles_Data);
 
