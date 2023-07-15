@@ -38,22 +38,19 @@ app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:$
 /* Start Handle The Routes */
 
 const usersRouter = require("./routes/users.router"),
-    textToImageGenerateRouter = require("./routes/textToImageGenerate.router"),
     adminRouter = require("./routes/admin.router"),
-    textToImageCategoriesRouter = require("./routes/textToImageCategories.router"),
-    textToImageStylesRouter = require("./routes/textToImageStyles.router"),
+    textToImageRouter = require("./routes/textToImage.router"),
+    imageToImageRouter = require("./routes/imageToImage.router"),
     productsRouter = require("./routes/products.router"),
     ordersRouter = require("./routes/orders.router");
 
 app.use("/users", usersRouter);
 
-app.use("/text-to-image-generate", textToImageGenerateRouter);
-
 app.use("/admin", adminRouter);
 
-app.use("/text-to-image/categories", textToImageCategoriesRouter);
+app.use("/text-to-image", textToImageRouter);
 
-app.use("/text-to-image/styles", textToImageStylesRouter);
+app.use("/image-to-image", imageToImageRouter);
 
 app.use("/products", productsRouter);
 

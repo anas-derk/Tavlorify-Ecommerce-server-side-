@@ -1,3 +1,28 @@
+function getAllCategoriesData(req, res) {
+    const { getAllCategoriesData } = require("../models/textToImageCategories.model");
+    getAllCategoriesData()
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+}
+
+function get_all_category_Styles_Data(req, res) {
+    let categoryName = req.query.categoryName;
+    const { get_all_category_Styles_Data } = require("../models/textToImageStyles.model");
+    get_all_category_Styles_Data(categoryName)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+}
+
+function putStyleData(req, res) {
+    let styleId = req.params.styleId;
+    let newPrompt = req.body.newPrompt,
+        newNegativePrompt = req.body.newNegativePrompt;
+    const { updateStyleData } = require("../models/textToImageStyles.model");
+    updateStyleData(styleId, newPrompt, newNegativePrompt)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+}
+
 async function runModel(model, input) {
     const Replicate = require("replicate");
     const replicate = new Replicate({
@@ -13,7 +38,7 @@ async function runModel(model, input) {
     }
 }
 
-function textToImageGenerate(req, res) {
+function generateImage(req, res) {
     let textPrompt = req.query.textPrompt,
         prompt = req.query.prompt,
         category = req.query.category,
@@ -123,4 +148,9 @@ function textToImageGenerate(req, res) {
     }
 }
 
-module.exports = { textToImageGenerate };
+module.exports = {
+    getAllCategoriesData,
+    get_all_category_Styles_Data,
+    putStyleData,
+    generateImage,
+}
