@@ -1,23 +1,6 @@
-// Import Mongoose
+// Import Mongoose And Image To Image Style Model Object
 
-const mongoose = require("mongoose");
-
-// Create Image To Image Style Schema
-
-const imageToImageStyleSchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-    prompt: String,
-    negative_prompt: String,
-    ddim_steps: Number,
-    strength: Number,
-    modelName: String,
-    categoryName: String,
-});
-
-// Create Image To Image Style Model From Style Schema
-
-const imageToImageStyleModel = mongoose.model("image-to-image-style", imageToImageStyleSchema);
+const { mongoose, imageToImageStyleModel } = require("../models/all.models");
 
 // Import Database URL
 

@@ -1,20 +1,6 @@
-// Import Mongoose
+// Import Mongoose And Product Model Object
 
-const mongoose = require("mongoose");
-
-// Create Product Schema
-
-const productSchema = mongoose.Schema({
-    imageSrc: String,
-    name: String,
-    type: String,
-    dimentions: String,
-    price: Number,
-});
-
-// Create Product Model From Product Schema
-
-const productModel = mongoose.model("product", productSchema);
+const { mongoose, productModel } = require("../models/all.models");
 
 // Import Database URL
 

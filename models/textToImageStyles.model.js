@@ -1,21 +1,6 @@
-// Import Mongoose
+// Import Mongoose And Text To Image Style Model Object
 
-const mongoose = require("mongoose");
-
-// Create Text To Image Style Schema
-
-const textToImageStyleSchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-    prompt: String,
-    negative_prompt: String,
-    modelName: String,
-    categoryName: String,
-});
-
-// Create Text To Image Style Model From Style Schema
-
-const textToImageStyleModel = mongoose.model("text-to-image-style", textToImageStyleSchema);
+const { mongoose, textToImageStyleModel } = require("../models/all.models");
 
 // Import Database URL
 

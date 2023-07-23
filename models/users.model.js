@@ -1,19 +1,6 @@
-// Import Mongoose
+// Import Mongoose And User Model Object
 
-const mongoose = require("mongoose");
-
-// Create User Schema
-
-const userSchema = mongoose.Schema({
-    email: String,
-    password: String,
-    firstName: String,
-    lastName: String,
-});
-
-// Create User Model From User Schema
-
-const userModel = mongoose.model("user", userSchema);
+const { mongoose, userModel } = require("../models/all.models");
 
 // Import Database URL
 

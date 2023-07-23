@@ -1,17 +1,6 @@
-// Import Mongoose
+// Import Mongoose And Text To Image Category Model Object
 
-const mongoose = require("mongoose");
-
-// Create Text To Image Category Schema
-
-const textToImageCategorySchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-});
-
-// Create Text To Image Category Model From Category Schema
-
-const textToImageCategoryModel = mongoose.model("text-to-image-categorie", textToImageCategorySchema);
+const { mongoose, textToImageCategoryModel } = require("../models/all.models");
 
 // Import Database URL
 
