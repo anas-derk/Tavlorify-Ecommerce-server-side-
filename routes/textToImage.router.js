@@ -2,11 +2,20 @@ const textToImageRouter = require("express").Router();
 
 const textToImageController = require("../controllers/textToTomage.controller");
 
-const upload = require("../global/multer.config");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./assets/images/categories/textToImage");
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
+    },
+});
 
 textToImageRouter.get("/categories/all-categories-data", textToImageController.getAllCategoriesData);
 
-textToImageRouter.post("/categories/add-new-category", upload.single("imgSrc"), textToImageController.addNewCategory);
+textToImageRouter.post("/categories/add-new-category", multer({ storage }).single("imgSrc"), textToImageController.addNewCategory);
 
 textToImageRouter.get("/styles/category-styles-data", textToImageController.get_all_category_Styles_Data);
 

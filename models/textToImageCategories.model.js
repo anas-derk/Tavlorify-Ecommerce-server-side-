@@ -43,7 +43,7 @@ async function addNewCategory(categoryInfo) {
     try {
         await mongoose.connect(DB_URL);
         const newCategory = new textToImageCategoryModel({
-            imgSrc: "/",
+            imgSrc: categoryInfo.imgSrc,
             name: categoryInfo.categoryName,
         });
         await newCategory.save();

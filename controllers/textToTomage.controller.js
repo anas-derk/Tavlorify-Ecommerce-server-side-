@@ -18,6 +18,8 @@ function addNewCategory(req, res) {
     })
     .catch(err => {
         console.log(err);
+        const { unlinkSync } = require("fs");
+        unlinkSync(imgSrc);
         res.json(err);
     })
 }

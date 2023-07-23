@@ -2,9 +2,18 @@ const productsRouter = require("express").Router();
 
 const productsController = require("../controllers/products.controller");
 
-const upload = require("../global/multer.config");
+const multer = require("multer");
 
-productsRouter.post("/add-new-product", upload.single("imageSrc"), productsController.postNewProduct);
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./assets/images/products");
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
+    },
+});
+
+productsRouter.post("/add-new-product", multer({ storage }).single("imageSrc"), productsController.postNewProduct);
 
 productsRouter.get("/product-info/:productId", productsController.getProductInfo);
 
