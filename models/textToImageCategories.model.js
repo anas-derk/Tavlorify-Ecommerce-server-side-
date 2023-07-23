@@ -39,6 +39,24 @@ async function getAllCategoriesData() {
     }
 }
 
+async function addNewCategory(categoryInfo) {
+    try {
+        await mongoose.connect(DB_URL);
+        const newCategory = new textToImageCategoryModel({
+            imgSrc: "/",
+            name: categoryInfo.categoryName,
+        });
+        await newCategory.save();
+        await mongoose.disconnect();
+        return "Add New Category For Text To Image Page Is Successfuly !!";
+    }
+    catch(err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 async function getCategoryData(categoryName) {
     try {
         // Connect To DB
@@ -91,4 +109,5 @@ module.exports = {
     getCategoryData,
     updateStyleData,
     getAllCategoriesData,
+    addNewCategory,
 };

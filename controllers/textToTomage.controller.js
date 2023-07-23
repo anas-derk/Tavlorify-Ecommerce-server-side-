@@ -5,6 +5,23 @@ function getAllCategoriesData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function addNewCategory(req, res) {
+    const bodyData = req.body;
+    const imgSrc = req.file.path;
+    const categoryInfo = {
+        ...Object.assign({}, bodyData),
+        imgSrc,
+    };
+    const { addNewCategory } = require("../models/textToImageCategories.model");
+    addNewCategory(categoryInfo).then((result) => {
+        res.json(result);
+    })
+    .catch(err => {
+        console.log(err);
+        res.json(err);
+    })
+}
+
 function get_all_category_Styles_Data(req, res) {
     let categoryName = req.query.categoryName;
     const { get_all_category_Styles_Data } = require("../models/textToImageStyles.model");
@@ -153,4 +170,5 @@ module.exports = {
     get_all_category_Styles_Data,
     putStyleData,
     generateImage,
+    addNewCategory,
 }
