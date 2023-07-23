@@ -6,7 +6,7 @@ const { mongoose, textToImageStyleModel } = require("../models/all.models");
 
 const DB_URL = require("../global/DB_URL");
 
-async function get_all_category_Styles_Data(categoryName){
+async function get_all_category_Styles_Data(categoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -28,7 +28,28 @@ async function get_all_category_Styles_Data(categoryName){
     }
 }
 
-async function updateStyleData(styleId, newPrompt, newNegativePrompt){
+async function addNewStyle(styleData) {
+    try {
+        await mongoose.connect(DB_URL);
+        let newStyleData = new textToImageStyleModel({
+            imgSrc: styleData.imgSrc,
+            name: styleData.styleName,
+            prompt: styleData.stylePrompt,
+            negative_prompt: styleData.styleNegativePrompt,
+            modelName: styleData.modelName,
+            categoryName: styleData.categoryName,
+        });
+        await newStyleData.save();
+        await mongoose.disconnect();
+        return "Adding New Category Style For Text To Image Page Process Is Succesfuly !!";
+    }
+    catch (err) {
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
+async function updateStyleData(styleId, newPrompt, newNegativePrompt) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -58,4 +79,5 @@ async function updateStyleData(styleId, newPrompt, newNegativePrompt){
 module.exports = {
     get_all_category_Styles_Data,
     updateStyleData,
+    addNewStyle,
 }

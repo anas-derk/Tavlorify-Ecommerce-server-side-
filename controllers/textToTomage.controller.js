@@ -32,6 +32,24 @@ function get_all_category_Styles_Data(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function addNewStyle(req, res) {
+    const bodyData = req.body;
+    const styleData = {
+        ...Object.assign({}, bodyData),
+        imgSrc: req.file.path,
+    };
+    const { addNewStyle } = require("../models/textToImageStyles.model");
+    addNewStyle(styleData).then((result) => {
+        res.json(result);
+    })
+    .catch((err) => {
+        console.log(err);
+        const { unlinkSync } = require("fs");
+        unlinkSync(req.file.path);
+        res.json(err);
+    });
+}
+
 function putStyleData(req, res) {
     let styleId = req.params.styleId;
     let newPrompt = req.body.newPrompt,
@@ -173,4 +191,5 @@ module.exports = {
     putStyleData,
     generateImage,
     addNewCategory,
+    addNewStyle,
 }
