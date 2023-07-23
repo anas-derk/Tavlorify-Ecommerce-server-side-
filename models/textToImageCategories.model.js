@@ -1,6 +1,6 @@
 // Import Mongoose And Text To Image Category Model Object
 
-const { mongoose, textToImageCategoryModel } = require("../models/all.models");
+const { mongoose, textToImageCategoryModel, textToImageStyleModel } = require("../models/all.models");
 
 // Import Database URL
 
@@ -32,14 +32,23 @@ async function addNewCategory(categoryInfo) {
     try {
         await mongoose.connect(DB_URL);
         const newCategory = new textToImageCategoryModel({
-            imgSrc: categoryInfo.imgSrc,
+            imgSrc: categoryInfo["categoryImgFile"][0].path,
             name: categoryInfo.categoryName,
         });
         await newCategory.save();
+        const newStyle = new textToImageStyleModel({
+            imgSrc: categoryInfo["styleImgFile"][0].path,
+            name: categoryInfo.styleName,
+            prompt: categoryInfo.stylePrompt,
+            negative_prompt: categoryInfo.styleNegativePrompt,
+            modelName: categoryInfo.modelName,
+            categoryName: categoryInfo.categoryName,
+        });
+        await newStyle.save();
         await mongoose.disconnect();
-        return "Add New Category For Text To Image Page Is Successfuly !!";
+        return "Add New Category And First Style For Text To Image Page Is Successfuly !!";
     }
-    catch(err) {
+    catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
@@ -76,7 +85,7 @@ async function updateStyleData(categoryName, styleName, newPrompt, newNegativePr
         let categoryData = await textToImageCategoryModel.updateOne({
             name: categoryName,
         }, {
-            
+
         });
         if (categoryData) {
             await mongoose.disconnect();

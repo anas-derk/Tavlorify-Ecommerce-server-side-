@@ -7,10 +7,9 @@ function getAllCategoriesData(req, res) {
 
 function addNewCategory(req, res) {
     const bodyData = req.body;
-    const imgSrc = req.file.path;
     const categoryInfo = {
         ...Object.assign({}, bodyData),
-        imgSrc,
+        ...Object.assign({}, req.files),
     };
     const { addNewCategory } = require("../models/textToImageCategories.model");
     addNewCategory(categoryInfo).then((result) => {
@@ -19,9 +18,10 @@ function addNewCategory(req, res) {
     .catch(err => {
         console.log(err);
         const { unlinkSync } = require("fs");
-        unlinkSync(imgSrc);
+        unlinkSync(req.files["categoryImgFile"][0].path);
+        unlinkSync(req.files["styleImgFile"][0].path);
         res.json(err);
-    })
+    });
 }
 
 function get_all_category_Styles_Data(req, res) {
