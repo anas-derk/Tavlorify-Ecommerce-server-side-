@@ -61,10 +61,17 @@ function putStyleData(req, res) {
 }
 
 function deleteStyleData(req, res) {
-    let styleId = req.params.styleId;
+    const styleId = req.params.styleId;
+    if (!styleId) return "Sorry, Please Send Style Id"; 
     const { deleteStyleData } = require("../models/textToImageStyles.model");
     deleteStyleData(styleId)
-        .then((result) => res.json(result))
+        .then((result) => {
+            if (result === "Category Style Deleting Process Is Succesfuly !!") {
+                const { unlinkSync } = require("fs");
+                unlinkSync(req.query.imgSrc);
+                res.json(result);
+            }
+        })
         .catch((err) => res.status(500).json(err));
 }
 
