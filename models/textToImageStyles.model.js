@@ -31,7 +31,7 @@ async function get_all_category_Styles_Data(categoryName) {
 async function addNewStyle(styleData) {
     try {
         await mongoose.connect(DB_URL);
-        let newStyleData = new textToImageStyleModel({
+        const newStyleData = new textToImageStyleModel({
             imgSrc: styleData.imgSrc,
             name: styleData.styleName,
             prompt: styleData.stylePrompt,
@@ -76,8 +76,28 @@ async function updateStyleData(styleId, newPrompt, newNegativePrompt) {
     }
 }
 
+async function deleteStyleData(styleId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        // Check If Email Is Exist
+        const result = await textToImageStyleModel.deleteOne({
+            _id: styleId,
+        });
+        await mongoose.disconnect();
+        if (result.deletedCount === 0) return "Sorry, This Style Is Not Exist, Please Send Valid Style Id !!";
+        return "Category Style Deleting Process Is Succesfuly !!";
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 module.exports = {
     get_all_category_Styles_Data,
     updateStyleData,
+    deleteStyleData,
     addNewStyle,
 }

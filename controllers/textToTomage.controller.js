@@ -60,6 +60,14 @@ function putStyleData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function deleteStyleData(req, res) {
+    let styleId = req.params.styleId;
+    const { deleteStyleData } = require("../models/textToImageStyles.model");
+    deleteStyleData(styleId)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+}
+
 async function runModel(model, input) {
     const Replicate = require("replicate");
     const replicate = new Replicate({
@@ -189,6 +197,7 @@ module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
     putStyleData,
+    deleteStyleData,
     generateImage,
     addNewCategory,
     addNewStyle,
