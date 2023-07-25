@@ -40,6 +40,8 @@ textToImageRouter.put("/categories/update-category-data/:categoryId", textToImag
 
 textToImageRouter.delete("/styles/delete-style-data/:styleId", textToImageController.deleteStyleData);
 
+textToImageRouter.delete("/categories/delete-category-data/:categoryId", textToImageController.deleteCategoryData);
+
 textToImageRouter.get("/generate-image", textToImageController.generateImage);
 
 module.exports = textToImageRouter;
