@@ -36,6 +36,8 @@ textToImageRouter.post("/styles/add-new-style", multer({ storage: multer.diskSto
 
 textToImageRouter.put("/styles/update-style-data/:styleId", textToImageController.putStyleData);
 
+textToImageRouter.put("/categories/update-category-data/:categoryId", textToImageController.putCategoryData);
+
 textToImageRouter.delete("/styles/delete-style-data/:styleId", textToImageController.deleteStyleData);
 
 textToImageRouter.get("/generate-image", textToImageController.generateImage);
