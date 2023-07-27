@@ -29,6 +29,8 @@ imageToImageRouter.post("/categories/add-new-category", multer({
 
 imageToImageRouter.put("/categories/update-category-data/:categoryId", imageToImageController.putCategoryData);
 
+imageToImageRouter.delete("/categories/delete-category-data/:categoryId", imageToImageController.deleteCategoryData);
+
 // imageToImageRouter.get("/generate-image", imageToImageController.generateImage);
 
 module.exports = imageToImageRouter;

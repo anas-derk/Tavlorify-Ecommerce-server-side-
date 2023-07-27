@@ -44,9 +44,29 @@ function putCategoryData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function deleteCategoryData(req, res) {
+    const categoryId = req.params.categoryId;
+    if (!categoryId) return "Sorry, Please Send Category Id"; 
+    const { deleteCategoryData } = require("../models/imageToImageCategories.model");
+    deleteCategoryData(categoryId)
+        .then((result) => {
+            console.log(result)
+            if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
+                const { unlinkSync } = require("fs");
+                unlinkSync(result.categoryData.imgSrc);
+                for(let i = 0; i < result.categoryStylesData.length; i++) {
+                    unlinkSync(result.categoryStylesData[i].imgSrc);
+                }
+                res.json("Category Deleting Process Is Succesfuly !!");
+            }
+        })
+        .catch((err) => res.status(500).json(err));
+}
+
 module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
     addNewCategory,
     putCategoryData,
+    deleteCategoryData,
 }

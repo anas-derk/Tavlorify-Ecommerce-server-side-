@@ -105,9 +105,37 @@ async function updateCategoryData(categoryId, oldCategoryName, newCategoryName) 
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
     }
 }
+
+async function deleteCategoryData(categoryId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        const categoryData = await imageToImageCategoryModel.findById(categoryId);
+        const categoryStylesData = await imageToImageStyleModel.find({ categoryName: categoryData.name });
+        if (!categoryData) {
+            await mongoose.disconnect();
+            return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+        }
+        else {
+            await imageToImageCategoryModel.deleteOne({
+                _id: categoryId,
+            });
+            await imageToImageStyleModel.deleteMany({ categoryName: categoryData.name });
+            await mongoose.disconnect();
+            return { categoryData, categoryStylesData };
+        };
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 module.exports = {
     getAllCategoriesData,
     getCategoryData,
     addNewCategory,
     updateCategoryData,
+    deleteCategoryData,
 };

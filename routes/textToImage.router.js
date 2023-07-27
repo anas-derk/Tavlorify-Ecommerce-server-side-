@@ -40,12 +40,12 @@ textToImageRouter.post("/styles/add-new-style", multer({
     })
 }).single("styleImgFile"), textToImageController.addNewStyle);
 
-textToImageRouter.put("/styles/update-style-data/:styleId", textToImageController.putStyleData);
-
 textToImageRouter.put("/categories/update-category-data/:categoryId", textToImageController.putCategoryData);
 
-textToImageRouter.delete("/styles/delete-style-data/:styleId", textToImageController.deleteStyleData);
+textToImageRouter.put("/styles/update-style-data/:styleId", textToImageController.putStyleData);
 
 textToImageRouter.delete("/categories/delete-category-data/:categoryId", textToImageController.deleteCategoryData);
+
+textToImageRouter.delete("/styles/delete-style-data/:styleId", textToImageController.deleteStyleData);
 
 module.exports = textToImageRouter;
