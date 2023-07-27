@@ -79,29 +79,6 @@ async function addNewCategory(categoryInfo) {
     }
 }
 
-async function addNewStyle(styleData) {
-    try {
-        await mongoose.connect(DB_URL);
-        const newStyleData = new imageToImageStyleModel({
-            imgSrc: styleData.imgSrc,
-            name: styleData.styleName,
-            prompt: styleData.stylePrompt,
-            negative_prompt: styleData.styleNegativePrompt,
-            ddim_steps: styleData.ddim_steps,
-            strength: styleData.strength,
-            modelName: styleData.modelName,
-            categoryName: styleData.categoryName,
-        });
-        await newStyleData.save();
-        await mongoose.disconnect();
-        return "Adding New Category Style For Image To Image Page Process Is Succesfuly !!";
-    }
-    catch (err) {
-        await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
-    }
-}
-
 async function updateCategoryData(categoryId, oldCategoryName, newCategoryName) {
     try {
         // Connect To DB
@@ -159,7 +136,6 @@ module.exports = {
     getAllCategoriesData,
     getCategoryData,
     addNewCategory,
-    addNewStyle,
     updateCategoryData,
     deleteCategoryData,
 };
