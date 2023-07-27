@@ -10,6 +10,8 @@ const imageToImageStyleSchema = mongoose.Schema({
     prompt: String,
     negative_prompt: String,
     modelName: String,
+    ddim_steps: Number,
+    strength: Number,
     categoryName: String,
 });
 

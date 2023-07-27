@@ -1,6 +1,6 @@
 // Import Mongoose And Image To Image Category Model Object
 
-const { mongoose, imageToImageCategoryModel } = require("../models/all.models");
+const { mongoose, imageToImageCategoryModel, imageToImageStyleModel } = require("../models/all.models");
 
 // Import Database URL
 
@@ -50,6 +50,35 @@ async function getCategoryData(categoryName) {
     }
 }
 
+async function addNewCategory(categoryInfo) {
+    try {
+        await mongoose.connect(DB_URL);
+        const newCategory = new imageToImageCategoryModel({
+            imgSrc: categoryInfo["categoryImgFile"][0].path,
+            name: categoryInfo.categoryName,
+        });
+        await newCategory.save();
+        const newStyle = new imageToImageStyleModel({
+            imgSrc: categoryInfo["styleImgFile"][0].path,
+            name: categoryInfo.styleName,
+            prompt: categoryInfo.stylePrompt,
+            negative_prompt: categoryInfo.styleNegativePrompt,
+            ddim_steps: categoryInfo.ddim_steps,
+            strength: categoryInfo.strength,
+            modelName: categoryInfo.modelName,
+            categoryName: categoryInfo.categoryName,
+        });
+        await newStyle.save();
+        await mongoose.disconnect();
+        return "Add New Category And First Style For Image To Image Page Is Successfuly !!";
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 async function updateStyleData(categoryName, styleName, newPrompt, newNegativePrompt) {
     try {
         // Connect To DB
@@ -77,7 +106,8 @@ async function updateStyleData(categoryName, styleName, newPrompt, newNegativePr
 }
 
 module.exports = {
-    getCategoryData,
-    updateStyleData,
     getAllCategoriesData,
+    getCategoryData,
+    addNewCategory,
+    updateStyleData,
 };
