@@ -32,6 +32,24 @@ function addNewCategory(req, res) {
     });
 }
 
+function addNewStyle(req, res) {
+    const bodyData = req.body;
+    const styleData = {
+        ...Object.assign({}, bodyData),
+        imgSrc: req.file.path,
+    };
+    const { addNewStyle } = require("../models/imageToImageStyles.model");
+    addNewStyle(styleData).then((result) => {
+        res.json(result);
+    })
+    .catch((err) => {
+        console.log(err);
+        const { unlinkSync } = require("fs");
+        unlinkSync(req.file.path);
+        res.json(err);
+    });
+}
+
 function putCategoryData(req, res) {
     const categoryId = req.params.categoryId;
     const oldCategoryName = req.query.oldCategoryName;
@@ -67,6 +85,7 @@ module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
     addNewCategory,
+    addNewStyle,
     putCategoryData,
     deleteCategoryData,
 }

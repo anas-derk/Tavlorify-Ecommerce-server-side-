@@ -12,10 +12,10 @@ imageToImageRouter.post("/categories/add-new-category", multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             if (file.fieldname === "categoryImgFile") {
-                cb(null, "./assets/images/categories/textToImage");
+                cb(null, "./assets/images/categories/imageToImage");
             }
             else if (file.fieldname === "styleImgFile") {
-                cb(null, "./assets/images/styles/textToImage");
+                cb(null, "./assets/images/styles/imageToImage");
             }
         },
         filename: (req, file, cb) => {
@@ -26,6 +26,17 @@ imageToImageRouter.post("/categories/add-new-category", multer({
     name: "categoryImgFile",
     maxCount: 1,
 }, { name: "styleImgFile", maxCount: 1 }]), imageToImageController.addNewCategory);
+
+imageToImageRouter.post("/styles/add-new-style", multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, "./assets/images/styles/imageToImage");
+        },
+        filename: (req, file, cb) => {
+            cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
+        },
+    })
+}).single("styleImgFile"), imageToImageController.addNewStyle);
 
 imageToImageRouter.put("/categories/update-category-data/:categoryId", imageToImageController.putCategoryData);
 
