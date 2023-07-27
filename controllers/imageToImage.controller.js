@@ -32,8 +32,21 @@ function addNewCategory(req, res) {
     });
 }
 
+function putCategoryData(req, res) {
+    const categoryId = req.params.categoryId;
+    const oldCategoryName = req.query.oldCategoryName;
+    const newCategoryName = req.body.newCategoryName;
+    console.log(categoryId, oldCategoryName, newCategoryName);
+    if (!categoryId || !oldCategoryName || !newCategoryName) return "Sorry, Please Send Category Id And Old Category Name And New Category Name !!";
+    const { updateCategoryData } = require("../models/imageToImageCategories.model");
+    updateCategoryData(categoryId, oldCategoryName, newCategoryName)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+}
+
 module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
     addNewCategory,
+    putCategoryData,
 }

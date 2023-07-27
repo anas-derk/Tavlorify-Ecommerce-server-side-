@@ -27,6 +27,8 @@ imageToImageRouter.post("/categories/add-new-category", multer({
     maxCount: 1,
 }, { name: "styleImgFile", maxCount: 1 }]), imageToImageController.addNewCategory);
 
+imageToImageRouter.put("/categories/update-category-data/:categoryId", imageToImageController.putCategoryData);
+
 // imageToImageRouter.get("/generate-image", imageToImageController.generateImage);
 
 module.exports = imageToImageRouter;

@@ -79,24 +79,25 @@ async function addNewCategory(categoryInfo) {
     }
 }
 
-async function updateStyleData(categoryName, styleName, newPrompt, newNegativePrompt) {
+async function updateCategoryData(categoryId, oldCategoryName, newCategoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        // Check If Email Is Exist
-        let categoryData = await imageToImageCategoryModel.updateOne({
-            name: categoryName,
+        const result = await imageToImageCategoryModel.updateOne({
+            _id: categoryId,
         }, {
-            
+            name: newCategoryName,
         });
-        if (categoryData) {
-            await mongoose.disconnect();
-            return categoryData;
-        }
+        if (result.modifiedCount === 0) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         else {
-            mongoose.disconnect();
-            return "Sorry, The Category Is Not Exist !!, Please Enter Another Category Name ..";
-        }
+            const result1 = await imageToImageStyleModel.updateMany({
+                categoryName: oldCategoryName,
+            }, {
+                categoryName: newCategoryName,
+            });
+            await mongoose.disconnect();
+            return "Category Updating Process Is Succesfuly !!"
+        };
     }
     catch (err) {
         // Disconnect In DB
@@ -104,10 +105,9 @@ async function updateStyleData(categoryName, styleName, newPrompt, newNegativePr
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
     }
 }
-
 module.exports = {
     getAllCategoriesData,
     getCategoryData,
     addNewCategory,
-    updateStyleData,
+    updateCategoryData,
 };
