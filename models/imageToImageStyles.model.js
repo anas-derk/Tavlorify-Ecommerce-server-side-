@@ -28,33 +28,6 @@ async function get_all_category_Styles_Data(categoryName){
     }
 }
 
-async function updateStyleData(styleId, newPrompt, newNegativePrompt){
-    try {
-        // Connect To DB
-        await mongoose.connect(DB_URL);
-        // Check If Email Is Exist
-        let newStyleData = await imageToImageStyleModel.updateOne({
-            _id: styleId,
-        }, {
-            prompt: newPrompt,
-            negative_prompt: newNegativePrompt,
-        });
-        if (newStyleData) {
-            await mongoose.disconnect();
-            return newStyleData;
-        }
-        else {
-            mongoose.disconnect();
-            return "Sorry, The Category Style Is Not Exist !!, Please Enter Another ..";
-        }
-    }
-    catch (err) {
-        // Disconnect In DB
-        await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
-    }
-}
-
 async function addNewStyle(styleData) {
     try {
         await mongoose.connect(DB_URL);
@@ -78,8 +51,57 @@ async function addNewStyle(styleData) {
     }
 }
 
+async function updateStyleData(styleId, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        // Check If Email Is Exist
+        let newStyleData = await imageToImageStyleModel.updateOne({
+            _id: styleId,
+        }, {
+            prompt: newPrompt,
+            negative_prompt: newNegativePrompt,
+            ddim_steps: newDdimSteps,
+            strength: newStrength,
+        });
+        if (newStyleData) {
+            await mongoose.disconnect();
+            return newStyleData;
+        }
+        else {
+            mongoose.disconnect();
+            return "Sorry, The Category Style Is Not Exist !!, Please Enter Another ..";
+        }
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
+async function deleteStyleData(styleId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        // Check If Email Is Exist
+        const result = await imageToImageStyleModel.deleteOne({
+            _id: styleId,
+        });
+        await mongoose.disconnect();
+        if (result.deletedCount === 0) return "Sorry, This Style Is Not Exist, Please Send Valid Style Id !!";
+        return "Category Style Deleting Process Is Succesfuly !!";
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 module.exports = {
     get_all_category_Styles_Data,
     addNewStyle,
     updateStyleData,
+    deleteStyleData,
 }

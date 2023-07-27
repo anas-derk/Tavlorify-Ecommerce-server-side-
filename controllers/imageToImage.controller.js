@@ -62,6 +62,18 @@ function putCategoryData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function putStyleData(req, res) {
+    let styleId = req.params.styleId;
+    let newPrompt = req.body.newPrompt,
+        newNegativePrompt = req.body.newNegativePrompt;
+        newDdimSteps = req.body.newDdimSteps;
+        newStrength = req.body.newStrength;
+    const { updateStyleData } = require("../models/imageToImageStyles.model");
+    updateStyleData(styleId, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+}
+
 function deleteCategoryData(req, res) {
     const categoryId = req.params.categoryId;
     if (!categoryId) return "Sorry, Please Send Category Id"; 
@@ -81,11 +93,28 @@ function deleteCategoryData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function deleteStyleData(req, res) {
+    const styleId = req.params.styleId;
+    if (!styleId) return "Sorry, Please Send Style Id"; 
+    const { deleteStyleData } = require("../models/imageToImageStyles.model");
+    deleteStyleData(styleId)
+        .then((result) => {
+            if (result === "Category Style Deleting Process Is Succesfuly !!") {
+                const { unlinkSync } = require("fs");
+                unlinkSync(req.query.imgSrc);
+                res.json(result);
+            }
+        })
+        .catch((err) => res.status(500).json(err));
+}
+
 module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
     addNewCategory,
     addNewStyle,
     putCategoryData,
+    putStyleData,
     deleteCategoryData,
+    deleteStyleData,
 }

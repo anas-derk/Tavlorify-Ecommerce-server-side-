@@ -40,7 +40,11 @@ imageToImageRouter.post("/styles/add-new-style", multer({
 
 imageToImageRouter.put("/categories/update-category-data/:categoryId", imageToImageController.putCategoryData);
 
+imageToImageRouter.put("/styles/update-style-data/:styleId", imageToImageController.putStyleData);
+
 imageToImageRouter.delete("/categories/delete-category-data/:categoryId", imageToImageController.deleteCategoryData);
+
+imageToImageRouter.delete("/styles/delete-style-data/:styleId", imageToImageController.deleteStyleData);
 
 // imageToImageRouter.get("/generate-image", imageToImageController.generateImage);
 
