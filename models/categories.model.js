@@ -6,6 +6,21 @@ const { mongoose, categoryModel } = require("../models/all.models");
 
 const DB_URL = require("../global/DB_URL");
 
+async function getAllCategories() {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        const categoriesList = await categoryModel.find({});
+        await mongoose.disconnect();
+        return categoriesList;
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 async function addNewCategory(categoryName) {
     try {
         // Connect To DB
@@ -20,8 +35,46 @@ async function addNewCategory(categoryName) {
                 name: categoryName,
             });
             await newCategory.save();
-            mongoose.disconnect();
+            await mongoose.disconnect();
             return "Congratulations, the category has been successfully added";
+        }
+    }
+    catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
+async function addNewSubCategory(categoryName, subCategoryName) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        const category = await categoryModel.findOne({ name: categoryName });
+        if (!category) {
+            await mongoose.disconnect();
+            return "Sorry, This Category Not Found !!"
+        }
+        else {
+            const subCategoryIndex = category.subCategories.findIndex((subCategory) => subCategory.subCategoryName === subCategoryName);
+            console.log(subCategoryIndex);
+            if (subCategoryIndex === -1) {
+                await categoryModel.updateOne({
+                    name: categoryName,
+                }, {
+                    $push: {
+                        subCategories: [{
+                            subCategoryName: subCategoryName,
+                            subCategories: [],
+                        }],
+                    }
+                });
+                await mongoose.disconnect();
+                return "Congratulations, the sub category has been successfully added";
+            } else {
+                await mongoose.disconnect();
+                return "Sorry, This Sub Cateogory Has Already Been Added !!";
+            }
         }
     }
     catch (err) {
@@ -33,4 +86,6 @@ async function addNewCategory(categoryName) {
 
 module.exports = {
     addNewCategory,
+    getAllCategories,
+    addNewSubCategory,
 }

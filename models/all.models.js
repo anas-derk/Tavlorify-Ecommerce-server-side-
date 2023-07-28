@@ -99,7 +99,10 @@ const productModel = mongoose.model("product", productSchema);
 const categorySchema = mongoose.Schema({
     name: String,
     subCategories: {
-        type: Array,
+        type: [{
+            subCategoryName: String,
+            subCategories: [{ subCategoryName: String }],
+        }],
         default: [],
     },
 });
