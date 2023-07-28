@@ -42,7 +42,8 @@ const usersRouter = require("./routes/users.router"),
     textToImageRouter = require("./routes/textToImage.router"),
     imageToImageRouter = require("./routes/imageToImage.router"),
     productsRouter = require("./routes/products.router"),
-    ordersRouter = require("./routes/orders.router");
+    ordersRouter = require("./routes/orders.router"),
+    categoriesRouter = require("./routes/categories.router");
 
 app.use("/users", usersRouter);
 
@@ -55,6 +56,8 @@ app.use("/image-to-image", imageToImageRouter);
 app.use("/products", productsRouter);
 
 app.use("/orders", ordersRouter);
+
+app.use("/categories", categoriesRouter);
 
 app.post("/download-created-image", (req, res) => {
     const { get } = require('axios');

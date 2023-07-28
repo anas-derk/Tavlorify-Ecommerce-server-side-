@@ -94,6 +94,20 @@ const productSchema = mongoose.Schema({
 
 const productModel = mongoose.model("product", productSchema);
 
+// Create Category Schema
+
+const categorySchema = mongoose.Schema({
+    name: String,
+    subCategories: {
+        type: Array,
+        default: [],
+    },
+});
+
+// Create Category Model From Category Schema
+
+const categoryModel = mongoose.model("categorie", categorySchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -103,4 +117,5 @@ module.exports = {
     imageToImageStyleModel,
     imageToImageCategoryModel,
     productModel,
+    categoryModel,
 }
