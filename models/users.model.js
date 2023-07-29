@@ -88,14 +88,21 @@ async function updateUserInfo(userId, newUserData) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        let encrypted_password = await bcrypt.hash(newUserData.password, 10);
-        // Check If User Is Exist
-        await userModel.updateOne({ _id: userId }, {
-            email: newUserData.email,
-            password: encrypted_password,
-            firstName: newUserData.firstName,
-            lastName: newUserData.lastName,
-        });
+        if (newUserData.password !== "") {
+            const encrypted_password = await bcrypt.hash(newUserData.password, 10);
+            await userModel.updateOne({ _id: userId }, {
+                email: newUserData.email,
+                password: encrypted_password,
+                firstName: newUserData.firstName,
+                lastName: newUserData.lastName,
+            });
+        } else {
+            await userModel.updateOne({ _id: userId }, {
+                email: newUserData.email,
+                firstName: newUserData.firstName,
+                lastName: newUserData.lastName,
+            });
+        }
         await mongoose.disconnect();
         return "Update Process Successful ...";
     } catch (err) {
