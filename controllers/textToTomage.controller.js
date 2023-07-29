@@ -118,7 +118,7 @@ function generateImage(req, res) {
             break;
         }
         default: {
-            req.json("Error !!");
+            res.json("Error !!");
         }
     }
 }
