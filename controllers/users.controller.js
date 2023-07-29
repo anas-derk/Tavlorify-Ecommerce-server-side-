@@ -13,7 +13,7 @@ function createNewUser(req, res) {
             createNewUser(email, password, country).then((msg) => {
                 res.json(msg);
             })
-            .catch((err) => res.json(err));
+                .catch((err) => res.json(err));
         }
         else {
             // Return Error Msg If Email Is Not Valid
@@ -56,8 +56,16 @@ function getUserInfo(req, res) {
         getUserInfo(userId).then((user) => {
             res.json(user);
         })
-        .catch((err) => res.json(err));
+            .catch((err) => res.json(err));
     }
+}
+
+function getAllUsers(req, res) {
+    const { getAllUsers } = require("../models/users.model");
+    getAllUsers().then((result) => {
+        res.json(result);
+    })
+        .catch((err) => res.json(err));
 }
 
 function putUserInfo(req, res) {
@@ -69,7 +77,7 @@ function putUserInfo(req, res) {
         updateUserInfo(userId, newUserData).then((result) => {
             res.json(result);
         })
-        .catch((err) => res.json(err));
+            .catch((err) => res.json(err));
     }
 }
 
@@ -77,5 +85,6 @@ module.exports = {
     createNewUser,
     login,
     getUserInfo,
+    getAllUsers,
     putUserInfo,
 }

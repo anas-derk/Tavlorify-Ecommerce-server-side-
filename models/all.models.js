@@ -19,6 +19,10 @@ const userSchema = mongoose.Schema({
     email: String,
     password: String,
     country: String,
+    registerationDate: {
+        type: Date,
+        default: Date.now(),
+    },
 });
 
 // Create User Model From User Schema

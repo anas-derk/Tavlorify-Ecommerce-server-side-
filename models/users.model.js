@@ -85,6 +85,20 @@ async function getUserInfo(userId) {
     }
 }
 
+async function getAllUsers() {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        const users = await userModel.find({});
+        await mongoose.disconnect();
+        return users;
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+    }
+}
+
 async function updateUserInfo(userId, newUserData) {
     try {
         // Connect To DB
@@ -115,5 +129,6 @@ module.exports = {
     createNewUser,
     login,
     getUserInfo,
+    getAllUsers,
     updateUserInfo,
 }
