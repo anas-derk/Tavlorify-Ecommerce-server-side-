@@ -12,7 +12,7 @@ const bcrypt = require("bcryptjs");
 
 // Define Create New User Function
 
-async function createNewUser(email, password) {
+async function createNewUser(email, password, country) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -28,6 +28,7 @@ async function createNewUser(email, password) {
             let newUser = new userModel({
                 email,
                 password: encrypted_password,
+                country,
             });
             // Save The New User As Document In User Collection
             await newUser.save();
@@ -93,14 +94,12 @@ async function updateUserInfo(userId, newUserData) {
             await userModel.updateOne({ _id: userId }, {
                 email: newUserData.email,
                 password: encrypted_password,
-                firstName: newUserData.firstName,
-                lastName: newUserData.lastName,
+                country: newUserData.country,
             });
         } else {
             await userModel.updateOne({ _id: userId }, {
                 email: newUserData.email,
-                firstName: newUserData.firstName,
-                lastName: newUserData.lastName,
+                country: newUserData.country,
             });
         }
         await mongoose.disconnect();

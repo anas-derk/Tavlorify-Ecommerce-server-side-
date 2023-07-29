@@ -18,6 +18,7 @@ const adminModel = mongoose.model("admin", adminSchema);
 const userSchema = mongoose.Schema({
     email: String,
     password: String,
+    country: String,
 });
 
 // Create User Model From User Schema

@@ -1,15 +1,16 @@
 function createNewUser(req, res) {
-    let email = req.body.email.toLowerCase(),
-        password = req.body.password;
+    const email = req.body.email.toLowerCase(),
+        password = req.body.password,
+        country = req.body.country;
     // Start Handle Email Value To Check It Before Save In DB
     const { isEmail } = require("../global/functions");
-    // Check If Email, Password And Name Are Exist
-    if (email.length > 0 && password.length > 0) {
+    // Check If Email, Password And Country Are Exist
+    if (email.length > 0 && password.length > 0 && country.length > 0) {
         // Check If Email Valid
         if (isEmail(email)) {
             const { createNewUser } = require("../models/users.model");
             // Create New User
-            createNewUser(email, password).then((msg) => {
+            createNewUser(email, password, country).then((msg) => {
                 res.json(msg);
             })
             .catch((err) => res.json(err));
