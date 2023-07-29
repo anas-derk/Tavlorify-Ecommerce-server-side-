@@ -8,4 +8,6 @@ categoriesRouter.post("/add-new-category", categoriesController.addNewCategory);
 
 categoriesRouter.post("/add-new-sub-category/:categoryName", categoriesController.addNewSubCategory);
 
+categoriesRouter.post("/add-new-sub-category-from-sub-category/:categoryName/:subCategoryName", categoriesController.addNewSubCategoryFromSubCategory);
+
 module.exports = categoriesRouter;

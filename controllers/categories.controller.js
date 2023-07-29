@@ -31,8 +31,22 @@ function addNewSubCategory(req, res) {
     });
 }
 
+function addNewSubCategoryFromSubCategory(req, res) {
+    const categoryName = req.params.categoryName;
+    const subCategoryName = req.params.subCategoryName;
+    const subCategoryFromSubCategoryName = req.body.subCategoryFromSubCategoryName.toUpperCase();
+    const { addNewSubCategoryFromSubCategory } = require("../models/categories.model");
+    addNewSubCategoryFromSubCategory(categoryName, subCategoryName, subCategoryFromSubCategoryName).then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        console.log(err);
+        res.json(err);
+    });
+}
+
 module.exports = {
     getAllCategories,
     addNewCategory,
     addNewSubCategory,
+    addNewSubCategoryFromSubCategory,
 }
