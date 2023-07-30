@@ -114,6 +114,20 @@ const categorySchema = mongoose.Schema({
 
 const categoryModel = mongoose.model("categorie", categorySchema);
 
+// Create Order Schema
+
+const orderSchema = mongoose.Schema({
+    imageSrc: String,
+    name: String,
+    type: String,
+    dimentions: String,
+    price: Number,
+});
+
+// Create Order Model From Order Schema
+
+const orderModel = mongoose.model("order", orderSchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -124,4 +138,5 @@ module.exports = {
     imageToImageCategoryModel,
     productModel,
     categoryModel,
+    orderModel,
 }
