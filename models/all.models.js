@@ -88,9 +88,17 @@ const imageToImageCategoryModel = mongoose.model("image-to-image-categorie", ima
 const productSchema = mongoose.Schema({
     imageSrc: String,
     name: String,
-    type: String,
     dimentions: String,
+    subjects: Array,
+    room: String,
+    style: String,
+    orientation: String,
+    colors: Array,
     price: Number,
+    numberOfOrders: {
+        type: Number,
+        default: 0,
+    },
 });
 
 // Create Product Model From Product Schema
@@ -100,6 +108,7 @@ const productModel = mongoose.model("product", productSchema);
 // Create Category Schema
 
 const categorySchema = mongoose.Schema({
+    categoryType: String,
     name: String,
     subCategories: {
         type: [{

@@ -9,9 +9,10 @@ function getAllCategories(req, res) {
 }
 
 function addNewCategory(req, res) {
+    const categoryType = req.params.categoryType;
     const categoryName = req.body.categoryName.toUpperCase();
     const { addNewCategory } = require("../models/categories.model");
-    addNewCategory(categoryName).then((result) => {
+    addNewCategory(categoryType, categoryName).then((result) => {
         res.json(result);
     }).catch((err) => {
         console.log(err);
@@ -20,10 +21,11 @@ function addNewCategory(req, res) {
 }
 
 function addNewSubCategory(req, res) {
+    const categoryType = req.params.categoryType;
     const categoryName = req.params.categoryName;
     const subCategoryName = req.body.subCategoryName.toUpperCase();
     const { addNewSubCategory } = require("../models/categories.model");
-    addNewSubCategory(categoryName, subCategoryName).then((result) => {
+    addNewSubCategory(categoryType, categoryName, subCategoryName).then((result) => {
         res.json(result);
     }).catch((err) => {
         console.log(err);
@@ -32,11 +34,17 @@ function addNewSubCategory(req, res) {
 }
 
 function addNewSubCategoryFromSubCategory(req, res) {
+    const categoryType = req.params.categoryType;
     const categoryName = req.params.categoryName;
     const subCategoryName = req.params.subCategoryName;
     const subCategoryFromSubCategoryName = req.body.subCategoryFromSubCategoryName.toUpperCase();
     const { addNewSubCategoryFromSubCategory } = require("../models/categories.model");
-    addNewSubCategoryFromSubCategory(categoryName, subCategoryName, subCategoryFromSubCategoryName).then((result) => {
+    addNewSubCategoryFromSubCategory(
+        categoryType,
+        categoryName,
+        subCategoryName,
+        subCategoryFromSubCategoryName
+    ).then((result) => {
         res.json(result);
     }).catch((err) => {
         console.log(err);

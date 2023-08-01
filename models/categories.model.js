@@ -21,43 +21,43 @@ async function getAllCategories() {
     }
 }
 
-async function addNewCategory(categoryName) {
+async function addNewCategory(categoryType, categoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const category = await categoryModel.findOne({ name: categoryName });
+        const category = await categoryModel.findOne({ categoryType: categoryType, name: categoryName });
         if (category) {
             await mongoose.disconnect();
-            return "Sorry, This Category Has Already Been Added !!"
+            return "Sorry, This Category Has Already Been Added !!";
         }
         else {
             const newCategory = new categoryModel({
+                categoryType: categoryType,
                 name: categoryName,
             });
             await newCategory.save();
             await mongoose.disconnect();
             return "Congratulations, the category has been successfully added";
         }
-    }
-    catch (err) {
-        // Disconnect In DB
-        await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
-    }
+        }
+        catch (err) {
+            // Disconnect In DB
+            await mongoose.disconnect();
+            throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        }
 }
 
-async function addNewSubCategory(categoryName, subCategoryName) {
+async function addNewSubCategory(categoryType, categoryName, subCategoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const category = await categoryModel.findOne({ name: categoryName });
+        const category = await categoryModel.findOne({ categoryType: categoryType, name: categoryName });
         if (!category) {
             await mongoose.disconnect();
             return "Sorry, This Category Not Found !!";
         }
         else {
             const subCategoryIndex = category.subCategories.findIndex((subCategory) => subCategory.subCategoryName === subCategoryName);
-            console.log(subCategoryIndex);
             if (subCategoryIndex === -1) {
                 await categoryModel.updateOne({
                     name: categoryName,
@@ -84,11 +84,11 @@ async function addNewSubCategory(categoryName, subCategoryName) {
     }
 }
 
-async function addNewSubCategoryFromSubCategory(categoryName, subCategoryName, subCategoryFromSubCategoryName) {
+async function addNewSubCategoryFromSubCategory(categoryType, categoryName, subCategoryName, subCategoryFromSubCategoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const category = await categoryModel.findOne({ name: categoryName });
+        const category = await categoryModel.findOne({ categoryType: categoryType, name: categoryName });
         if (!category) {
             await mongoose.disconnect();
             return "Sorry, This Category Not Found !!";
