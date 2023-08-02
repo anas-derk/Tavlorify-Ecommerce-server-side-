@@ -89,15 +89,19 @@ const productSchema = mongoose.Schema({
     imageSrc: String,
     name: String,
     dimentions: String,
-    subjects: Array,
-    room: String,
-    style: String,
     orientation: String,
+    subjects: Array,
+    rooms: String,
+    styles: String,
     colors: Array,
     price: Number,
     numberOfOrders: {
         type: Number,
         default: 0,
+    },
+    postOfDate: {
+        type: Date,
+        default: Date.now(),
     },
 });
 
