@@ -48,14 +48,8 @@ async function getAllProducts() {
         // Connect To DB
         await mongoose.connect(DB_URL);
         let allProducts = await productModel.find({});
-        if (allProducts) {
-            await mongoose.disconnect();
-            return allProducts;
-        }
-        else {
-            await mongoose.disconnect();
-            return "Sorry, There Is No Products !!";
-        }
+        await mongoose.disconnect();
+        return allProducts;
     }
     catch (err) {
         // Disconnect To DB
