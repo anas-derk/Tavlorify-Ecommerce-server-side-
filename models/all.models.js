@@ -88,11 +88,10 @@ const imageToImageCategoryModel = mongoose.model("image-to-image-categorie", ima
 const productSchema = mongoose.Schema({
     imageSrc: String,
     name: String,
-    dimentions: String,
     orientation: String,
     subjects: Array,
-    rooms: String,
-    styles: String,
+    rooms: Array,
+    styles: Array,
     colors: Array,
     price: Number,
     numberOfOrders: {

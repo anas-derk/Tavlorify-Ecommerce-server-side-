@@ -1,11 +1,15 @@
 function postNewProduct(req, res) {
-    let bodyData = req.body;
-    let productImageSrc = req.file.path;
-    let productInfo = {
+    const bodyData = req.body;
+    const productImageSrc = req.file.path;
+    const productInfo = {
         ...Object.assign({}, bodyData),
         imageSrc: productImageSrc,
+        subjects: bodyData.subjects.split(","),
+        styles: bodyData.styles.split(","),
+        rooms: bodyData.rooms.split(","),
+        colors: bodyData.colors.split(","),
     };
-    if (!productInfo) res.json("Sorry, Please Send Product Info");
+    if (Object.keys(productInfo).length === 0) res.json("Sorry, Please Send Product Info");
     else {
         const { addNewProduct } = require("../models/products.model");
         addNewProduct(productInfo).then((result) => {
