@@ -36,6 +36,14 @@ const textToImageStyleSchema = mongoose.Schema({
     name: String,
     prompt: String,
     negative_prompt: String,
+    num_inference_steps: {
+        type: Number,
+        default: 50,
+    },
+    refine: {
+        type: String,
+        default: "",
+    },
     modelName: String,
     categoryName: String,
 });

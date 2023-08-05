@@ -19,6 +19,8 @@ function generateImage(req, res) {
         category = req.query.category,
         model_name = req.query.model_name,
         negative_prompt = req.query.negative_prompt,
+        num_inference_steps = req.query.num_inference_steps,
+        refine = req.query.expert_ensemble_refiner,
         width = req.query.width,
         height = req.query.height;
 
@@ -87,10 +89,13 @@ function generateImage(req, res) {
                 });
             break;
         }
-        case "kandinsky-2": {
-            runModel("ai-forever/kandinsky-2:601eea49d49003e6ea75a11527209c4f510a93e2112c969d548fbb45b9c4f19f", 
+        case "sdxl": {
+            runModel("stability-ai/sdxl:2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2", 
                 {
                     prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    negative_prompt: negative_prompt,
+                    num_inference_steps: num_inference_steps,
+                    refine: refine,
                     width: parseInt(width),
                     height: parseInt(height),
                 })
