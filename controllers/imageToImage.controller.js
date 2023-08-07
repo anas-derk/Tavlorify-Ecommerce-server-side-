@@ -13,6 +13,40 @@ function get_all_category_Styles_Data(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+function generateImage(req, res) {
+    const imageToImageInfo = {
+        ...Object.assign({}, req.body),
+    }
+    switch (imageToImageInfo.modelName) {
+        case "controlnet-1.1-x-realistic-vision-v2.0": {
+            runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
+                {
+                    image: `https://api1.outcircle2023.com/${req.file.path}`,
+                    prompt: `${imageToImageInfo.category}, ${imageToImageInfo.prompt}`,
+                    negative_prompt: imageToImageInfo.prompt,
+                    image_resolution: parseInt(imageToImageInfo.image_resolution),
+                    ddim_steps: parseInt(imageToImageInfo.ddim_steps),
+                    strength: parseInt(imageToImageInfo.strength),
+                })
+                .then((output) => {
+                    console.log(output);
+                    const { unlinkSync } = require("fs")
+                    res.json(output[0]);
+                    unlinkSync(req.file.path);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.json(err);
+                    unlinkSync(req.file.path);
+                });
+            break;
+        }
+        default: {
+            res.json("Error !!");
+        }
+    }
+}
+
 function addNewCategory(req, res) {
     const bodyData = req.body;
     const categoryInfo = {
@@ -108,9 +142,25 @@ function deleteStyleData(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
+async function runModel(model, input) {
+    const Replicate = require("replicate");
+    const replicate = new Replicate({
+        auth: process.env.API_TOKEN,
+    });
+    try {
+        const output = await replicate.run(
+            model, { input, },
+        );
+        return output;
+    } catch (err) {
+        return err;
+    }
+}
+
 module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
+    generateImage,
     addNewCategory,
     addNewStyle,
     putCategoryData,
