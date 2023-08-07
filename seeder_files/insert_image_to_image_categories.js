@@ -15,27 +15,27 @@ const imageToImageCategoryModel = mongoose.model("image-to-image-categorie", ima
 
 const imageToImageCategoriesData = [
     {
-        imgSrc: "assets/images/categories/imageToImage/GlobalArt.png",
+        imgSrc: "assets/images/categories/imageToImage/GlobalArt.jpg",
         name: "Global art",
     },
     {
-        imgSrc: "assets/images/categories/imageToImage/People.png",
+        imgSrc: "assets/images/categories/imageToImage/People.jpg",
         name: "People",
     },
     {
-        imgSrc: "assets/images/categories/imageToImage/CharactersKidsAndArt.png",
+        imgSrc: "assets/images/categories/imageToImage/CharactersKidsAndArt.jpg",
         name: "characters And Kids art",
     },
     {
-        imgSrc: "assets/images/categories/imageToImage/LandscapeAndNature.png",
+        imgSrc: "assets/images/categories/imageToImage/LandscapeAndNature.jpg",
         name: "Landscape And Nature",
     },
     {
-        imgSrc: "assets/images/categories/imageToImage/Cityscapes.png",
+        imgSrc: "assets/images/categories/imageToImage/Cityscapes.jpg",
         name: "Cityscapes",
     },
     {
-        imgSrc: "assets/images/categories/imageToImage/ScandinavianArt.png",
+        imgSrc: "assets/images/categories/imageToImage/ScandinavianArt.jpg",
         name: "Scandinavian art",
     },
 ];
