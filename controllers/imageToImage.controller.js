@@ -22,16 +22,16 @@ function generateImage(req, res) {
             runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                 {
                     image: `https://api1.outcircle2023.com/${req.file.path}`,
-                    prompt: `${imageToImageInfo.category}, ${imageToImageInfo.prompt}`,
-                    negative_prompt: imageToImageInfo.prompt,
+                    // image: "https://api1.outcircle2023.com/assets/images/generatedImages/previewImageForPoster.png",
+                    prompt: `${imageToImageInfo.prompt}`,
+                    n_prompt: imageToImageInfo.negative_prompt,
                     image_resolution: parseInt(imageToImageInfo.image_resolution),
                     ddim_steps: parseInt(imageToImageInfo.ddim_steps),
-                    strength: parseInt(imageToImageInfo.strength),
+                    strength: Number(imageToImageInfo.strength),
                 })
                 .then((output) => {
-                    console.log(output);
                     const { unlinkSync } = require("fs")
-                    res.json(output[0]);
+                    res.json(output);
                     unlinkSync(req.file.path);
                 })
                 .catch((err) => {
