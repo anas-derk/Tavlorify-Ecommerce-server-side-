@@ -21,8 +21,7 @@ function generateImage(req, res) {
         case "controlnet-1.1-x-realistic-vision-v2.0": {
             runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                 {
-                    image: `https://api1.outcircle2023.com/${req.file.path}`,
-                    // image: "https://api1.outcircle2023.com/assets/images/generatedImages/previewImageForPoster.png",
+                    image: `https://newapi.tavlorify.se/${req.file.path}`,
                     prompt: `${imageToImageInfo.prompt}`,
                     n_prompt: imageToImageInfo.negative_prompt,
                     image_resolution: parseInt(imageToImageInfo.image_resolution),
