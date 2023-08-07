@@ -30,7 +30,8 @@ function generateImage(req, res) {
                     strength: Number(imageToImageInfo.strength),
                 })
                 .then((output) => {
-                    const { unlinkSync } = require("fs")
+                    const { unlinkSync } = require("fs");
+                    console.log(output);
                     res.json(output);
                     unlinkSync(req.file.path);
                 })
