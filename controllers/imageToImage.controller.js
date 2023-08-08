@@ -17,38 +17,44 @@ async function generateImage(req, res) {
     const imageToImageInfo = {
         ...Object.assign({}, req.body),
     }
+    const filePath = `assets/image${Date.now()}.jpg`;
     const sharp = require("sharp");
-    const modifiedImageBuffer = await sharp(req.file.buffer).withMetadata(false).toBuffer();
-    const { writeFileSync } = require("fs");
-    const filePath = `assets/image${Date.now()}.jpg`
-    writeFileSync(filePath, modifiedImageBuffer);
-    switch (imageToImageInfo.modelName) {
-        case "controlnet-1.1-x-realistic-vision-v2.0": {
-            runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
-                {
-                    image: `https://newapi.tavlorify.se/${filePath}`,
-                    prompt: `${imageToImageInfo.prompt}`,
-                    n_prompt: imageToImageInfo.negative_prompt,
-                    image_resolution: parseInt(imageToImageInfo.image_resolution),
-                    ddim_steps: parseInt(imageToImageInfo.ddim_steps),
-                    strength: Number(imageToImageInfo.strength),
-                })
-                .then((output) => {
-                    const { unlinkSync } = require("fs");
-                    console.log(output);
-                    res.json(output);
-                    unlinkSync(req.file.path);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.json(err);
-                    unlinkSync(req.file.path);
-                });
-            break;
+    try {
+        const inputImageBuffer = await sharp(req.file.buffer).toBuffer();
+        const inputImageMetaData = await sharp(req.file.buffer).metadata();
+        console.log(inputImageMetaData.orientation);
+        if (inputImageMetaData.orientation && [5, 6, 7, 8].includes(inputImageMetaData.orientation)) {
+            let imageProcessor = sharp(inputImageBuffer);
+            imageProcessor = imageProcessor.rotate(90);
+            await imageProcessor.toFile(filePath);
+        } else {
+            await sharp(inputImageBuffer).toFile(filePath);
         }
-        default: {
-            res.json("Error !!");
+        switch (imageToImageInfo.modelName) {
+            case "controlnet-1.1-x-realistic-vision-v2.0": {
+                const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
+                    {
+                        image: `https://newapi.tavlorify.se/${filePath}`,
+                        prompt: `${imageToImageInfo.prompt}`,
+                        n_prompt: imageToImageInfo.negative_prompt,
+                        image_resolution: parseInt(imageToImageInfo.image_resolution),
+                        ddim_steps: parseInt(imageToImageInfo.ddim_steps),
+                        strength: Number(imageToImageInfo.strength),
+                    });
+                const { unlinkSync } = require("fs");
+                console.log(output);
+                res.json(output);
+                break;
+            }
+            default: {
+                res.json("Error !!");
+            }
         }
+    } catch (err) {
+        const { unlinkSync } = require("fs");
+        console.log(err);
+        res.json(err);
+        unlinkSync(filePath);
     }
 }
 
@@ -62,13 +68,13 @@ function addNewCategory(req, res) {
     addNewCategory(categoryInfo).then((result) => {
         res.json(result);
     })
-    .catch(err => {
-        console.log(err);
-        const { unlinkSync } = require("fs");
-        unlinkSync(req.files["categoryImgFile"][0].path);
-        unlinkSync(req.files["styleImgFile"][0].path);
-        res.json(err);
-    });
+        .catch(err => {
+            console.log(err);
+            const { unlinkSync } = require("fs");
+            unlinkSync(req.files["categoryImgFile"][0].path);
+            unlinkSync(req.files["styleImgFile"][0].path);
+            res.json(err);
+        });
 }
 
 function addNewStyle(req, res) {
@@ -81,12 +87,12 @@ function addNewStyle(req, res) {
     addNewStyle(styleData).then((result) => {
         res.json(result);
     })
-    .catch((err) => {
-        console.log(err);
-        const { unlinkSync } = require("fs");
-        unlinkSync(req.file.path);
-        res.json(err);
-    });
+        .catch((err) => {
+            console.log(err);
+            const { unlinkSync } = require("fs");
+            unlinkSync(req.file.path);
+            res.json(err);
+        });
 }
 
 function putCategoryData(req, res) {
@@ -105,8 +111,8 @@ function putStyleData(req, res) {
     let styleId = req.params.styleId;
     let newPrompt = req.body.newPrompt,
         newNegativePrompt = req.body.newNegativePrompt;
-        newDdimSteps = req.body.newDdimSteps;
-        newStrength = req.body.newStrength;
+    newDdimSteps = req.body.newDdimSteps;
+    newStrength = req.body.newStrength;
     const { updateStyleData } = require("../models/imageToImageStyles.model");
     updateStyleData(styleId, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
         .then((result) => res.json(result))
@@ -115,7 +121,7 @@ function putStyleData(req, res) {
 
 function deleteCategoryData(req, res) {
     const categoryId = req.params.categoryId;
-    if (!categoryId) return "Sorry, Please Send Category Id"; 
+    if (!categoryId) return "Sorry, Please Send Category Id";
     const { deleteCategoryData } = require("../models/imageToImageCategories.model");
     deleteCategoryData(categoryId)
         .then((result) => {
@@ -123,7 +129,7 @@ function deleteCategoryData(req, res) {
             if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
                 const { unlinkSync } = require("fs");
                 unlinkSync(result.categoryData.imgSrc);
-                for(let i = 0; i < result.categoryStylesData.length; i++) {
+                for (let i = 0; i < result.categoryStylesData.length; i++) {
                     unlinkSync(result.categoryStylesData[i].imgSrc);
                 }
                 res.json("Category Deleting Process Is Succesfuly !!");
@@ -134,7 +140,7 @@ function deleteCategoryData(req, res) {
 
 function deleteStyleData(req, res) {
     const styleId = req.params.styleId;
-    if (!styleId) return "Sorry, Please Send Style Id"; 
+    if (!styleId) return "Sorry, Please Send Style Id";
     const { deleteStyleData } = require("../models/imageToImageStyles.model");
     deleteStyleData(styleId)
         .then((result) => {
