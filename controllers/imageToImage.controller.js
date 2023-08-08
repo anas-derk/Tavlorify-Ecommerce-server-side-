@@ -13,15 +13,20 @@ function get_all_category_Styles_Data(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
-function generateImage(req, res) {
+async function generateImage(req, res) {
     const imageToImageInfo = {
         ...Object.assign({}, req.body),
     }
+    const sharp = require("sharp");
+    const modifiedImageBuffer = await sharp(req.file.buffer).withMetadata(false).toBuffer();
+    const { writeFileSync } = require("fs");
+    const filePath = `assets/image${Date.now()}.jpg`
+    writeFileSync(filePath, modifiedImageBuffer);
     switch (imageToImageInfo.modelName) {
         case "controlnet-1.1-x-realistic-vision-v2.0": {
             runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                 {
-                    image: `https://newapi.tavlorify.se/${req.file.path}`,
+                    image: `https://newapi.tavlorify.se/${filePath}`,
                     prompt: `${imageToImageInfo.prompt}`,
                     n_prompt: imageToImageInfo.negative_prompt,
                     image_resolution: parseInt(imageToImageInfo.image_resolution),

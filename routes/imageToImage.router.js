@@ -9,14 +9,7 @@ imageToImageRouter.get("/categories/all-categories-data", imageToImageController
 imageToImageRouter.get("/styles/category-styles-data", imageToImageController.get_all_category_Styles_Data);
 
 imageToImageRouter.post("/generate-image", multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, "./assets/images");
-        },
-        filename: (req, file, cb) => {
-            cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
-        },
-    })
+    storage: multer.memoryStorage(),
 }).single("imageFile"), imageToImageController.generateImage);
 
 imageToImageRouter.post("/categories/add-new-category", multer({
