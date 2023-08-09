@@ -13,11 +13,8 @@ function get_all_category_Styles_Data(req, res) {
         .catch((err) => res.status(500).json(err));
 }
 
-async function generateImage(req, res) {
-    const imageToImageInfo = {
-        ...Object.assign({}, req.body),
-    }
-    const filePath = `assets/image${Date.now()}.jpg`;
+async function uploadImageAndProcessing(req, res) {
+    const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
     const sharp = require("sharp");
     try {
         const inputImageBuffer = await sharp(req.file.buffer).toBuffer();
@@ -27,22 +24,34 @@ async function generateImage(req, res) {
             let imageProcessor = sharp(inputImageBuffer);
             imageProcessor = imageProcessor.rotate(90);
             await imageProcessor.toFile(filePath);
+            res.json({ imageLink: `https://newapi.tavlorify.se/${filePath}`, orientationNumber: inputImageMetaData.orientation });
         } else {
             await sharp(inputImageBuffer).toFile(filePath);
+            res.json({ imageLink: `https://newapi.tavlorify.se/${filePath}`, orientationNumber: inputImageMetaData.orientation });
         }
+    }
+    catch(err) {
+        const { unlinkSync } = require("fs");
+        unlinkSync(filePath);
+        console.log(err);
+        res.status(500).json(err);
+    }
+}
+
+async function generateImage(req, res) {
+    const imageToImageInfo = req.query;
+    try {
         switch (imageToImageInfo.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
                 const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                     {
-                        image: `https://newapi.tavlorify.se/${filePath}`,
-                        prompt: `${imageToImageInfo.prompt}`,
+                        image: imageToImageInfo.imageLink,
+                        prompt: imageToImageInfo.prompt,
                         n_prompt: imageToImageInfo.negative_prompt,
                         image_resolution: parseInt(imageToImageInfo.image_resolution),
                         ddim_steps: parseInt(imageToImageInfo.ddim_steps),
                         strength: Number(imageToImageInfo.strength),
                     });
-                const { unlinkSync } = require("fs");
-                unlinkSync(filePath);
                 console.log(output);
                 res.json(output);
                 break;
@@ -52,8 +61,6 @@ async function generateImage(req, res) {
             }
         }
     } catch (err) {
-        const { unlinkSync } = require("fs");
-        unlinkSync(filePath);
         console.log(err);
         res.json(err);
     }
@@ -172,6 +179,7 @@ async function runModel(model, input) {
 module.exports = {
     getAllCategoriesData,
     get_all_category_Styles_Data,
+    uploadImageAndProcessing,
     generateImage,
     addNewCategory,
     addNewStyle,

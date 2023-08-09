@@ -4,13 +4,15 @@ const imageToImageController = require("../controllers/imageToImage.controller")
 
 const multer = require("multer");
 
+imageToImageRouter.get("/generate-image", imageToImageController.generateImage);
+
 imageToImageRouter.get("/categories/all-categories-data", imageToImageController.getAllCategoriesData);
 
 imageToImageRouter.get("/styles/category-styles-data", imageToImageController.get_all_category_Styles_Data);
 
-imageToImageRouter.post("/generate-image", multer({
+imageToImageRouter.post("/upload-image-and-processing", multer({
     storage: multer.memoryStorage(),
-}).single("imageFile"), imageToImageController.generateImage);
+}).single("imageFile"), imageToImageController.uploadImageAndProcessing);
 
 imageToImageRouter.post("/categories/add-new-category", multer({
     storage: multer.diskStorage({
