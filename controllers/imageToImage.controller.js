@@ -20,21 +20,21 @@ async function generateImage(req, res) {
     const filePath = `assets/image${Date.now()}.jpg`;
     const sharp = require("sharp");
     try {
-        // const inputImageBuffer = await sharp(req.file.path).toBuffer();
-        // const inputImageMetaData = await sharp(req.file.path).metadata();
-        // console.log(inputImageMetaData.orientation);
-        // if (inputImageMetaData.orientation && [5, 6, 7, 8].includes(inputImageMetaData.orientation)) {
-        //     let imageProcessor = sharp(inputImageBuffer);
-        //     imageProcessor = imageProcessor.rotate(90);
-        //     await imageProcessor.toFile(filePath);
-        // } else {
-        //     await sharp(inputImageBuffer).toFile(filePath);
-        // }
+        const inputImageBuffer = await sharp(req.file.buffer).toBuffer();
+        const inputImageMetaData = await sharp(req.file.buffer).metadata();
+        console.log(inputImageMetaData.orientation);
+        if (inputImageMetaData.orientation && [5, 6, 7, 8].includes(inputImageMetaData.orientation)) {
+            let imageProcessor = sharp(inputImageBuffer);
+            imageProcessor = imageProcessor.rotate(90);
+            await imageProcessor.toFile(filePath);
+        } else {
+            await sharp(inputImageBuffer).toFile(filePath);
+        }
         switch (imageToImageInfo.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
                 const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                     {
-                        image: `https://newapi.tavlorify.se/${req.file.path}`,
+                        image: `https://newapi.tavlorify.se/${filePath}`,
                         prompt: `${imageToImageInfo.prompt}`,
                         n_prompt: imageToImageInfo.negative_prompt,
                         image_resolution: parseInt(imageToImageInfo.image_resolution),
@@ -42,6 +42,7 @@ async function generateImage(req, res) {
                         strength: Number(imageToImageInfo.strength),
                     });
                 const { unlinkSync } = require("fs");
+                unlinkSync(filePath);
                 console.log(output);
                 res.json(output);
                 break;
@@ -52,9 +53,9 @@ async function generateImage(req, res) {
         }
     } catch (err) {
         const { unlinkSync } = require("fs");
+        unlinkSync(filePath);
         console.log(err);
         res.json(err);
-        unlinkSync(filePath);
     }
 }
 
