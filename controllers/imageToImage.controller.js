@@ -17,18 +17,8 @@ async function uploadImageAndProcessing(req, res) {
     const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
     const sharp = require("sharp");
     try {
-        const inputImageBuffer = await sharp(req.file.buffer).toBuffer();
-        const inputImageMetaData = await sharp(req.file.buffer).metadata();
-        console.log(inputImageMetaData.orientation);
-        if (inputImageMetaData.orientation && [5, 6, 7, 8].includes(inputImageMetaData.orientation)) {
-            let imageProcessor = sharp(inputImageBuffer);
-            imageProcessor = imageProcessor.rotate(90);
-            await imageProcessor.toFile(filePath);
-            res.json({ imageLink: `https://newapi.tavlorify.se/${filePath}`, orientationNumber: inputImageMetaData.orientation });
-        } else {
-            await sharp(inputImageBuffer).toFile(filePath);
-            res.json({ imageLink: `https://newapi.tavlorify.se/${filePath}`, orientationNumber: inputImageMetaData.orientation });
-        }
+        await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
+        res.json({ imageLink: `http://newapi.tavlorify.se/${filePath}`});
     }
     catch(err) {
         const { unlinkSync } = require("fs");
