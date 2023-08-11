@@ -18,7 +18,7 @@ async function uploadImageAndProcessing(req, res) {
     const sharp = require("sharp");
     try {
         await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
-        res.json({ imageLink: `http://newapi.tavlorify.se/${filePath}`});
+        res.json({ imageLink: `https://newapi.tavlorify.se/${filePath}`});
     }
     catch(err) {
         const { unlinkSync } = require("fs");
