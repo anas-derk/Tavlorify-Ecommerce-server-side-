@@ -39,6 +39,7 @@ async function generateImage(req, res) {
                         prompt: imageToImageInfo.prompt,
                         n_prompt: imageToImageInfo.negative_prompt,
                         image_resolution: parseInt(imageToImageInfo.image_resolution),
+                        preprocessor_resolution: parseInt(imageToImageInfo.preprocessor_resolution),
                         ddim_steps: parseInt(imageToImageInfo.ddim_steps),
                         strength: Number(imageToImageInfo.strength),
                     });
