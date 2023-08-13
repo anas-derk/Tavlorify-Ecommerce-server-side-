@@ -17,8 +17,15 @@ async function uploadImageAndProcessing(req, res) {
     const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
     const sharp = require("sharp");
     try {
-        await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
-        res.json({ imageLink: `https://newapi.tavlorify.se/${filePath}`});
+        const { width, height } = await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
+        let imageType;
+        if (width > height) imageType = "horizontal";
+        else if (width < height) imageType = "vertical";
+        else imageType = "square";
+        res.json({
+            imageLink: `https://newapi.tavlorify.se/${filePath}`,
+            imageType: imageType,
+        });
     }
     catch(err) {
         const { unlinkSync } = require("fs");
