@@ -77,18 +77,4 @@ app.post("/download-created-image", (req, res) => {
         });
 });
 
-// async function cropImage() {
-//     const sharp = require("sharp");
-//     try {
-//         const image = await sharp(`assets/images/generatedImages/previewImageForPosterInImageToImageH.png`)
-//             .resize({ fit: "cover", width: null, height: 417 })
-//             .extract({ width: 585, height: 417, left: 0, top: 0 })
-//             .toFile("assets/images/new.png");
-//     }
-//     catch (err) {
-//         console.log(err);
-//     }
-// }
-
-// cropImage();
 /* End Handle The Routes */

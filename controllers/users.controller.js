@@ -95,8 +95,24 @@ function postGeneratedImageAndInfoIt(req, res) {
         })
         .catch(error => {
             console.error('حدث خطأ أثناء تحميل الصورة:', error);
-            res.status(500).json({ msg: "Sorry, Error In Download !!", error});
+            res.status(500).json({ msg: "Sorry, Error In Download !!", error });
         });
+}
+
+async function postImageAfterCroping(req, res) {
+    const cropingDetails = req.body;
+    const sharp = require("sharp");
+    try {
+        await sharp(cropingDetails.imagePath)
+            .resize({ fit: "cover", width: null, height: cropingDetails.height })
+            .extract({ width: cropingDetails.width, height: cropingDetails.height, left: cropingDetails.left, top: cropingDetails.top })
+            .toFile(`assets/images/cropedImages/cropedImage${Math.random()}_${Date.now()}__.png`);
+        res.json(`assets/images/cropedImages/cropedImage${Math.random()}_${Date.now()}__.png`);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
 }
 
 module.exports = {
@@ -105,5 +121,6 @@ module.exports = {
     getUserInfo,
     getAllUsers,
     putUserInfo,
-    postGeneratedImageAndInfoIt
+    postGeneratedImageAndInfoIt,
+    postImageAfterCroping,
 }
