@@ -103,11 +103,12 @@ async function postImageAfterCroping(req, res) {
     const cropingDetails = req.body;
     const sharp = require("sharp");
     try {
+        const imagePath = `assets/images/cropedImages/cropedImage${Math.random()}_${Date.now()}__.png`;
         await sharp(cropingDetails.imagePath)
             .resize({ fit: "cover", width: null, height: cropingDetails.height })
             .extract({ width: cropingDetails.width, height: cropingDetails.height, left: cropingDetails.left, top: cropingDetails.top })
-            .toFile(`assets/images/cropedImages/cropedImage${Math.random()}_${Date.now()}__.png`);
-        res.json(`assets/images/cropedImages/cropedImage${Math.random()}_${Date.now()}__.png`);
+            .toFile(imagePath);
+        res.json(imagePath);
     }
     catch (err) {
         console.log(err);
