@@ -65,11 +65,11 @@ app.post("/download-created-image", (req, res) => {
     const imageData = req.body;
     imageData.imageName = imageData.imageName.replaceAll(" ", "_");
     const randomImageName = `${Math.random()}_${Date.now()}__${imageData.imageName}`;
-    const destination = path.join(__dirname, "assets", "images" , "generatedImages", randomImageName);
+    const destination = path.join(__dirname, "assets", "images", "generatedImages", randomImageName);
     get(imageData.imageUrl, { responseType: 'stream' })
         .then(response => {
             response.data.pipe(createWriteStream(destination));
-            res.json({ msg: "success file downloaded !!", imageUrl: `assets/images/generatedImages/${randomImageName}`});
+            res.json({ msg: "success file downloaded !!", imageUrl: `assets/images/generatedImages/${randomImageName}` });
         })
         .catch(error => {
             console.error('حدث خطأ أثناء تحميل الصورة:', error);
@@ -77,4 +77,18 @@ app.post("/download-created-image", (req, res) => {
         });
 });
 
+// async function cropImage() {
+//     const sharp = require("sharp");
+//     try {
+//         const image = await sharp(`assets/images/generatedImages/previewImageForPosterInImageToImageH.png`)
+//             .resize({ fit: "cover", width: null, height: 417 })
+//             .extract({ width: 585, height: 417, left: 0, top: 0 })
+//             .toFile("assets/images/new.png");
+//     }
+//     catch (err) {
+//         console.log(err);
+//     }
+// }
+
+// cropImage();
 /* End Handle The Routes */
