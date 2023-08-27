@@ -104,10 +104,17 @@ async function postImageAfterCroping(req, res) {
     const sharp = require("sharp");
     try {
         const imagePath = `assets/images/cropedImages/cropedImage${Math.random()}_${Date.now()}__.png`;
-        await sharp(cropingDetails.imagePath)
-            .resize({ fit: "cover", width: null, height: cropingDetails.height })
-            .extract({ width: cropingDetails.width, height: cropingDetails.height, left: cropingDetails.left, top: cropingDetails.top })
-            .toFile(imagePath);
+        const imageBuffer = sharp(cropingDetails.imagePath);
+        const { width, height } = await imageBuffer.metadata();
+        if (width < height) {
+            await imageBuffer.resize({ fit: "cover", width: cropingDetails.width, height: null })
+                .extract({ width: cropingDetails.width, height: cropingDetails.height, left: cropingDetails.left, top: cropingDetails.top })
+                .toFile(imagePath);
+        } else if (width > height) {
+            await imageBuffer.resize({ fit: "cover", width: null, height: cropingDetails.height })
+                .extract({ width: cropingDetails.width, height: cropingDetails.height, left: cropingDetails.left, top: cropingDetails.top })
+                .toFile(imagePath);
+        }
         res.json(imagePath);
     }
     catch (err) {
