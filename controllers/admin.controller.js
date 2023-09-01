@@ -22,4 +22,11 @@ function getAdminLogin(req, res) {
     }
 }
 
-module.exports = { getAdminLogin };
+function putStyleImage(req, res) {
+    console.log(req.query, req.file);
+}
+
+module.exports = {
+    getAdminLogin,
+    putStyleImage,
+};
