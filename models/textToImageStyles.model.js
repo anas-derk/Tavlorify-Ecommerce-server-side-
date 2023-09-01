@@ -49,7 +49,7 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, newPrompt, newNegativePrompt) {
+async function updateStyleData(styleId, newName, newPrompt, newNegativePrompt) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -57,6 +57,7 @@ async function updateStyleData(styleId, newPrompt, newNegativePrompt) {
         let newStyleData = await textToImageStyleModel.updateOne({
             _id: styleId,
         }, {
+            name: newName,
             prompt: newPrompt,
             negative_prompt: newNegativePrompt,
         });

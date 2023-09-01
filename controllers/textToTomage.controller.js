@@ -167,10 +167,11 @@ function addNewStyle(req, res) {
 
 function putStyleData(req, res) {
     let styleId = req.params.styleId;
-    let newPrompt = req.body.newPrompt,
+    let newName = req.body.newName,
+        newPrompt = req.body.newPrompt,
         newNegativePrompt = req.body.newNegativePrompt;
     const { updateStyleData } = require("../models/textToImageStyles.model");
-    updateStyleData(styleId, newPrompt, newNegativePrompt)
+    updateStyleData(styleId, newName, newPrompt, newNegativePrompt)
         .then((result) => res.json(result))
         .catch((err) => res.status(500).json(err));
 }
