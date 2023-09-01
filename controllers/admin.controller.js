@@ -23,7 +23,22 @@ function getAdminLogin(req, res) {
 }
 
 function putStyleImage(req, res) {
-    console.log(req.query, req.file);
+    const { updateStyleImagePath } = require("../models/admin.model");
+    updateStyleImagePath(req.query.service, req.query.styleId, req.file.path)
+    .then((result) => {
+        const { unlinkSync } = require("fs");
+        if (result !== "sorry, this style is not found") {
+            unlinkSync(result);
+            res.json("style image process is succesfuly !!");
+        } else {
+            unlinkSync(req.file.path);
+            res.json("sorry, this style is not found");
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+    });
 }
 
 module.exports = {

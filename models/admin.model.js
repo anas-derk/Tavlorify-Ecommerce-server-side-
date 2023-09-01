@@ -1,6 +1,6 @@
 // Import Mongoose And Admin Model Object
 
-const { mongoose, adminModel } = require("../models/all.models");
+const { mongoose, adminModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
 
 // Import Database URL
 
@@ -35,6 +35,38 @@ async function adminLogin(email, password) {
     }
 }
 
+async function handleChangeStyleImagePath(model, styleId, newFilePath) {
+    const styleData = await model.findById(styleId);
+    if (!styleData) {
+        await mongoose.disconnect();
+        return "sorry, this style is not found";
+    } else {
+        await model.updateOne({
+            _id: styleId,
+        }, { imgSrc: newFilePath });
+        await mongoose.disconnect();
+        return styleData.imgSrc;
+    }
+}
+
+async function updateStyleImagePath(service, styleId, newFilePath) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        if (service === "text-to-image") {
+            return handleChangeStyleImagePath(textToImageStyleModel, styleId, newFilePath);
+        } else {
+            return handleChangeStyleImagePath(imageToImageStyleModel, styleId, newFilePath);
+        }
+    } catch (err) {
+        console.log(err);
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     adminLogin,
+    updateStyleImagePath,
 }

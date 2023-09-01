@@ -5,8 +5,9 @@ const adminController = require("../controllers/admin.controller");
 const multer = require("multer");
 
 function checkServiceName(req, res, next) {
-    if (req.query.service === "text-to-image" || req.query.service === "image-to-image") next();
-    else res.status(400).json("service name uncorrect !!");
+    const serviceNameAndStyleId = req.query;
+    if ((serviceNameAndStyleId.service === "text-to-image" || serviceNameAndStyleId.service === "image-to-image") &&serviceNameAndStyleId.styleId) next();
+    else res.status(400).json("service name uncorrect or not found, or styleId not found !!");
 }
 
 adminRouter.get("/login", adminController.getAdminLogin);
