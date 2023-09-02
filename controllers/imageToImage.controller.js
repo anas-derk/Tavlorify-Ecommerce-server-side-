@@ -103,14 +103,17 @@ function addNewStyle(req, res) {
 
 function putCategoryData(req, res) {
     const categoryId = req.params.categoryId;
+    const newCategorySortNumber = req.body.newCategorySortNumber;
     const oldCategoryName = req.query.oldCategoryName;
     const newCategoryName = req.body.newCategoryName;
-    console.log(categoryId, oldCategoryName, newCategoryName);
-    if (!categoryId || !oldCategoryName || !newCategoryName) return "Sorry, Please Send Category Id And Old Category Name And New Category Name !!";
-    const { updateCategoryData } = require("../models/imageToImageCategories.model");
-    updateCategoryData(categoryId, oldCategoryName, newCategoryName)
-        .then((result) => res.json(result))
-        .catch((err) => res.status(500).json(err));
+    if (!newCategorySortNumber || !categoryId || !oldCategoryName || !newCategoryName) {
+        res.status(400).json("Sorry, Please Send Category Id, New Category Sort Number And Old Category Name And New Category Name !!");
+    } else {
+        const { updateCategoryData } = require("../models/imageToImageCategories.model");
+        updateCategoryData(categoryId, newCategorySortNumber, oldCategoryName, newCategoryName)
+            .then((result) => res.json(result))
+            .catch((err) => res.status(500).json(err));
+    }
 }
 
 function putStyleData(req, res) {

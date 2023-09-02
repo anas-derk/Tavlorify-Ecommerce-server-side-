@@ -182,7 +182,7 @@ function putCategoryData(req, res) {
     const oldCategoryName = req.query.oldCategoryName;
     const newCategoryName = req.body.newCategoryName;
     if (!newCategorySortNumber || !categoryId || !oldCategoryName || !newCategoryName) {
-        res.json("Sorry, Please Send Category Id And Old Category Name And New Category Name !!");
+        res.status(400).json("Sorry, Please Send Category Id, New Category Sort Number And Old Category Name And New Category Name !!");
     } else {
         const { updateCategoryData } = require("../models/textToImageCategories.model");
         updateCategoryData(categoryId, newCategorySortNumber, oldCategoryName, newCategoryName)

@@ -7,6 +7,7 @@ const DB_URL = "mongodb://127.0.0.1:27017/e-commerce-canvas";
 const imageToImageCategorySchema = mongoose.Schema({
     imgSrc: String,
     name: String,
+    sortNumber: Number,
 });
 
 // Create Image To Image Category Model From Category Schema
@@ -17,26 +18,32 @@ const imageToImageCategoriesData = [
     {
         imgSrc: "assets/images/categories/imageToImage/GlobalArt.jpg",
         name: "Global art",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/categories/imageToImage/People.jpg",
         name: "People",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/categories/imageToImage/CharactersKidsAndArt.jpg",
         name: "characters And Kids art",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/categories/imageToImage/LandscapeAndNature.jpg",
         name: "Landscape And Nature",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/categories/imageToImage/Cityscapes.jpg",
         name: "Cityscapes",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/categories/imageToImage/ScandinavianArt.jpg",
         name: "Scandinavian art",
+        sortNumber: 6,
     },
 ];
 
