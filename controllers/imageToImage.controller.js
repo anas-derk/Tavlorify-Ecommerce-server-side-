@@ -115,12 +115,13 @@ function putCategoryData(req, res) {
 
 function putStyleData(req, res) {
     let styleId = req.params.styleId;
-    let newPrompt = req.body.newPrompt,
+    let newName = req.body.newName,
+        newPrompt = req.body.newPrompt,
         newNegativePrompt = req.body.newNegativePrompt;
     newDdimSteps = req.body.newDdimSteps;
     newStrength = req.body.newStrength;
     const { updateStyleData } = require("../models/imageToImageStyles.model");
-    updateStyleData(styleId, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
+    updateStyleData(styleId, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
         .then((result) => res.json(result))
         .catch((err) => res.status(500).json(err));
 }

@@ -51,7 +51,7 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
+async function updateStyleData(styleId, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -59,6 +59,7 @@ async function updateStyleData(styleId, newPrompt, newNegativePrompt, newDdimSte
         let newStyleData = await imageToImageStyleModel.updateOne({
             _id: styleId,
         }, {
+            name: newName,
             prompt: newPrompt,
             negative_prompt: newNegativePrompt,
             ddim_steps: newDdimSteps,
