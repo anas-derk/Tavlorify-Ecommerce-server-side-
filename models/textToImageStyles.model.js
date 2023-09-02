@@ -31,6 +31,7 @@ async function get_all_category_Styles_Data(categoryName) {
 async function addNewStyle(styleData) {
     try {
         await mongoose.connect(DB_URL);
+        const stylesCount = await textToImageStyleModel.countDocuments({ categoryName: styleData.categoryName });
         const newStyleData = new textToImageStyleModel({
             imgSrc: styleData.imgSrc,
             name: styleData.styleName,
@@ -38,12 +39,14 @@ async function addNewStyle(styleData) {
             negative_prompt: styleData.styleNegativePrompt,
             modelName: styleData.modelName,
             categoryName: styleData.categoryName,
+            sortNumber: stylesCount + 1,
         });
         await newStyleData.save();
         await mongoose.disconnect();
         return "Adding New Category Style For Text To Image Page Process Is Succesfuly !!";
     }
     catch (err) {
+        console.log(err);
         await mongoose.disconnect();
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
     }

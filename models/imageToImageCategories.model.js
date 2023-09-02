@@ -53,9 +53,11 @@ async function getCategoryData(categoryName) {
 async function addNewCategory(categoryInfo) {
     try {
         await mongoose.connect(DB_URL);
+        const categoriesCount = await imageToImageCategoryModel.countDocuments({});
         const newCategory = new imageToImageCategoryModel({
             imgSrc: categoryInfo["categoryImgFile"][0].path,
             name: categoryInfo.categoryName,
+            sortNumber: categoriesCount + 1,
         });
         await newCategory.save();
         const newStyle = new imageToImageStyleModel({
@@ -66,6 +68,7 @@ async function addNewCategory(categoryInfo) {
             ddim_steps: categoryInfo.ddim_steps,
             strength: categoryInfo.strength,
             categoryName: categoryInfo.categoryName,
+            sortNumber: 1,
         });
         await newStyle.save();
         await mongoose.disconnect();

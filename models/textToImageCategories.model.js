@@ -32,9 +32,11 @@ async function getAllCategoriesData() {
 async function addNewCategory(categoryInfo) {
     try {
         await mongoose.connect(DB_URL);
+        const categoriesCount = await textToImageCategoryModel.countDocuments({});
         const newCategory = new textToImageCategoryModel({
             imgSrc: categoryInfo["categoryImgFile"][0].path,
             name: categoryInfo.categoryName,
+            sortNumber: categoriesCount + 1,
         });
         await newCategory.save();
         const newStyle = new textToImageStyleModel({
@@ -44,6 +46,7 @@ async function addNewCategory(categoryInfo) {
             negative_prompt: categoryInfo.styleNegativePrompt,
             modelName: categoryInfo.modelName,
             categoryName: categoryInfo.categoryName,
+            sortNumber: 1,
         });
         await newStyle.save();
         await mongoose.disconnect();

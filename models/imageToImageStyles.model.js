@@ -31,6 +31,7 @@ async function get_all_category_Styles_Data(categoryName){
 async function addNewStyle(styleData) {
     try {
         await mongoose.connect(DB_URL);
+        const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName: styleData.categoryName });
         const newStyleData = new imageToImageStyleModel({
             imgSrc: styleData.imgSrc,
             name: styleData.styleName,
@@ -40,6 +41,7 @@ async function addNewStyle(styleData) {
             strength: styleData.strength,
             modelName: styleData.modelName,
             categoryName: styleData.categoryName,
+            sortNumber: stylesCount + 1,
         });
         await newStyleData.save();
         await mongoose.disconnect();
