@@ -72,7 +72,10 @@ const imageToImageStyleSchema = mongoose.Schema({
     negative_prompt: String,
     ddim_steps: Number,
     strength: Number,
-    modelName: String,
+    modelName: {
+        type: String,
+        default: "controlnet-1.1-x-realistic-vision-v2.0",
+    },
     categoryName: String,
 });
 

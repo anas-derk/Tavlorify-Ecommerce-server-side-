@@ -65,7 +65,6 @@ async function addNewCategory(categoryInfo) {
             negative_prompt: categoryInfo.styleNegativePrompt,
             ddim_steps: categoryInfo.ddim_steps,
             strength: categoryInfo.strength,
-            modelName: categoryInfo.modelName,
             categoryName: categoryInfo.categoryName,
         });
         await newStyle.save();
