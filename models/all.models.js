@@ -46,6 +46,7 @@ const textToImageStyleSchema = mongoose.Schema({
     },
     modelName: String,
     categoryName: String,
+    sortNumber: Number,
 });
 
 // Create Text To Image Style Model From Style Schema
@@ -57,6 +58,7 @@ const textToImageStyleModel = mongoose.model("text-to-image-style", textToImageS
 const textToImageCategorySchema = mongoose.Schema({
     imgSrc: String,
     name: String,
+    sortNumber: Number,
 });
 
 // Create Text To Image Category Model From Category Schema
@@ -77,6 +79,7 @@ const imageToImageStyleSchema = mongoose.Schema({
         default: "controlnet-1.1-x-realistic-vision-v2.0",
     },
     categoryName: String,
+    sortNumber: Number,
 });
 
 // Create Image To Image Style Model From Style Schema
@@ -88,6 +91,7 @@ const imageToImageStyleModel = mongoose.model("image-to-image-style", imageToIma
 const imageToImageCategorySchema = mongoose.Schema({
     imgSrc: String,
     name: String,
+    sortNumber: Number,
 });
 
 // Create Image To Image Category Model From Category Schema

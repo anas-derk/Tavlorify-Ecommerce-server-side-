@@ -11,7 +11,7 @@ async function getAllCategoriesData() {
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let categorieData = await textToImageCategoryModel.find({});
+        let categorieData = await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
         if (categorieData) {
             await mongoose.disconnect();
             return categorieData;
@@ -22,6 +22,7 @@ async function getAllCategoriesData() {
         }
     }
     catch (err) {
+        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
@@ -77,7 +78,7 @@ async function getCategoryData(categoryName) {
     }
 }
 
-async function updateCategoryData(categoryId, oldCategoryName, newCategoryName) {
+async function updateCategoryData(categoryId, newCategorySortNumber, oldCategoryName, newCategoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -85,10 +86,11 @@ async function updateCategoryData(categoryId, oldCategoryName, newCategoryName) 
             _id: categoryId,
         }, {
             name: newCategoryName,
+            sortNumber: newCategorySortNumber,
         });
         if (result.modifiedCount === 0) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         else {
-            const result1 = await textToImageStyleModel.updateMany({
+            await textToImageStyleModel.updateMany({
                 categoryName: oldCategoryName,
             }, {
                 categoryName: newCategoryName,
