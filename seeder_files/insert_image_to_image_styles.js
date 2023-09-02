@@ -13,7 +13,7 @@ const imageToImageStyleSchema = mongoose.Schema({
     ddim_steps: Number,
     strength: Number,
     categoryName: String,
-    sortNumber: String,
+    sortNumber: Number,
 });
 
 // Create Image To Image Style Model From Style Schema

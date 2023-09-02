@@ -117,16 +117,21 @@ function putCategoryData(req, res) {
 }
 
 function putStyleData(req, res) {
-    let styleId = req.params.styleId;
-    let newName = req.body.newName,
+    const styleId = req.params.styleId;
+    const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber,
+        newName = req.body.newName,
         newPrompt = req.body.newPrompt,
-        newNegativePrompt = req.body.newNegativePrompt;
-    newDdimSteps = req.body.newDdimSteps;
-    newStrength = req.body.newStrength;
-    const { updateStyleData } = require("../models/imageToImageStyles.model");
-    updateStyleData(styleId, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
-        .then((result) => res.json(result))
-        .catch((err) => res.status(500).json(err));
+        newNegativePrompt = req.body.newNegativePrompt,
+        newDdimSteps = req.body.newDdimSteps,
+        newStrength = req.body.newStrength;
+    if (!styleId || !newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt || !newDdimSteps || !newStrength) {
+        res.status(400).json("Sorry, Please Send All Requirments Field !!");
+    } else {
+        const { updateStyleData } = require("../models/imageToImageStyles.model");
+        updateStyleData(styleId, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
+            .then((result) => res.json(result))
+            .catch((err) => res.status(500).json(err));
+    }
 }
 
 function deleteCategoryData(req, res) {

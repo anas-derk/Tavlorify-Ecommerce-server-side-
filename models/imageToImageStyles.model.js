@@ -11,7 +11,7 @@ async function get_all_category_Styles_Data(categoryName){
         // Connect To DB
         await mongoose.connect(DB_URL);
         // Check If Email Is Exist
-        let categoryStylesData = await imageToImageStyleModel.find({ categoryName });
+        let categoryStylesData = await imageToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
         if (categoryStylesData) {
             await mongoose.disconnect();
             return categoryStylesData;
@@ -51,7 +51,7 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
+async function updateStyleData(styleId, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
@@ -59,6 +59,7 @@ async function updateStyleData(styleId, newName, newPrompt, newNegativePrompt, n
         let newStyleData = await imageToImageStyleModel.updateOne({
             _id: styleId,
         }, {
+            sortNumber: newCategoryStyleSortNumber,
             name: newName,
             prompt: newPrompt,
             negative_prompt: newNegativePrompt,
