@@ -19,6 +19,7 @@ const textToImageStyleSchema = mongoose.Schema({
     },
     modelName: String,
     categoryName: String,
+    sortNumber: Number,
 });
 
 // Create Text To Image Style Model From Style Schema
@@ -34,6 +35,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/art_deco.png",
@@ -43,6 +45,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Vasily_kandinsky.png",
@@ -53,6 +56,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Palette_knife.png",
@@ -62,6 +66,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Abstract_Expressionism.png",
@@ -71,6 +76,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Art",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Pop_Art.png",
@@ -81,6 +87,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Neo_Impressionist.png",
@@ -90,6 +97,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/scandinavian_modern_art.png",
@@ -100,6 +108,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Epic_Origami.png",
@@ -110,6 +119,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/flower_ART.png",
@@ -119,6 +129,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Art",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Horror.png",
@@ -129,6 +140,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 11,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Charcoal.png",
@@ -138,6 +150,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 12,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/abstract_art.png",
@@ -148,6 +161,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 13,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Cubist.png",
@@ -158,6 +172,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 14,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Candy_art.png",
@@ -167,6 +182,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 15,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Oil_Painting.png",
@@ -176,6 +192,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Art",
+        sortNumber: 16,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Gouache.png",
@@ -186,6 +203,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 17,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Color_Painting.png",
@@ -195,6 +213,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Art",
+        sortNumber: 18,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Cubist_v2.png",
@@ -205,6 +224,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Art",
+        sortNumber: 19,
     },
     {
         imgSrc: "assets/images/styles/textToImage/art/Surreal.png",
@@ -214,6 +234,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "Art",
+        sortNumber: 20,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/Pet_Portrait.png",
@@ -223,6 +244,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "Animals",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/Neo_Impressionist.png",
@@ -232,6 +254,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Animals",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/Pop_Art.png",
@@ -242,6 +265,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Animals",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/Cubist_v2.png",
@@ -252,6 +276,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Animals",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/with_red_raincoat.png",
@@ -261,6 +286,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Animals",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/with_glasses.png",
@@ -270,6 +296,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Animals",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/dancing_sillhouette.png",
@@ -280,6 +307,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Animals",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/Animals_with_gemstones.png",
@@ -289,6 +317,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Animals",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/iridescent_accents.png",
@@ -298,6 +327,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Animals",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Animals/Cubist.png",
@@ -308,6 +338,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Animals",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/Photo.png",
@@ -317,6 +348,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Photography",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/Classic_Cars_Photography.png",
@@ -326,6 +358,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "openjourney",
         categoryName: "Photography",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/Pet_Portrait.png",
@@ -335,6 +368,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "Photography",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/Food_Photography.png",
@@ -344,6 +378,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Photography",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/B_W_Photography.png",
@@ -353,6 +388,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Photography",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/macro_photography.png",
@@ -362,6 +398,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Photography",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/textToImage/photography/Cinematic_photograph.png",
@@ -371,6 +408,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Photography",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Striking.png",
@@ -380,6 +418,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "People",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/B_W Portrait.png",
@@ -389,6 +428,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Vibrant.png",
@@ -398,6 +438,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "People",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/portrait_with_gemstones.png",
@@ -407,6 +448,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/dancing_sillhouette.png",
@@ -416,6 +458,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Pop_Art.png",
@@ -426,6 +469,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "People",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Viking.png",
@@ -435,6 +479,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Artistic_Portrait.png",
@@ -444,6 +489,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Neo_Impressionist.png",
@@ -453,6 +499,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Hyperreal.png",
@@ -462,6 +509,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/textToImage/People/Abstract_art.png",
@@ -471,6 +519,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "People",
+        sortNumber: 11,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/Palette_knife.png",
@@ -480,6 +529,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Landscape And Nature",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/Epic2.png",
@@ -489,6 +539,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "Landscape And Nature",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/Marine_life.png",
@@ -498,6 +549,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Landscape And Nature",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/digital_art.png",
@@ -508,6 +560,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Landscape And Nature",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/iridescent_accents.png",
@@ -517,6 +570,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Landscape And Nature",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/dreamy.png",
@@ -526,6 +580,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Landscape And Nature",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/sunset.png",
@@ -535,6 +590,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Landscape And Nature",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/vivid_colors.png",
@@ -544,6 +600,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Landscape And Nature",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/Northern_lights.png",
@@ -554,6 +611,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Landscape And Nature",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/textToImage/LandscapeAndNature/Fantasy.png",
@@ -563,6 +621,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Landscape And Nature",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Vehicles/Sunset_Synthwave.png",
@@ -572,6 +631,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Vehicles",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Vehicles/Classic_Cars_Photography.png",
@@ -581,6 +641,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "openjourney",
         categoryName: "Vehicles",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/Anime.png",
@@ -590,6 +651,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "midjourney-diffusion",
         categoryName: "characters And Anime",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/Anime_v2.png",
@@ -599,6 +661,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "characters And Anime",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/colorful_Fantasy.png",
@@ -608,6 +671,7 @@ const textToImageStylesData = [
         num_inference_steps: 30,
         modelName: "deliberate-v2",
         categoryName: "characters And Anime",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/DarkFantasy.png",
@@ -617,6 +681,7 @@ const textToImageStylesData = [
         num_inference_steps: 30,
         modelName: "deliberate-v2",
         categoryName: "characters And Anime",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/Animation_Character.png",
@@ -626,6 +691,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "openjourney",
         categoryName: "characters And Anime",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/CGI_Character.png",
@@ -636,6 +702,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "characters And Anime",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/Animation_Character.png",
@@ -646,6 +713,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "characters And Anime",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/textToImage/charactersAndAnime/Anime_portrait.png",
@@ -656,6 +724,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "characters And Anime",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Cityscapes/van_gogh_style.png",
@@ -665,6 +734,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "stable-diffusion",
         categoryName: "Cityscapes",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Cityscapes/skyline.png",
@@ -675,6 +745,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Cityscapes",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Cityscapes/Vasily_kandinsky.png",
@@ -685,6 +756,7 @@ const textToImageStylesData = [
         refine: "expert_ensemble_refiner",
         modelName: "sdxl",
         categoryName: "Cityscapes",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/textToImage/Cityscapes/Palette_knife.png",
@@ -694,6 +766,7 @@ const textToImageStylesData = [
         num_inference_steps: 50,
         modelName: "dreamshaper",
         categoryName: "Cityscapes",
+        sortNumber: 4,
     },
 ];
 

@@ -166,12 +166,16 @@ function addNewStyle(req, res) {
 }
 
 function putStyleData(req, res) {
-    let styleId = req.params.styleId;
-    let newName = req.body.newName,
+    const styleId = req.params.styleId;
+    const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber, 
+        newName = req.body.newName,
         newPrompt = req.body.newPrompt,
         newNegativePrompt = req.body.newNegativePrompt;
+    if (!newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt) {
+        res.status(400).json("Sorry, Please Send Style Id, New Name, New Prompt, And New Negative Prompt And New Category Style Sort Number !!");
+    }
     const { updateStyleData } = require("../models/textToImageStyles.model");
-    updateStyleData(styleId, newName, newPrompt, newNegativePrompt)
+    updateStyleData(styleId, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt)
         .then((result) => res.json(result))
         .catch((err) => res.status(500).json(err));
 }

@@ -13,6 +13,7 @@ const imageToImageStyleSchema = mongoose.Schema({
     ddim_steps: Number,
     strength: Number,
     categoryName: String,
+    sortNumber: String,
 });
 
 // Create Image To Image Style Model From Style Schema
@@ -29,6 +30,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/scandinavian_modern_art.jpg",
@@ -39,6 +41,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/palette_knife.jpg",
@@ -49,6 +52,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/fine_art.jpg",
@@ -59,6 +63,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/cubist.jpg",
@@ -69,6 +74,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/sketch_art.jpg",
@@ -79,6 +85,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/pop_art.jpg",
@@ -89,6 +96,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/candy_art.jpg",
@@ -99,6 +107,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/oil_painting.jpg",
@@ -109,6 +118,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/gouache.jpg",
@@ -119,6 +129,7 @@ const imageToImageStylesData = [
         strength: 0.4,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/charcoal.jpg",
@@ -129,6 +140,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 11,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/surreal.jpg",
@@ -139,6 +151,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 12,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/flower_art.jpg",
@@ -149,6 +162,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 13,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/iridescent_accents.jpg",
@@ -159,6 +173,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 14,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/abstract_expressionism.jpg",
@@ -169,6 +184,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 15,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/dancing_sillhouette.jpg",
@@ -179,6 +195,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 16,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/van_gogh_style.jpg",
@@ -189,6 +206,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 17,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/picasso_style.jpg",
@@ -199,6 +217,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 18,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/art_deco.jpg",
@@ -209,6 +228,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 19,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/graffiti_and_street_art.jpg",
@@ -219,6 +239,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 20,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/GlobalArt/neo_impressionist.jpg",
@@ -229,6 +250,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Global art",
+        sortNumber: 21,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/sketch_art.jpg",
@@ -239,6 +261,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/flower_art.jpg",
@@ -249,6 +272,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/neo_impressionist.jpg",
@@ -259,6 +283,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/pop_art.jpg",
@@ -269,6 +294,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/charcoal.jpg",
@@ -279,6 +305,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/oil_painting.jpg",
@@ -289,6 +316,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/gouache.jpg",
@@ -299,6 +327,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/surreal.jpg",
@@ -309,6 +338,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/candy_art.jpg",
@@ -319,6 +349,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/line_art.jpg",
@@ -329,6 +360,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/palette_knife.jpg",
@@ -339,6 +371,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 11,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/scandinavian_modern_art.jpg",
@@ -349,6 +382,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 12,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/dancing_sillhouette.jpg",
@@ -359,6 +393,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 13,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/van_gogh.jpg",
@@ -369,6 +404,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 14,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/picasso.jpg",
@@ -379,6 +415,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 15,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/art_deco.jpg",
@@ -389,6 +426,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 16,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/iridescent_accents.jpg",
@@ -399,6 +437,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 17,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/street_art.jpg",
@@ -409,6 +448,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 18,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/cubist.jpg",
@@ -419,6 +459,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 19,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/abstract_expressionism.jpg",
@@ -429,6 +470,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 20,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/People/fine_art.jpg",
@@ -439,6 +481,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "People",
+        sortNumber: 21,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/cgi_character.jpg",
@@ -449,6 +492,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/animation_character.jpg",
@@ -459,6 +503,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/anime.jpg",
@@ -469,6 +514,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/candy_art.jpg",
@@ -479,6 +525,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/viking.jpg",
@@ -489,6 +536,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/horror_halloween_art.jpg",
@@ -499,6 +547,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/CharactersAndKids/christmas.jpg",
@@ -509,6 +558,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "characters And Kids art",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/iridescent_accents.jpg",
@@ -519,6 +569,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/northern_lights.jpg",
@@ -529,6 +580,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/scandinavian_modern_art.jpg",
@@ -539,6 +591,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/fantasy.jpg",
@@ -549,6 +602,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/palette_knife.jpg",
@@ -559,6 +613,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/line_art.jpg",
@@ -569,6 +624,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/oil_painting.jpg",
@@ -579,6 +635,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/gouache.jpg",
@@ -589,6 +646,7 @@ const imageToImageStylesData = [
         strength: 0.4,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/flower_art.jpg",
@@ -599,6 +657,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/dancing_sillhouette.jpg",
@@ -609,6 +668,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 10,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/graffiti_art.jpg",
@@ -619,6 +679,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 11,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/charcoal.jpg",
@@ -629,6 +690,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 12,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/neo_impressionist.jpg",
@@ -639,6 +701,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 13,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/art_deco.jpg",
@@ -649,6 +712,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 14,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/sketch_art.jpg",
@@ -659,6 +723,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 15,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/fine_art.jpg",
@@ -669,6 +734,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 16,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/abstract_expressionism.jpg",
@@ -679,6 +745,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 17,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/van_gogh_style.jpg",
@@ -689,6 +756,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 18,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/dreamy.jpg",
@@ -699,6 +767,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 19,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/LandscapeAndNature/digital_art.jpg",
@@ -709,6 +778,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Landscape And Nature",
+        sortNumber: 20,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/Cityscapes/van_gogh_style.jpg",
@@ -719,6 +789,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Cityscapes",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/Cityscapes/skyline.jpg",
@@ -729,6 +800,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Cityscapes",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/Cityscapes/vasily_kandinsky.jpg",
@@ -739,6 +811,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Cityscapes",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/Cityscapes/palette_knife.jpg",
@@ -749,6 +822,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Cityscapes",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/Cityscapes/art_deco.jpg",
@@ -759,6 +833,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Cityscapes",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/Cityscapes/street_art.jpg",
@@ -769,6 +844,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Cityscapes",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/scandinavian_modern_art.jpg",
@@ -779,6 +855,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 1,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/carl_larsson_(Swedish,1853_1919).jpg",
@@ -789,6 +866,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 2,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/anders_zorn_(Swedish,1860_1920).jpg",
@@ -799,6 +877,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 3,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/edvard_munch_(Norwegian,1863_1944).jpg",
@@ -809,6 +888,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 4,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/eilif_peterssen_(Norwegian,1852_1928).jpg",
@@ -819,6 +899,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 5,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/christian_krohg_(Norwegian,1852_1925).jpg",
@@ -829,6 +910,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 6,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/harriet_backer_(Norwegian,1845_1932).jpg",
@@ -839,6 +921,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 7,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/peder_severin_kroyer_(Danish,1851_1909).jpg",
@@ -849,6 +932,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 8,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/vilhelm_hammershoi_(Danish,1864_1916).jpg",
@@ -859,6 +943,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 9,
     },
     {
         imgSrc: "assets/images/styles/imageToImage/ScandinavianArt/akseli_gallen_kallela_(Finnish,1865_1931).jpg",
@@ -869,6 +954,7 @@ const imageToImageStylesData = [
         strength: 0.8,
         modelName: "controlnet-1.1-x-realistic-vision-v2.0",
         categoryName: "Scandinavian art",
+        sortNumber: 10,
     },
 ];
 
