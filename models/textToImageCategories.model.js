@@ -81,20 +81,24 @@ async function getCategoryData(categoryName) {
     }
 }
 
-async function updateCategoryData(categoryId, newCategorySortNumber, oldCategoryName, newCategoryName) {
+async function updateCategoryData(categoryId, newCategorySortNumber, newCategoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const result = await textToImageCategoryModel.updateOne({
-            _id: categoryId,
-        }, {
+        const theSecondCategory = await textToImageCategoryModel.findOne({ sortNumber: newCategorySortNumber });
+        const theFirstCategory = await textToImageCategoryModel.findOneAndUpdate({ _id: categoryId }, {
             name: newCategoryName,
             sortNumber: newCategorySortNumber,
+        }, { returnOriginal: true });
+        await textToImageCategoryModel.updateOne({
+            _id: theSecondCategory._id,
+        }, {
+            sortNumber: theFirstCategory.sortNumber,
         });
-        if (result.modifiedCount === 0) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+        if (newCategoryName === theFirstCategory.name ) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         else {
             await textToImageStyleModel.updateMany({
-                categoryName: oldCategoryName,
+                categoryName: theFirstCategory.name,
             }, {
                 categoryName: newCategoryName,
             });

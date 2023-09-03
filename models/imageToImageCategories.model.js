@@ -81,20 +81,25 @@ async function addNewCategory(categoryInfo) {
     }
 }
 
-async function updateCategoryData(categoryId, newCategorySortNumber, oldCategoryName, newCategoryName) {
+async function updateCategoryData(categoryId, newCategorySortNumber, newCategoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const result = await imageToImageCategoryModel.updateOne({
-            _id: categoryId,
-        }, {
+        await mongoose.connect(DB_URL);
+        const theSecondCategory = await imageToImageCategoryModel.findOne({ sortNumber: newCategorySortNumber });
+        const theFirstCategory = await imageToImageCategoryModel.findOneAndUpdate({ _id: categoryId }, {
             name: newCategoryName,
             sortNumber: newCategorySortNumber,
+        }, { returnOriginal: true });
+        await imageToImageCategoryModel.updateOne({
+            _id: theSecondCategory._id,
+        }, {
+            sortNumber: theFirstCategory.sortNumber,
         });
-        if (result.modifiedCount === 0) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+        if (newCategoryName === theFirstCategory.name ) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         else {
             await imageToImageStyleModel.updateMany({
-                categoryName: oldCategoryName,
+                categoryName: theFirstCategory.name,
             }, {
                 categoryName: newCategoryName,
             });
