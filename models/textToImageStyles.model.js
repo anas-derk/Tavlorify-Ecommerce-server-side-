@@ -52,27 +52,23 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt) {
+async function updateStyleData(styleId, categoryName, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        // Check If Email Is Exist
-        let newStyleData = await textToImageStyleModel.updateOne({
-            _id: styleId,
-        }, {
-            sortNumber: newCategoryStyleSortNumber,
+        const theSecondStyle = await textToImageStyleModel.findOne({ sortNumber: newCategoryStyleSortNumber, categoryName: categoryName });
+        const theFirstStyle = await textToImageStyleModel.findOneAndUpdate({ _id: styleId }, {
             name: newName,
             prompt: newPrompt,
             negative_prompt: newNegativePrompt,
+            sortNumber: newCategoryStyleSortNumber,
+        }, { returnOriginal: true });
+        await textToImageStyleModel.updateOne({
+            _id: theSecondStyle._id,
+        }, {
+            sortNumber: theFirstStyle.sortNumber,
         });
-        if (newStyleData) {
-            await mongoose.disconnect();
-            return newStyleData;
-        }
-        else {
-            mongoose.disconnect();
-            return "Sorry, The Category Style Is Not Exist !!, Please Enter Another ..";
-        }
+        await mongoose.disconnect();
     }
     catch (err) {
         // Disconnect In DB
