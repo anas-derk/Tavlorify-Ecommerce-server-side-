@@ -217,7 +217,6 @@ function deleteCategoryData(req, res) {
     const { deleteCategoryData } = require("../models/textToImageCategories.model");
     deleteCategoryData(categoryId)
         .then((result) => {
-            console.log(result)
             if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
                 const { unlinkSync } = require("fs");
                 unlinkSync(result.categoryData.imgSrc);

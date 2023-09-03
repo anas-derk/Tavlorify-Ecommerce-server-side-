@@ -95,7 +95,7 @@ async function updateCategoryData(categoryId, newCategorySortNumber, newCategory
         }, {
             sortNumber: theFirstCategory.sortNumber,
         });
-        if (newCategoryName === theFirstCategory.name ) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+        if (newCategoryName === theFirstCategory.name) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         else {
             await textToImageStyleModel.updateMany({
                 categoryName: theFirstCategory.name,
@@ -124,15 +124,28 @@ async function deleteCategoryData(categoryId) {
             return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         }
         else {
+            const categoriesCount = await textToImageCategoryModel.countDocuments({});
             await textToImageCategoryModel.deleteOne({
                 _id: categoryId,
             });
+            if (categoriesCount !== categoryData.sortNumber) {
+                const allCategoies = await textToImageCategoryModel.find({});
+                let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
+                    if (category.sortNumber > categoryData.sortNumber) {
+                        category.sortNumber = category.sortNumber - 1;
+                    }
+                    return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
+                });
+                await textToImageCategoryModel.deleteMany({});
+                await textToImageCategoryModel.insertMany(allCategoiesAfterChangeSortNumber);
+            }
             await textToImageStyleModel.deleteMany({ categoryName: categoryData.name });
             await mongoose.disconnect();
             return { categoryData, categoryStylesData };
         };
     }
     catch (err) {
+        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");
