@@ -198,9 +198,10 @@ function putCategoryData(req, res) {
 
 function deleteStyleData(req, res) {
     const styleId = req.params.styleId;
-    if (!styleId) return "Sorry, Please Send Style Id"; 
+    const categoryName = req.query.categoryName;
+    if (!styleId || !categoryName) return "Sorry, Please Send Style Id And Category Name !!"; 
     const { deleteStyleData } = require("../models/textToImageStyles.model");
-    deleteStyleData(req.params.styleId, req.query.categoryName)
+    deleteStyleData(styleId, categoryName)
         .then((result) => {
             if (result) {
                 const { unlinkSync } = require("fs");
