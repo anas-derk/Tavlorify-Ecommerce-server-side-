@@ -78,22 +78,48 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleSortNumber
     }
 }
 
-async function deleteStyleData(styleId) {
+async function deleteStyleData(styleId, categoryName) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        // Check If Email Is Exist
-        const result = await textToImageStyleModel.deleteOne({
+        const stylesCount = await textToImageStyleModel.countDocuments({ categoryName: categoryName });
+        const styleData = await textToImageStyleModel.findOneAndDelete({
             _id: styleId,
         });
-        await mongoose.disconnect();
-        if (result.deletedCount === 0) return "Sorry, This Style Is Not Exist, Please Send Valid Style Id !!";
-        return "Category Style Deleting Process Is Succesfuly !!";
+        if (!styleData) {
+            await mongoose.disconnect();
+            return "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!";
+        } else {
+            if (stylesCount !== styleData.sortNumber) {
+                const allCategoryStyles = await textToImageStyleModel.find({ categoryName: styleData.categoryName });
+                let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
+                    if (style.sortNumber > styleData.sortNumber) {
+                        style.sortNumber = style.sortNumber - 1;
+                    }
+                    return {
+                        imgSrc: style.imgSrc,
+                        name: style.name,
+                        prompt: style.prompt,
+                        negative_prompt: style.negative_prompt,
+                        num_inference_steps: style.num_inference_steps,
+                        refine: style.refine,
+                        modelName: style.modelName,
+                        categoryName: style.categoryName,
+                        sortNumber: style.sortNumber,
+                    };
+                });
+                await textToImageStyleModel.deleteMany({ categoryName: categoryName });
+                await textToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
+            }
+            await mongoose.disconnect();
+            return styleData.imgSrc;
+        }
     }
     catch (err) {
+        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 

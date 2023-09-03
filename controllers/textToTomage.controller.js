@@ -200,12 +200,12 @@ function deleteStyleData(req, res) {
     const styleId = req.params.styleId;
     if (!styleId) return "Sorry, Please Send Style Id"; 
     const { deleteStyleData } = require("../models/textToImageStyles.model");
-    deleteStyleData(styleId)
+    deleteStyleData(req.params.styleId, req.query.categoryName)
         .then((result) => {
-            if (result === "Category Style Deleting Process Is Succesfuly !!") {
+            if (result) {
                 const { unlinkSync } = require("fs");
-                unlinkSync(req.query.imgSrc);
-                res.json(result);
+                unlinkSync(result);
+                res.json("Category Style Deleting Process Is Succesfuly !!");
             }
         })
         .catch((err) => res.status(500).json(err));

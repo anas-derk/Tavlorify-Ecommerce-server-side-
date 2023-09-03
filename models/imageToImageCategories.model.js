@@ -85,7 +85,6 @@ async function updateCategoryData(categoryId, newCategorySortNumber, newCategory
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        await mongoose.connect(DB_URL);
         const theSecondCategory = await imageToImageCategoryModel.findOne({ sortNumber: newCategorySortNumber });
         const theFirstCategory = await imageToImageCategoryModel.findOneAndUpdate({ _id: categoryId }, {
             name: newCategoryName,
@@ -125,9 +124,21 @@ async function deleteCategoryData(categoryId) {
             return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         }
         else {
+            const categoriesCount = await imageToImageCategoryModel.countDocuments({});
             await imageToImageCategoryModel.deleteOne({
                 _id: categoryId,
             });
+            if (categoriesCount !== categoryData.sortNumber) {
+                const allCategoies = await imageToImageCategoryModel.find({});
+                let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
+                    if (category.sortNumber > categoryData.sortNumber) {
+                        category.sortNumber = category.sortNumber - 1;
+                    }
+                    return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
+                });
+                await imageToImageCategoryModel.deleteMany({});
+                await imageToImageCategoryModel.insertMany(allCategoiesAfterChangeSortNumber);
+            }
             await imageToImageStyleModel.deleteMany({ categoryName: categoryData.name });
             await mongoose.disconnect();
             return { categoryData, categoryStylesData };
