@@ -52,6 +52,4 @@ imageToImageRouter.delete("/categories/delete-category-data/:categoryId", imageT
 
 imageToImageRouter.delete("/styles/delete-style-data/:styleId", imageToImageController.deleteStyleData);
 
-// imageToImageRouter.get("/generate-image", imageToImageController.generateImage);
-
 module.exports = imageToImageRouter;
