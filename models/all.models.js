@@ -155,6 +155,29 @@ const orderSchema = mongoose.Schema({
 
 const orderModel = mongoose.model("order", orderSchema);
 
+// Create generated Image Schema
+
+const generatedImageSchema = mongoose.Schema({
+    service: String,
+    uploadedImageURL: {
+        type: String,
+        default: "",
+    },
+    textPrompt: {
+        type: String,
+        default: "",
+    },
+    styleName: String,
+    categoryName: String,
+    position: String,
+    size: String,
+    generatedImageURL: String,
+});
+
+// Create generated Image Model From generated Image Schema
+
+const generatedImageModel = mongoose.model("generatedImage", generatedImageSchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -166,4 +189,5 @@ module.exports = {
     productModel,
     categoryModel,
     orderModel,
+    generatedImageModel,
 }
