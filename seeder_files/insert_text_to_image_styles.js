@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_URL = "mongodb://127.0.0.1:27017/e-commerce-canvas";
+const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
 
 // Create Text To Image Style Schema
 
@@ -24,7 +24,7 @@ const textToImageStyleSchema = mongoose.Schema({
 
 // Create Text To Image Style Model From Style Schema
 
-const textToImageStyleModel = mongoose.model("text-to-image-style", textToImageStyleSchema);
+const textToImageStyleModel = mongoose.model("text_to_image_style", textToImageStyleSchema);
 
 const textToImageStylesData = [
     {

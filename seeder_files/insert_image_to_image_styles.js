@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_URL = "mongodb://127.0.0.1:27017/e-commerce-canvas";
+const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
 
 // Create Image To Image Style Schema
 
@@ -18,7 +18,7 @@ const imageToImageStyleSchema = mongoose.Schema({
 
 // Create Image To Image Style Model From Style Schema
 
-const imageToImageStyleModel = mongoose.model("image-to-image-style", imageToImageStyleSchema);
+const imageToImageStyleModel = mongoose.model("image_to_image_style", imageToImageStyleSchema);
 
 const imageToImageStylesData = [
     {

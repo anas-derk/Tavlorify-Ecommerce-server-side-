@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_URL = "mongodb://127.0.0.1:27017/e-commerce-canvas";
+const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
 
 // Create Text To Image Category Schema
 
@@ -12,7 +12,7 @@ const textToImageCategorySchema = mongoose.Schema({
 
 // Create Text To Image Category Model From Category Schema
 
-const textToImageCategoryModel = mongoose.model("text-to-image-categorie", textToImageCategorySchema);
+const textToImageCategoryModel = mongoose.model("text_to_image_categorie", textToImageCategorySchema);
 
 const textToImageCategoriesData = [
     {
