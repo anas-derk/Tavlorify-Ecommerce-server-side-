@@ -51,7 +51,7 @@ const textToImageStyleSchema = mongoose.Schema({
 
 // Create Text To Image Style Model From Style Schema
 
-const textToImageStyleModel = mongoose.model("text-to-image-style", textToImageStyleSchema);
+const textToImageStyleModel = mongoose.model("text_to_image_style", textToImageStyleSchema);
 
 // Create Text To Image Category Schema
 
@@ -63,7 +63,7 @@ const textToImageCategorySchema = mongoose.Schema({
 
 // Create Text To Image Category Model From Category Schema
 
-const textToImageCategoryModel = mongoose.model("text-to-image-categorie", textToImageCategorySchema);
+const textToImageCategoryModel = mongoose.model("text_to_image_categorie", textToImageCategorySchema);
 
 // Create Image To Image Style Schema
 
@@ -84,7 +84,7 @@ const imageToImageStyleSchema = mongoose.Schema({
 
 // Create Image To Image Style Model From Style Schema
 
-const imageToImageStyleModel = mongoose.model("image-to-image-style", imageToImageStyleSchema);
+const imageToImageStyleModel = mongoose.model("image_to_image_style", imageToImageStyleSchema);
 
 // Create Image To Image Category Schema
 
@@ -96,7 +96,7 @@ const imageToImageCategorySchema = mongoose.Schema({
 
 // Create Image To Image Category Model From Category Schema
 
-const imageToImageCategoryModel = mongoose.model("image-to-image-categorie", imageToImageCategorySchema);
+const imageToImageCategoryModel = mongoose.model("image_to_image_categorie", imageToImageCategorySchema);
 
 // Create Product Schema
 
