@@ -167,8 +167,8 @@ const generatedImageSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-    styleName: String,
     categoryName: String,
+    styleName: String,
     position: String,
     size: String,
     generatedImageURL: String,
@@ -176,7 +176,7 @@ const generatedImageSchema = mongoose.Schema({
 
 // Create generated Image Model From generated Image Schema
 
-const generatedImageModel = mongoose.model("generatedImage", generatedImageSchema);
+const generatedImageModel = mongoose.model("generated_image", generatedImageSchema);
 
 module.exports = {
     mongoose,

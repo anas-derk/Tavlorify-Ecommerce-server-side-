@@ -4,34 +4,28 @@ async function saveNewGeneratedImage(generatedImageURL) {
     const randomImageName = `${Math.random()}_${Date.now()}__generatedImage.png`;
     const path = require("path");
     const destination = path.join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
-    try {
-        const res = await get(generatedImageURL, { responseType: 'stream' });
-        const result = await res.data;
-        result.pipe(createWriteStream(destination));
-        return { msg: "success file downloaded !!", imageURL: `assets/images/generatedImages/${randomImageName}` };
-    }
-    catch (err) {
-        return err;
-    }
+    const res = await get(generatedImageURL, { responseType: 'stream' });
+    const result = await res.data;
+    result.pipe(createWriteStream(destination));
+    return { msg: "success file downloaded !!", imagePath: `assets/images/generatedImages/${randomImageName}` };
 }
 
-function postNewGeneratedImageData(req, res) {
+async function postNewGeneratedImageData(req, res) {
     const generatedImageData = req.body;
-    // const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
-    saveNewGeneratedImage(generatedImageData.generatedImageURL)
-    .then((result) => {
-        console.log(result);
-        res.json(result);
-    })
-    .catch(err => {
-        console.log(err);
-        res.json(err);
-    })
-    // saveNewGeneratedImageData(generatedImageData)
-    // .then((result) => {
-    //     res.json(result);
-    // })
-    // .catch((err) => console.log(err));
+    const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
+    try{
+        const result = await saveNewGeneratedImage(generatedImageData.generatedImageURL);
+        if (result.msg && result.msg === "success file downloaded !!") {
+            const result1 = await saveNewGeneratedImageData({
+                ...generatedImageData,
+                generatedImageURL: result.imagePath,
+            });
+            res.json(result1);
+        }
+    }
+    catch(err) {
+        res.status(500).json(err);
+    }
 }
 
 module.exports = {

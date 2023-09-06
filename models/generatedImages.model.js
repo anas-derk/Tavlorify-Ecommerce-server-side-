@@ -10,9 +10,9 @@ async function saveNewGeneratedImageData(generatedImageData) {
     try {
         await mongoose.connect(DB_URL);
         const newGeneratedImageData = new generatedImageModel(generatedImageData);
-        await newGeneratedImageData.save();
+        const result = await newGeneratedImageData.save();
         await mongoose.disconnect();
-        return "Save New Generated Image Data Process Is Successfuly !!";
+        return result;
     }
     catch (err) {
         await mongoose.disconnect();
