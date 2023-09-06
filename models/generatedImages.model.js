@@ -20,6 +20,20 @@ async function saveNewGeneratedImageData(generatedImageData) {
     }
 }
 
+async function getSpecificGeneratedImagesData(service) {
+    try {
+        await mongoose.connect(DB_URL);
+        const generatedImagesData = await generatedImageModel.find({ service: service });
+        await mongoose.disconnect();
+        return generatedImagesData;
+    }
+    catch (err) {
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     saveNewGeneratedImageData,
+    getSpecificGeneratedImagesData,
 }

@@ -28,6 +28,20 @@ async function postNewGeneratedImageData(req, res) {
     }
 }
 
+function getSpecificGeneratedImagesData(req, res) {
+    const service = req.query.service;
+    console.log(service)
+    if (!service && (service !== "text-to-image" || service !== "image-to-image")) {
+        res.status(400).json(`Invalid Service Name !!`);
+    } else {
+        const { getSpecificGeneratedImagesData } = require("../models/generatedImages.model");
+        getSpecificGeneratedImagesData(service)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(500).json(err));
+    }
+}
+
 module.exports = {
     postNewGeneratedImageData,
+    getSpecificGeneratedImagesData,
 }
