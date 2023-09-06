@@ -81,24 +81,6 @@ function putUserInfo(req, res) {
     }
 }
 
-function postGeneratedImageAndInfoIt(req, res) {
-    const imageData = req.body;
-    const { get } = require('axios');
-    const { createWriteStream } = require('fs');
-    const { join } = require("path");
-    const randomImageName = `${Math.random()}_${Date.now()}__generatedImage.png`;
-    const destination = join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
-    get(imageData.imageUrl, { responseType: 'stream' })
-        .then(response => {
-            response.data.pipe(createWriteStream(destination));
-            res.json({ msg: "success file downloaded !!", imageUrl: `assets/images/generatedImages/${randomImageName}` });
-        })
-        .catch(error => {
-            console.error('حدث خطأ أثناء تحميل الصورة:', error);
-            res.status(500).json({ msg: "Sorry, Error In Download !!", error });
-        });
-}
-
 async function postImageAfterCroping(req, res) {
     const cropingDetails = req.body;
     const sharp = require("sharp");
@@ -129,6 +111,5 @@ module.exports = {
     getUserInfo,
     getAllUsers,
     putUserInfo,
-    postGeneratedImageAndInfoIt,
     postImageAfterCroping,
 }
