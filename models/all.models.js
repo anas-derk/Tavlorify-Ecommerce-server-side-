@@ -169,8 +169,15 @@ const generatedImageSchema = mongoose.Schema({
     },
     categoryName: String,
     styleName: String,
+    paintingType: String,
     position: String,
     size: String,
+    isExistWhiteBorder: {
+        type: String,
+        default: "without-border",
+    },
+    width: Number,
+    height: Number,
     generatedImageURL: String,
 });
 
