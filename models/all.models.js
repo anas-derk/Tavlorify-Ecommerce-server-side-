@@ -178,6 +178,10 @@ const generatedImageSchema = mongoose.Schema({
     },
     width: Number,
     height: Number,
+    frameColor: {
+        type: String,
+        default: "none",
+    },
     generatedImageURL: String,
 });
 
