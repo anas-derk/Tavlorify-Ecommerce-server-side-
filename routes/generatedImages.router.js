@@ -6,4 +6,6 @@ generatedImagesRouter.post("/save-new-generated-image-data", generatedImagesCont
 
 generatedImagesRouter.get("/specific-generated-images-data", generatedImagesController.getSpecificGeneratedImagesData);
 
+generatedImagesRouter.delete("/generated-image-data/:generatedImageDataId", generatedImagesController.deleteGeneratedImageData);
+
 module.exports = generatedImagesRouter;

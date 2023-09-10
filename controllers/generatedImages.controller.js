@@ -30,7 +30,6 @@ async function postNewGeneratedImageData(req, res) {
 
 function getSpecificGeneratedImagesData(req, res) {
     const service = req.query.service;
-    console.log(service)
     if (!service && (service !== "text-to-image" || service !== "image-to-image")) {
         res.status(400).json(`Invalid Service Name !!`);
     } else {
@@ -41,7 +40,24 @@ function getSpecificGeneratedImagesData(req, res) {
     }
 }
 
+function deleteGeneratedImageData(req, res) {
+    const generatedImageDataId = req.params.generatedImageDataId;
+    if (!generatedImageDataId) res.status(400).json("Please Send Generated Image Data Id !!");
+    else {
+        const { deleteGeneratedImageData } = require("../models/generatedImages.model");
+        deleteGeneratedImageData(generatedImageDataId)
+        .then((res) => {
+            res.json("Deleteting Generated Image Data Has Been Succesfuly !!");
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    }
+}
+
 module.exports = {
     postNewGeneratedImageData,
     getSpecificGeneratedImagesData,
+    deleteGeneratedImageData,
 }
