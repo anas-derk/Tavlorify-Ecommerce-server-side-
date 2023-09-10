@@ -183,6 +183,10 @@ const generatedImageSchema = mongoose.Schema({
         default: "none",
     },
     generatedImageURL: String,
+    imageGegenerationDate: {
+        type: Date,
+        default: Date.now(),
+    },
 });
 
 // Create generated Image Model From generated Image Schema
