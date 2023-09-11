@@ -19,6 +19,26 @@ async function getPricesByProductName(productName) {
     }
 }
 
+async function updateProductPrice(productId, newProductPriceBeforeDiscount, newProductPriceAfterDiscount) {
+    try{
+        await mongoose.connect(DB_URL);
+        await productPricesModel.updateOne(
+            { _id: productId },
+            {
+                priceBeforeDiscount: newProductPriceBeforeDiscount,
+                priceAfterDiscount: newProductPriceAfterDiscount
+            }
+        );
+        await mongoose.disconnect();
+        return "Updating Product Price Process Has Been Successfuly !!";
+    }
+    catch(err) {
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getPricesByProductName,
+    updateProductPrice,
 }
