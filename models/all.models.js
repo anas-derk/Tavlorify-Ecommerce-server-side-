@@ -193,6 +193,20 @@ const generatedImageSchema = mongoose.Schema({
 
 const generatedImageModel = mongoose.model("generated_image", generatedImageSchema);
 
+// Create Product Prices Schema
+
+const productPricesSchema = mongoose.Schema({
+    productName: String,
+    dimentions: String,
+    position: String,
+    priceBeforeDiscount: Number,
+    priceAfterDiscount: Number,
+});
+
+// Create Product Prices Model From Product Prices Schema
+
+const productPricesModel = mongoose.model("prices", productPricesSchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -205,4 +219,5 @@ module.exports = {
     categoryModel,
     orderModel,
     generatedImageModel,
+    productPricesModel,
 }
