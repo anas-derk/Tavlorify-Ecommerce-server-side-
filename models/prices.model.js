@@ -34,7 +34,7 @@ async function getPriceByProductDetails(productName, position, dimentions) {
                 productPrices = { priceBeforeDiscount: productData.priceBeforeDiscount, priceAfterDiscount: productData.priceAfterDiscount };
                 break;
             }
-            case "poster-with-wooden-frames": {
+            case "poster-with-wooden-frame": {
                 let productsData = await productPricesModel.find({
                     $or: [
                         {
