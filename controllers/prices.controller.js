@@ -37,7 +37,26 @@ function putProductPrice(req, res) {
     }
 }
 
+function getPriceByProductDetails(req, res) {
+    const   productName = req.query.productName,
+            position = req.query.position,
+            dimentions = req.query.dimentions;
+    if (!productName || !dimentions || !position) res.status(400).json("Please Send All Product Details !!");
+    else {
+        const { getPriceByProductDetails } = require("../models/prices.model");
+        getPriceByProductDetails(productName, position, dimentions)
+        .then((result) => {
+            res.json(result);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    }
+}
+
 module.exports = {
     getPricesByProductName,
     putProductPrice,
+    getPriceByProductDetails,
 }
