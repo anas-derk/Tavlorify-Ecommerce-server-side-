@@ -36,9 +36,9 @@ async function getSpecificGeneratedImagesData(service) {
 async function deleteGeneratedImageData(generatedImageDataId) {
     try {
         await mongoose.connect(DB_URL);
-        const generatedImageData = await generatedImageModel.findOneAndDelete({ _id: generatedImageDataId });
+        await generatedImageModel.findOneAndDelete({ _id: generatedImageDataId });
         await mongoose.disconnect();
-        return generatedImageData;
+        return "Deleteting Generated Image Data Has Been Succesfuly !!";
     }
     catch (err) {
         await mongoose.disconnect();

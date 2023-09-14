@@ -47,8 +47,8 @@ function deleteGeneratedImageData(req, res) {
     else {
         const { deleteGeneratedImageData } = require("../models/generatedImages.model");
         deleteGeneratedImageData(generatedImageDataId)
-        .then((res) => {
-            res.json("Deleteting Generated Image Data Has Been Succesfuly !!");
+        .then((result) => {
+            res.json(result);
         })
         .catch((err) => {
             console.log(err);
