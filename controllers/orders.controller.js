@@ -8,7 +8,7 @@ async function getAllOrders(req, res) {
 
 async function getAllOrdersForUser(req, res) {
     const userId = req.params.userId;
-    if( !userId ) res.status(500).json("Sorry, Please Send User Id !!");
+    if (!userId) res.status(500).json("Sorry, Please Send User Id !!");
     else {
         const { getAllOrdersForUser } = require("../models/orders.model");
         getAllOrdersForUser().then((result) => {
@@ -37,8 +37,50 @@ async function postNewOrderToGelato(req, res) {
     }
 }
 
+async function postNewOrderToKlarna(req, res) {
+    const orderDetails = req.body;
+    const { post } = require("axios");
+    try {
+        const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders`, orderDetails, {
+            headers: {
+                "Content-Type": "application/json",
+                "Klarna-Partner": "string",
+                "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+            },
+        });
+        const result = await response.data;
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(err.response.data);
+    }
+}
+
+async function getOrderDetailsFromKlarna(req, res) {
+    const orderId = req.params.orderId;
+    if (!orderId) res.status(400).json("Please Send Order Id !!");
+    else {
+        const { get } = require("axios");
+        try{
+            const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                },
+            });
+            const result = await response.data;
+            res.json(result);
+        }
+        catch(err) {
+            res.status(500).json(err.response.data);
+        }
+    }
+}
+
 module.exports = {
     getAllOrders,
     getAllOrdersForUser,
+    getOrderDetailsFromKlarna,
     postNewOrderToGelato,
+    postNewOrderToKlarna,
 }
