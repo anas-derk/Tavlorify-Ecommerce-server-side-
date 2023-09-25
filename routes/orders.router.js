@@ -12,4 +12,6 @@ ordersRouter.post("/send-order-to-gelato", ordersController.postNewOrderToGelato
 
 ordersRouter.post("/send-order-to-klarna", ordersController.postNewOrderToKlarna);
 
+ordersRouter.put("/update-order/:orderId", ordersController.putOrder);
+
 module.exports = ordersRouter;

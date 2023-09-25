@@ -77,10 +77,33 @@ async function getOrderDetailsFromKlarna(req, res) {
     }
 }
 
+async function putOrder(req, res) {
+    const orderId = req.params.orderId;
+    const newOrderDetails = req.body;
+    if (!orderId) res.status(400).json("Please Send Order Id !!");
+    else {
+        const { post } = require("axios");
+        try{
+            const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, newOrderDetails, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                },
+            });
+            const result = await response.data;
+            res.json(result);
+        }
+        catch(err) {
+            res.status(500).json(err.response.data);
+        }
+    }
+}
+
 module.exports = {
     getAllOrders,
     getAllOrdersForUser,
     getOrderDetailsFromKlarna,
     postNewOrderToGelato,
     postNewOrderToKlarna,
+    putOrder,
 }
