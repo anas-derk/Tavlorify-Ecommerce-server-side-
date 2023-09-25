@@ -52,7 +52,7 @@ async function postNewOrderToKlarna(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(err.response.data);
+        res.status(500).json(err);
     }
 }
 
@@ -72,7 +72,7 @@ async function getOrderDetailsFromKlarna(req, res) {
             res.json(result);
         }
         catch(err) {
-            res.status(500).json(err.response.data);
+            res.status(500).json(err);
         }
     }
 }
@@ -94,7 +94,7 @@ async function putOrder(req, res) {
             res.json(result);
         }
         catch(err) {
-            res.status(500).json(err.response.data);
+            res.status(500).json(err);
         }
     }
 }
