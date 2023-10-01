@@ -46,7 +46,6 @@ async function postNewOrderToKlarna(req, res) {
 
 async function getOrderDetailsFromKlarna(req, res) {
     const orderId = req.params.orderId;
-    console.log(orderId);
     if (!orderId) res.status(400).json("Please Send Order Id !!");
     else {
         const { get } = require("axios");
