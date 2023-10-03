@@ -44,7 +44,30 @@ async function postNewOrderToKlarna(req, res) {
     }
 }
 
-async function getOrderDetailsFromKlarna(req, res) {
+async function postNewOrder(req, res) {
+    const orderId = req.params.orderId;
+    if (!orderId) res.status(400).json("Please Send Order Id !!");
+    else {
+        const { get } = require("axios");
+        try{
+            const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                },
+            });
+            const result = await response.data;
+            const { postNewOrder } = require("../models/orders.model");
+            const result1 = await postNewOrder(result);
+            res.json(result1);
+        }
+        catch(err) {
+            res.status(500).json(err.response.data);
+        }
+    }
+}
+
+async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
     const orderId = req.params.orderId;
     if (!orderId) res.status(400).json("Please Send Order Id !!");
     else {
@@ -65,7 +88,7 @@ async function getOrderDetailsFromKlarna(req, res) {
     }
 }
 
-async function putOrder(req, res) {
+async function putKlarnaOrder(req, res) {
     const orderId = req.params.orderId;
     const newOrderDetails = req.body;
     if (!orderId) res.status(400).json("Please Send Order Id !!");
@@ -89,8 +112,9 @@ async function putOrder(req, res) {
 
 module.exports = {
     getAllOrders,
-    getOrderDetailsFromKlarna,
+    getOrderDetailsFromKlarnaInCheckoutPeriod,
     postNewOrderToGelato,
     postNewOrderToKlarna,
-    putOrder,
+    postNewOrder,
+    putKlarnaOrder,
 }

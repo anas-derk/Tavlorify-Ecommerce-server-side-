@@ -144,11 +144,7 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 // Create Order Schema
 
 const orderSchema = mongoose.Schema({
-    imageSrc: String,
-    name: String,
-    type: String,
-    dimentions: String,
-    price: Number,
+    klarnaOrderId: String,
 });
 
 // Create Order Model From Order Schema

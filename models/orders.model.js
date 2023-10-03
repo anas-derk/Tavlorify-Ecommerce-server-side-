@@ -20,21 +20,31 @@ async function getAllOrders() {
     }
 }
 
-async function getAllOrdersForUser(userId) {
+async function postNewOrder(orderDetails) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const orders = await orderModel.findById(userId);
-        await mongoose.disconnect();
-        return orders;
+        const order = await orderModel.findOne({ klarnaOrderId: orderDetails.order_id });
+        if (order) {
+            await mongoose.disconnect();
+            return "This Order Is Already Exist !!";
+        }
+        else {
+            const newOrder = new orderModel({
+                klarnaOrderId: orderDetails.order_id,
+            });
+            await newOrder.save();
+            await mongoose.disconnect();
+            return "Adding New Order Is Successfuly !!";
+        }
     } catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
 module.exports = {
     getAllOrders,
-    getAllOrdersForUser,
+    postNewOrder,
 }

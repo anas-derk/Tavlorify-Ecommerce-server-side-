@@ -4,12 +4,14 @@ const ordersController = require("../controllers/orders.controller");
 
 ordersRouter.get("/all-orders", ordersController.getAllOrders);
 
-ordersRouter.get("/order-details-from-klarna/:orderId", ordersController.getOrderDetailsFromKlarna);
+ordersRouter.get("/order-details-from-klarna/:orderId", ordersController.getOrderDetailsFromKlarnaInCheckoutPeriod);
 
 ordersRouter.post("/send-order-to-gelato", ordersController.postNewOrderToGelato);
 
 ordersRouter.post("/send-order-to-klarna", ordersController.postNewOrderToKlarna);
 
-ordersRouter.put("/update-klarna-order/:orderId", ordersController.putOrder);
+ordersRouter.post("/save-klarna-order-details/:orderId", ordersController.postNewOrder);
+
+ordersRouter.put("/update-klarna-order/:orderId", ordersController.putKlarnaOrder);
 
 module.exports = ordersRouter;
