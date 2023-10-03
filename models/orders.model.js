@@ -32,6 +32,25 @@ async function postNewOrder(orderDetails) {
         else {
             const newOrder = new orderModel({
                 klarnaOrderId: orderDetails.order_id,
+                billing_address: {
+                    city: orderDetails.billing_address.city,
+                    email: orderDetails.billing_address.email,
+                    given_name: orderDetails.billing_address.given_name,
+                    family_name: orderDetails.billing_address.family_name,
+                    phone: orderDetails.billing_address.phone,
+                    postal_code: orderDetails.billing_address.postal_code,
+                    street_address: orderDetails.billing_address.street_address,
+                },
+                shipping_address: {
+                    city: orderDetails.shipping_address.city,
+                    email: orderDetails.shipping_address.email,
+                    given_name: orderDetails.shipping_address.given_name,
+                    family_name: orderDetails.shipping_address.family_name,
+                    phone: orderDetails.shipping_address.phone,
+                    postal_code: orderDetails.shipping_address.postal_code,
+                    street_address: orderDetails.shipping_address.street_address,
+                },
+                completed_at: orderDetails.shipping_address.completed_at,
             });
             await newOrder.save();
             await mongoose.disconnect();

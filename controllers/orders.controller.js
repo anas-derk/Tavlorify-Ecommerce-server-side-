@@ -62,7 +62,7 @@ async function postNewOrder(req, res) {
             res.json(result1);
         }
         catch(err) {
-            res.status(500).json(err.response.data);
+            res.status(500).json(err);
         }
     }
 }

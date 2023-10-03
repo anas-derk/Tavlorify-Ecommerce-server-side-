@@ -145,6 +145,25 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 
 const orderSchema = mongoose.Schema({
     klarnaOrderId: String,
+    billing_address: {
+        city: String,
+        email: String,
+        given_name: String,
+        family_name: String,
+        phone: String,
+        postal_code: String,
+        street_address: String,
+    },
+    shipping_address: {
+        city: String,
+        email: String,
+        given_name: String,
+        family_name: String,
+        phone: String,
+        postal_code: String,
+        street_address: String,
+    },
+    completed_at: Date,
 });
 
 // Create Order Model From Order Schema
