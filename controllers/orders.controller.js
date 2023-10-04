@@ -40,31 +40,24 @@ async function postNewOrderToKlarna(req, res) {
         res.json(result);
     }
     catch (err) {
+        console.log(err.response.data.error_messages);
         res.status(500).json(err);
     }
 }
 
 async function postNewOrder(req, res) {
-    const orderId = req.params.orderId;
-    if (!orderId) res.status(400).json("Please Send Order Id !!");
-    else {
-        const { get } = require("axios");
-        try{
-            const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
-                },
-            });
-            const result = await response.data;
-            const { postNewOrder } = require("../models/orders.model");
-            const result1 = await postNewOrder(result);
-            res.json(result1);
-        }
-        catch(err) {
-            res.status(500).json(err);
-        }
+    try{
+        const { postNewOrder } = require("../models/orders.model");
+        const result = await postNewOrder();
+        res.json(result);
     }
+    catch(err) {
+        res.status(500).json(err);
+    }
+}
+
+async function postAcknowledgeKlarnaOrder(req, res) {
+    
 }
 
 async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
@@ -105,6 +98,7 @@ async function putKlarnaOrder(req, res) {
             res.json(result);
         }
         catch(err) {
+            console.log(err.response.data);
             res.status(500).json(err);
         }
     }

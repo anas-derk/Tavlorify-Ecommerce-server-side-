@@ -144,26 +144,78 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 // Create Order Schema
 
 const orderSchema = mongoose.Schema({
-    klarnaOrderId: String,
+    klarnaOrderId: {
+        type: String,
+        default: "none",
+    },
+    status: {
+        type: String,
+        default: "none",
+    },
     billing_address: {
-        city: String,
-        email: String,
-        given_name: String,
-        family_name: String,
-        phone: String,
-        postal_code: String,
-        street_address: String,
+        city: {
+            type: String,
+            default: "none",
+        },
+        email: {
+            type: String,
+            default: "none",
+        },
+        given_name: {
+            type: String,
+            default: "none",
+        },
+        family_name: {
+            type: String,
+            default: "none",
+        },
+        phone: {
+            type: String,
+            default: "none",
+        },
+        postal_code: {
+            type: String,
+            default: "none",
+        },
+        street_address: {
+            type: String,
+            default: "none",
+        },
     },
     shipping_address: {
-        city: String,
-        email: String,
-        given_name: String,
-        family_name: String,
-        phone: String,
-        postal_code: String,
-        street_address: String,
+        city: {
+            type: String,
+            default: "none",
+        },
+        email: {
+            type: String,
+            default: "none",
+        },
+        given_name: {
+            type: String,
+            default: "none",
+        },
+        family_name: {
+            type: String,
+            default: "none",
+        },
+        phone: {
+            type: String,
+            default: "none",
+        },
+        postal_code: {
+            type: String,
+            default: "none",
+        },
+        street_address: {
+            type: String,
+            default: "none",
+        },
     },
-    completed_at: Date,
+    completed_at: {
+        type: Date,
+        default: Date.now(),
+    },
 });
 
 // Create Order Model From Order Schema
