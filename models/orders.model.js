@@ -35,7 +35,23 @@ async function postNewOrder() {
     }
 }
 
+async function updateOrder(orderId, newOrderDetails) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        const newOrderData = new orderModel.findOneAndUpdate({ _id: orderId }, { ...newOrderDetails });
+        console.log(newOrderData);
+        await mongoose.disconnect();
+        return { msg: "Updating Order Details Has Been Successfuly !!", orderId: newOrderData };
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getAllOrders,
     postNewOrder,
+    updateOrder,
 }

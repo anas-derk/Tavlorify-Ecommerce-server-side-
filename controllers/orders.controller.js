@@ -104,6 +104,22 @@ async function putKlarnaOrder(req, res) {
     }
 }
 
+async function putOrder(req, res) {
+    const orderId = req.params.orderId;
+    const newOrderDetails = req.body;
+    if (!orderId) res.status(400).json("Please Send Order Id !!");
+    else {
+        try{
+            const { updateOrder } = require("../models/orders.model");
+            const result = await updateOrder(newOrderDetails);
+            res.json(result);
+        }
+        catch(err) {
+            res.status(500).json(err);
+        }
+    }
+}
+
 module.exports = {
     getAllOrders,
     getOrderDetailsFromKlarnaInCheckoutPeriod,
@@ -111,4 +127,5 @@ module.exports = {
     postNewOrderToKlarna,
     postNewOrder,
     putKlarnaOrder,
+    putOrder,
 }

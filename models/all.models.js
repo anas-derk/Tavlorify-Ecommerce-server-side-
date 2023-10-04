@@ -148,9 +148,13 @@ const orderSchema = mongoose.Schema({
         type: String,
         default: "none",
     },
+    checkout_status: {
+        type: String,
+        default: "checkout_incomplete",
+    },
     status: {
         type: String,
-        default: "none",
+        default: "pending",
     },
     billing_address: {
         city: {
@@ -212,7 +216,7 @@ const orderSchema = mongoose.Schema({
             default: "none",
         },
     },
-    completed_at: {
+    added_date: {
         type: Date,
         default: Date.now(),
     },

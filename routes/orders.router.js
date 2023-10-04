@@ -14,4 +14,6 @@ ordersRouter.post("/create-new-order", ordersController.postNewOrder);
 
 ordersRouter.put("/update-klarna-order/:orderId", ordersController.putKlarnaOrder);
 
+ordersRouter.put("/update-order/:orderId", ordersController.putOrder);
+
 module.exports = ordersRouter;
