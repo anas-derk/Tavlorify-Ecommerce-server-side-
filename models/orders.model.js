@@ -39,10 +39,42 @@ async function updateOrder(orderId, newOrderDetails) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const newOrderData = new orderModel.findOneAndUpdate({ _id: orderId }, { ...newOrderDetails });
+        const newOrderData = await orderModel.findOneAndUpdate({
+            $or: [
+                {
+                    _id: orderId,
+                },
+                {
+                    klarnaOrderId: newOrderDetails.klarnaOrderId,
+                }
+            ]
+        }, { ...newOrderDetails });
         console.log(newOrderData);
         await mongoose.disconnect();
-        return { msg: "Updating Order Details Has Been Successfuly !!", orderId: newOrderData };
+        return "Updating Order Details Has Been Successfuly !!";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
+async function updateOrder(orderId, newOrderDetails) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        await orderModel.updateOne({
+            $or: [
+                {
+                    _id: orderId,
+                },
+                {
+                    klarnaOrderId: newOrderDetails.klarnaOrderId,
+                }
+            ]
+        }, { ...newOrderDetails });
+        await mongoose.disconnect();
+        return "Updating Order Details Has Been Successfuly !!";
     } catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();

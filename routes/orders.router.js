@@ -10,6 +10,8 @@ ordersRouter.post("/send-order-to-gelato", ordersController.postNewOrderToGelato
 
 ordersRouter.post("/send-order-to-klarna", ordersController.postNewOrderToKlarna);
 
+ordersRouter.post("/handle-klarna-checkout-complete/:orderId", ordersController.postKlarnaCheckoutComplete);
+
 ordersRouter.post("/create-new-order", ordersController.postNewOrder);
 
 ordersRouter.put("/update-klarna-order/:orderId", ordersController.putKlarnaOrder);

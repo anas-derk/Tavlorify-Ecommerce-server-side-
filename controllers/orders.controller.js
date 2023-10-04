@@ -56,8 +56,60 @@ async function postNewOrder(req, res) {
     }
 }
 
-async function postAcknowledgeKlarnaOrder(req, res) {
-    
+async function postKlarnaCheckoutComplete(req, res) {
+    try{
+        const orderId = req.params.orderId;
+        if (!orderId) res.status(400).json("Please Send Order Id !!");
+        else {
+            const { get, post } = require("axios");
+            let response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                },
+            });
+            let result = await response.data;
+            // ----------------------------------------------
+            if (result.status === "checkout_incomplete") {
+                const { updateOrder } = require("../models/orders.model");
+                result = updateOrder(undefined, {
+                    checkout_status: result.status,
+                    billing_address: {
+                        city: result.billing_address.city,
+                        email: result.billing_address.email,
+                        given_name: result.billing_address.given_name,
+                        family_name: result.billing_address.family_name,
+                        phone: result.billing_address.phone,
+                        postal_code: result.billing_address.postal_code,
+                        street_address: result.billing_address.street_address,
+                    },
+                    shipping_address: {
+                        city: result.shipping_address.city,
+                        email: result.shipping_address.email,
+                        given_name: result.shipping_address.given_name,
+                        family_name: result.shipping_address.family_name,
+                        phone: result.shipping_address.phone,
+                        postal_code: result.shipping_address.postal_code,
+                        street_address: result.shipping_address.street_address,
+                    },
+                });
+                response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                    },
+                });
+                result = await response.data;
+                res.json(result);
+            } else {
+                res.status(500).json("checkout_incomplete");
+            }
+        }
+    }
+    catch(err){
+        console.log(err.response.data);
+        res.status(500).json(err);
+    }
 }
 
 async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
@@ -111,10 +163,11 @@ async function putOrder(req, res) {
     else {
         try{
             const { updateOrder } = require("../models/orders.model");
-            const result = await updateOrder(newOrderDetails);
+            const result = await updateOrder(orderId, newOrderDetails);
             res.json(result);
         }
         catch(err) {
+            console.log(err);
             res.status(500).json(err);
         }
     }
@@ -126,6 +179,7 @@ module.exports = {
     postNewOrderToGelato,
     postNewOrderToKlarna,
     postNewOrder,
+    postKlarnaCheckoutComplete,
     putKlarnaOrder,
     putOrder,
 }
