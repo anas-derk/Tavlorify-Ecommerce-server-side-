@@ -39,7 +39,7 @@ async function updateOrder(orderId, newOrderDetails) {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const newOrderData = await orderModel.findOneAndUpdate({
+        await orderModel.updateOne({
             $or: [
                 {
                     _id: orderId,
@@ -49,7 +49,6 @@ async function updateOrder(orderId, newOrderDetails) {
                 }
             ]
         }, { ...newOrderDetails });
-        console.log(newOrderData);
         await mongoose.disconnect();
         return "Updating Order Details Has Been Successfuly !!";
     } catch (err) {

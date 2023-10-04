@@ -10,7 +10,8 @@
     "mongoose": "^7.1.0",
     "multer": "^1.4.5-lts.1",
     "replicate": "^0.11.1",
-    "sharp": "^0.32.4"
+    "sharp": "^0.32.4",
+    "uuid": "^9.0.1"
   },
   "scripts": {
     "start": "node server.js"

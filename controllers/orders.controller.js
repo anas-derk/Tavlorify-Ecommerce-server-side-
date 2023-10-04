@@ -62,7 +62,7 @@ async function postKlarnaCheckoutComplete(req, res) {
         if (!orderId) res.status(400).json("Please Send Order Id !!");
         else {
             const { get, post } = require("axios");
-            let response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
+            let response = await get(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
@@ -70,33 +70,36 @@ async function postKlarnaCheckoutComplete(req, res) {
             });
             let result = await response.data;
             // ----------------------------------------------
-            if (result.status === "checkout_incomplete") {
+            if (result.status == "AUTHORIZED") {
                 const { updateOrder } = require("../models/orders.model");
-                result = updateOrder(undefined, {
+                result = await updateOrder(undefined, {
+                    klarnaOrderId: orderId,
                     checkout_status: result.status,
                     billing_address: {
                         city: result.billing_address.city,
-                        email: result.billing_address.email,
-                        given_name: result.billing_address.given_name,
-                        family_name: result.billing_address.family_name,
-                        phone: result.billing_address.phone,
-                        postal_code: result.billing_address.postal_code,
-                        street_address: result.billing_address.street_address,
+                        email: result.billing_address.email || "none",
+                        given_name: result.billing_address.given_name || "none",
+                        family_name: result.billing_address.family_name || "none",
+                        phone: result.billing_address.phone || "none",
+                        postal_code: result.billing_address.postal_code || "none",
+                        street_address: result.billing_address.street_address || "none",
                     },
                     shipping_address: {
-                        city: result.shipping_address.city,
-                        email: result.shipping_address.email,
-                        given_name: result.shipping_address.given_name,
-                        family_name: result.shipping_address.family_name,
-                        phone: result.shipping_address.phone,
-                        postal_code: result.shipping_address.postal_code,
-                        street_address: result.shipping_address.street_address,
+                        city: result.shipping_address.city || "none",
+                        email: result.shipping_address.email || "none",
+                        given_name: result.shipping_address.given_name || "none",
+                        family_name: result.shipping_address.family_name || "none",
+                        phone: result.shipping_address.phone || "none",
+                        postal_code: result.shipping_address.postal_code || "none",
+                        street_address: result.shipping_address.street_address || "none",
                     },
                 });
+                const { v4 } = require("uuid");
                 response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, {
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                        "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`,
+                        "Klarna-Idempotency-Key": v4(),
                     },
                 });
                 result = await response.data;
@@ -107,7 +110,7 @@ async function postKlarnaCheckoutComplete(req, res) {
         }
     }
     catch(err){
-        console.log(err.response.data);
+        console.log(err);
         res.status(500).json(err);
     }
 }
