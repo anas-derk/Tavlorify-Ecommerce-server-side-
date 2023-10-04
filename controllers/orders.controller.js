@@ -95,14 +95,14 @@ async function postKlarnaCheckoutComplete(req, res) {
                     },
                 });
                 const { v4 } = require("uuid");
-                response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, {
+                response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, undefined , {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`,
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
-                result = await response.data;
+                await response.status;
                 res.json(result);
             } else {
                 res.status(500).json("checkout_incomplete");
