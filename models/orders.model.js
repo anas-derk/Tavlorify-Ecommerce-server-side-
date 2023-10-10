@@ -10,7 +10,7 @@ async function getAllOrders() {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const orders = await orderModel.find({});
+        const orders = await orderModel.find({}).sort({ added_date: -1 });
         await mongoose.disconnect();
         return orders;
     } catch (err) {
