@@ -220,6 +220,7 @@ const orderSchema = mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    orderNumber: Number,
 });
 
 // Create Order Model From Order Schema

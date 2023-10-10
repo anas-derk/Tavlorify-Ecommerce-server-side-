@@ -4,6 +4,8 @@ const ordersController = require("../controllers/orders.controller");
 
 ordersRouter.get("/all-orders", ordersController.getAllOrders);
 
+ordersRouter.get("/order-details/:orderId", ordersController.getOrderDetails);
+
 ordersRouter.get("/order-details-from-klarna/:orderId", ordersController.getOrderDetailsFromKlarnaInCheckoutPeriod);
 
 ordersRouter.post("/send-order-to-gelato", ordersController.postNewOrderToGelato);

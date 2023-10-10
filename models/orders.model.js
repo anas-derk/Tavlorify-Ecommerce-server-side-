@@ -16,7 +16,21 @@ async function getAllOrders() {
     } catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
+    }
+}
+
+async function getOrderDetails(orderId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(DB_URL);
+        const order = await orderModel.findById(orderId);
+        await mongoose.disconnect();
+        return order;
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
     }
 }
 
@@ -24,7 +38,8 @@ async function postNewOrder() {
     try {
         // Connect To DB
         await mongoose.connect(DB_URL);
-        const newOrder = new orderModel({});
+        const ordersCount = await orderModel.countDocuments();
+        const newOrder = new orderModel({ orderNumber: ordersCount + 1 });
         const orderDetails = await newOrder.save();
         await mongoose.disconnect();
         return { msg: "Creating New Order Has Been Successfuly !!", orderId: orderDetails._id };
@@ -83,6 +98,7 @@ async function updateOrder(orderId, newOrderDetails) {
 
 module.exports = {
     getAllOrders,
+    getOrderDetails,
     postNewOrder,
     updateOrder,
 }
