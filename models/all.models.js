@@ -148,6 +148,14 @@ const orderSchema = mongoose.Schema({
         type: String,
         default: "none",
     },
+    klarnaReference: {
+        type: String,
+        default: "none",
+    },
+    order_amount: {
+        type: Number,
+        default: 0,
+    },
     checkout_status: {
         type: String,
         default: "checkout_incomplete",
@@ -216,6 +224,32 @@ const orderSchema = mongoose.Schema({
             default: "none",
         },
     },
+    order_lines: [{
+        reference: {
+            type: String,
+            default: "none",
+        },
+        quantity: {
+            type: Number,
+            default: 0,
+        },
+        name: {
+            type: String,
+            default: "none",
+        },
+        total_amount: {
+            type: Number,
+            default: 0,
+        },
+        unit_price: {
+            type: Number,
+            default: 0,
+        },
+        image_url: {
+            type: String,
+            default: "none",
+        },
+    }],
     added_date: {
         type: Date,
         default: Date.now(),

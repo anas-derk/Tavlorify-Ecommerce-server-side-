@@ -88,7 +88,9 @@ async function postKlarnaCheckoutComplete(req, res) {
                 const { updateOrder } = require("../models/orders.model");
                 result = await updateOrder(undefined, {
                     klarnaOrderId: orderId,
+                    klarnaReference: result.klarna_reference,
                     checkout_status: result.status,
+                    order_amount: result.order_amount,
                     billing_address: {
                         city: result.billing_address.city,
                         email: result.billing_address.email || "none",
@@ -107,6 +109,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                         postal_code: result.shipping_address.postal_code || "none",
                         street_address: result.shipping_address.street_address || "none",
                     },
+                    order_lines: result.order_lines,
                 });
                 const { v4 } = require("uuid");
                 response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, undefined , {
