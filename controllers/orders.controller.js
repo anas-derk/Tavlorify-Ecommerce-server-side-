@@ -84,7 +84,7 @@ async function postKlarnaCheckoutComplete(req, res) {
             });
             let result = await response.data;
             // ----------------------------------------------
-            if (result.status != "AUTHORIZED") {
+            if (result.status == "AUTHORIZED") {
                 const { updateOrder } = require("../models/orders.model");
                 result = await updateOrder(undefined, {
                     klarnaOrderId: orderId,
