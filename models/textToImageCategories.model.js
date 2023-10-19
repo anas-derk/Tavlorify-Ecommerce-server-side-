@@ -2,14 +2,10 @@
 
 const { mongoose, textToImageCategoryModel, textToImageStyleModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 async function getAllCategoriesData() {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
         let categorieData = await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
         if (categorieData) {
@@ -31,7 +27,7 @@ async function getAllCategoriesData() {
 
 async function addNewCategory(categoryInfo) {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const categoriesCount = await textToImageCategoryModel.countDocuments({});
         const newCategory = new textToImageCategoryModel({
             imgSrc: categoryInfo["categoryImgFile"][0].path,
@@ -62,7 +58,7 @@ async function addNewCategory(categoryInfo) {
 async function getCategoryData(categoryName) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
         let categoryData = await textToImageCategoryModel.findOne({ name: categoryName });
         if (categoryData) {
@@ -84,7 +80,7 @@ async function getCategoryData(categoryName) {
 async function updateCategoryData(categoryId, newCategorySortNumber, newCategoryName) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const theSecondCategory = await textToImageCategoryModel.findOne({ sortNumber: newCategorySortNumber });
         const theFirstCategory = await textToImageCategoryModel.findOneAndUpdate({ _id: categoryId }, {
             name: newCategoryName,
@@ -116,7 +112,7 @@ async function updateCategoryData(categoryId, newCategorySortNumber, newCategory
 async function deleteCategoryData(categoryId) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const categoryData = await textToImageCategoryModel.findById(categoryId);
         const categoryStylesData = await textToImageStyleModel.find({ categoryName: categoryData.name });
         if (!categoryData) {

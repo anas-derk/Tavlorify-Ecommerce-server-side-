@@ -2,10 +2,6 @@
 
 const { mongoose, userModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 // require bcryptjs module for password encrypting
 
 const bcrypt = require("bcryptjs");
@@ -15,7 +11,7 @@ const bcrypt = require("bcryptjs");
 async function createNewUser(email, password, country) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
         let user = await userModel.findOne({ email });
         if (user) {
@@ -47,7 +43,7 @@ async function createNewUser(email, password, country) {
 async function login(email, password) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
         let user = await userModel.findOne({ email });
         if (user) {
@@ -72,7 +68,7 @@ async function login(email, password) {
 async function getUserInfo(userId) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If User Is Exist
         let user = await userModel.findById(userId);
         await mongoose.disconnect();
@@ -88,7 +84,7 @@ async function getUserInfo(userId) {
 async function getAllUsers() {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const users = await userModel.find({});
         await mongoose.disconnect();
         return users;
@@ -102,7 +98,7 @@ async function getAllUsers() {
 async function updateUserInfo(userId, newUserData) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         if (newUserData.password !== "") {
             const encrypted_password = await bcrypt.hash(newUserData.password, 10);
             await userModel.updateOne({ _id: userId }, {

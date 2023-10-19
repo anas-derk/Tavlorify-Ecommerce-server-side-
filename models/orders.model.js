@@ -2,14 +2,10 @@
 
 const { mongoose, orderModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 async function getAllOrders() {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const orders = await orderModel.find({}).sort({ added_date: -1 });
         await mongoose.disconnect();
         return orders;
@@ -23,7 +19,7 @@ async function getAllOrders() {
 async function getOrderDetails(orderId) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const order = await orderModel.findById(orderId);
         await mongoose.disconnect();
         return order;
@@ -37,7 +33,7 @@ async function getOrderDetails(orderId) {
 async function postNewOrder() {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const ordersCount = await orderModel.countDocuments();
         const newOrder = new orderModel({ orderNumber: ordersCount + 1 });
         const orderDetails = await newOrder.save();
@@ -53,7 +49,7 @@ async function postNewOrder() {
 async function updateOrder(orderId, newOrderDetails) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await orderModel.updateOne({
             $or: [
                 {
@@ -76,7 +72,7 @@ async function updateOrder(orderId, newOrderDetails) {
 async function updateOrder(orderId, newOrderDetails) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await orderModel.updateOne({
             $or: [
                 {

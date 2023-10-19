@@ -2,14 +2,10 @@
 
 const { mongoose, categoryModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 async function getAllCategories() {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const categoriesList = await categoryModel.find({});
         await mongoose.disconnect();
         return categoriesList;
@@ -24,7 +20,7 @@ async function getAllCategories() {
 async function addNewCategory(categoryType, categoryName) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const category = await categoryModel.findOne({ categoryType: categoryType, name: categoryName });
         if (category) {
             await mongoose.disconnect();
@@ -50,7 +46,7 @@ async function addNewCategory(categoryType, categoryName) {
 async function addNewSubCategory(categoryType, categoryName, subCategoryName) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const category = await categoryModel.findOne({ categoryType: categoryType, name: categoryName });
         if (!category) {
             await mongoose.disconnect();
@@ -87,7 +83,7 @@ async function addNewSubCategory(categoryType, categoryName, subCategoryName) {
 async function addNewSubCategoryFromSubCategory(categoryType, categoryName, subCategoryName, subCategoryFromSubCategoryName) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const category = await categoryModel.findOne({ categoryType: categoryType, name: categoryName });
         if (!category) {
             await mongoose.disconnect();

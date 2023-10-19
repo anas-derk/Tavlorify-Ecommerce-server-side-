@@ -2,13 +2,9 @@
 
 const { mongoose, generatedImageModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 async function saveNewGeneratedImageData(generatedImageData) {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const newGeneratedImageData = new generatedImageModel(generatedImageData);
         const result = await newGeneratedImageData.save();
         await mongoose.disconnect();
@@ -22,7 +18,7 @@ async function saveNewGeneratedImageData(generatedImageData) {
 
 async function getSpecificGeneratedImagesData(service) {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const generatedImagesData = await generatedImageModel.find({ service: service }).sort({ imageGegenerationDate: -1 });
         await mongoose.disconnect();
         return generatedImagesData;
@@ -35,7 +31,7 @@ async function getSpecificGeneratedImagesData(service) {
 
 async function deleteGeneratedImageData(generatedImageDataId) {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await generatedImageModel.findOneAndDelete({ _id: generatedImageDataId });
         await mongoose.disconnect();
         return "Deleteting Generated Image Data Has Been Succesfuly !!";

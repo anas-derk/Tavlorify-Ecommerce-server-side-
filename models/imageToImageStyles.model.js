@@ -2,14 +2,10 @@
 
 const { mongoose, imageToImageStyleModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 async function get_all_category_Styles_Data(categoryName){
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
         let categoryStylesData = await imageToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
         if (categoryStylesData) {
@@ -30,7 +26,7 @@ async function get_all_category_Styles_Data(categoryName){
 
 async function addNewStyle(styleData) {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName: styleData.categoryName });
         const newStyleData = new imageToImageStyleModel({
             imgSrc: styleData.imgSrc,
@@ -56,7 +52,7 @@ async function addNewStyle(styleData) {
 async function updateStyleData(styleId, categoryName, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const theSecondStyle = await imageToImageStyleModel.findOne({ sortNumber: newCategoryStyleSortNumber, categoryName: categoryName });
         const theFirstStyle = await imageToImageStyleModel.findOneAndUpdate({ _id: styleId }, {
             name: newName,
@@ -83,7 +79,7 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleSortNumber
 async function deleteStyleData(styleId, categoryName) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName: categoryName });
         const styleData = await imageToImageStyleModel.findOneAndDelete({
             _id: styleId,

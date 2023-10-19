@@ -2,10 +2,6 @@
 
 const { mongoose, adminModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 // require bcryptjs module for password encrypting
 
 const bcrypt = require("bcryptjs");
@@ -13,7 +9,7 @@ const bcrypt = require("bcryptjs");
 async function adminLogin(email, password) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
         let user = await adminModel.findOne({ email });
         if (user) {
@@ -52,7 +48,7 @@ async function handleChangeStyleImagePath(model, styleId, newFilePath) {
 async function updateStyleImagePath(service, styleId, newFilePath) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         if (service === "text-to-image") {
             return handleChangeStyleImagePath(textToImageStyleModel, styleId, newFilePath);
         } else {

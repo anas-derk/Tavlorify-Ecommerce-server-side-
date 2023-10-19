@@ -2,14 +2,10 @@
 
 const { mongoose, productModel } = require("../models/all.models");
 
-// Import Database URL
-
-const DB_URL = require("../global/DB_URL");
-
 async function addNewProduct(productInfo) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         let newProductInfo = new productModel(productInfo);
         await newProductInfo.save();
         await mongoose.disconnect();
@@ -25,7 +21,7 @@ async function addNewProduct(productInfo) {
 async function getProductInfo(productId) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         let productInfo = await productModel.findById(productId);
         if (productInfo) {
             await mongoose.disconnect();
@@ -46,7 +42,7 @@ async function getProductInfo(productId) {
 async function getAllProducts() {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         let allProducts = await productModel.find({});
         await mongoose.disconnect();
         return allProducts;
@@ -61,7 +57,7 @@ async function getAllProducts() {
 async function deleteProduct(productId) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         let productInfo = await productModel.findById(productId);
         await productModel.deleteOne({
             _id: productId,
@@ -79,7 +75,7 @@ async function deleteProduct(productId) {
 async function updateProduct(productId, newData) {
     try {
         // Connect To DB
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await productModel.updateOne({_id: productId}, {
             name: newData.name,
             price: newData.price,
