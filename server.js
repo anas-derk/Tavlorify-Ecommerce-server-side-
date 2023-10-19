@@ -45,7 +45,8 @@ const usersRouter = require("./routes/users.router"),
     ordersRouter = require("./routes/orders.router"),
     categoriesRouter = require("./routes/categories.router"),
     generatedImagesRouter = require("./routes/generatedImages.router"),
-    pricesRouter = require("./routes/prices.router");
+    pricesRouter = require("./routes/prices.router"),
+    returnedOrdersRouter = require("./routes/returnedOrders.router");
 
 app.use("/users", usersRouter);
 
@@ -64,5 +65,7 @@ app.use("/categories", categoriesRouter);
 app.use("/generated-images", generatedImagesRouter);
 
 app.use("/prices", pricesRouter);
+
+app.use("/returned-orders", returnedOrdersRouter);
 
 /* End Handle The Routes */

@@ -313,6 +313,58 @@ const productPricesSchema = mongoose.Schema({
 
 const productPricesModel = mongoose.model("prices", productPricesSchema);
 
+// Create Returned Order Schema
+
+const returnedOrderSchema = mongoose.Schema({
+    returnedOrderNumber: Number,
+    orderNumber: Number,
+    orderId: String,
+    klarnaOrderId: String,
+    klarnaReference: String,
+    status: {
+        type: String,
+        default: "pending",
+    },
+    order_amount: Number,
+    customer: {
+        first_name: String,
+        last_name: String,
+        email: String,
+        phone: String,
+    },
+    order_lines: [{
+        reference: {
+            type: String,
+            default: "none",
+        },
+        quantity: {
+            type: Number,
+            default: 0,
+        },
+        name: {
+            type: String,
+            default: "none",
+        },
+        unit_price: {
+            type: Number,
+            default: 0,
+        },
+        total_amount: {
+            type: Number,
+            default: 0,
+        },
+        return_reason: String,
+    }],
+    added_date: {
+        type: Date,
+        default: Date.now(),
+    },
+});
+
+// Create Returned Order Model From Returned Order Schema
+
+const returnedOrderModel = mongoose.model("returned_order", returnedOrderSchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -326,4 +378,5 @@ module.exports = {
     orderModel,
     generatedImageModel,
     productPricesModel,
+    returnedOrderModel,
 }
