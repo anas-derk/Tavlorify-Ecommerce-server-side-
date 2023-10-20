@@ -16,6 +16,20 @@ async function getAllReturnedOrders() {
     }
 }
 
+async function getReturnedOrderDetails(orderId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const order = await returnedOrderModel.findById(orderId);
+        await mongoose.disconnect();
+        return order;
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 async function postNewReturnedOrder(orderId) {
     try {
         // Connect To DB
@@ -48,5 +62,6 @@ async function postNewReturnedOrder(orderId) {
 
 module.exports = {
     getAllReturnedOrders,
+    getReturnedOrderDetails,
     postNewReturnedOrder,
 }

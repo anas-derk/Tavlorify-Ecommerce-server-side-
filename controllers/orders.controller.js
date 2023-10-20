@@ -1,3 +1,14 @@
+async function getAllOrders(req, res) {
+    const { getAllOrders } = require("../models/orders.model");
+    try{
+        const result = await getAllOrders();
+        await res.json(result);;
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
+}
+
 async function getOrderDetails(req, res) {
     const orderId = req.params.orderId;
     if (!orderId) await res.status(400).json("Please Send Order Id !!");
@@ -9,17 +20,6 @@ async function getOrderDetails(req, res) {
         catch(err){
             await res.status(500).json(err);
         }
-    }
-}
-
-async function getAllOrders(req, res) {
-    const { getAllOrders } = require("../models/orders.model");
-    try{
-        const result = await getAllOrders();
-        await res.json(result);;
-    }
-    catch(err) {
-        await res.status(500).json(err);
     }
 }
 
