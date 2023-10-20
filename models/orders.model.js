@@ -69,29 +69,6 @@ async function updateOrder(orderId, newOrderDetails) {
     }
 }
 
-async function updateOrder(orderId, newOrderDetails) {
-    try {
-        // Connect To DB
-        await mongoose.connect(process.env.DB_URL);
-        await orderModel.updateOne({
-            $or: [
-                {
-                    _id: orderId,
-                },
-                {
-                    klarnaOrderId: newOrderDetails.klarnaOrderId,
-                }
-            ]
-        }, { ...newOrderDetails });
-        await mongoose.disconnect();
-        return "Updating Order Details Has Been Successfuly !!";
-    } catch (err) {
-        // Disconnect In DB
-        await mongoose.disconnect();
-        throw Error(err);
-    }
-}
-
 module.exports = {
     getAllOrders,
     getOrderDetails,

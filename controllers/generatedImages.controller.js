@@ -20,40 +20,42 @@ async function postNewGeneratedImageData(req, res) {
                 ...generatedImageData,
                 generatedImageURL: result.imagePath,
             });
-            res.json(result1);
+            await res.json(result1);
         }
     }
     catch(err) {
-        console.log(err);
-        res.status(500).json(err);
+        await res.status(500).json(err);
     }
 }
 
-function getSpecificGeneratedImagesData(req, res) {
+async function getSpecificGeneratedImagesData(req, res) {
     const service = req.query.service;
     if (!service && (service !== "text-to-image" || service !== "image-to-image")) {
-        res.status(400).json(`Invalid Service Name !!`);
+        await res.status(400).json(`Invalid Service Name !!`);
     } else {
         const { getSpecificGeneratedImagesData } = require("../models/generatedImages.model");
-        getSpecificGeneratedImagesData(service)
-        .then((result) => res.json(result))
-        .catch((err) => res.status(500).json(err));
+        try{
+            const result = await getSpecificGeneratedImagesData(service);
+            await res.json(result);
+        }
+        catch(err) {
+            await res.status(500).json(err);
+        }
     }
 }
 
-function deleteGeneratedImageData(req, res) {
+async function deleteGeneratedImageData(req, res) {
     const generatedImageDataId = req.params.generatedImageDataId;
     if (!generatedImageDataId) res.status(400).json("Please Send Generated Image Data Id !!");
     else {
         const { deleteGeneratedImageData } = require("../models/generatedImages.model");
-        deleteGeneratedImageData(generatedImageDataId)
-        .then((result) => {
-            res.json(result);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+        try{
+            const result = await deleteGeneratedImageData(generatedImageDataId);
+            await res.json(result);
+        }
+        catch(err) {
+            await res.status(500).json(err);
+        }
     }
 }
 

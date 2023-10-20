@@ -14,10 +14,13 @@ async function getOrderDetails(req, res) {
 
 async function getAllOrders(req, res) {
     const { getAllOrders } = require("../models/orders.model");
-    getAllOrders().then((result) => {
-        res.json(result);
-    })
-        .catch((err) => res.json(err));
+    try{
+        const result = await getAllOrders();
+        await res.json(result);;
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
 async function postNewOrderToGelato(req, res) {
@@ -32,10 +35,9 @@ async function postNewOrderToGelato(req, res) {
             }
         });
         const result = await response.data;
-        res.json(result);
+        await res.json(result);
     } catch (err) {
-        console.log(err);
-        res.status(500).json("Error !");
+        await res.status(500).json(err);
     }
 }
 
@@ -51,11 +53,10 @@ async function postNewOrderToKlarna(req, res) {
             },
         });
         const result = await response.data;
-        res.json(result);
+        await res.json(result);
     }
     catch (err) {
-        console.log(err.response.data.error_messages);
-        res.status(500).json(err);
+        await res.status(500).json(err);
     }
 }
 
@@ -63,10 +64,10 @@ async function postNewOrder(req, res) {
     try{
         const { postNewOrder } = require("../models/orders.model");
         const result = await postNewOrder();
-        res.json(result);
+        await res.json(result);
     }
     catch(err) {
-        res.status(500).json(err);
+        await res.status(500).json(err);
     }
 }
 
@@ -119,16 +120,14 @@ async function postKlarnaCheckoutComplete(req, res) {
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
-                await response.status;
-                res.json(result);
+                await res.json(result);
             } else {
-                res.status(500).json("checkout_incomplete");
+                await res.status(500).json("checkout_incomplete");
             }
         }
     }
     catch(err){
-        console.log(err);
-        res.status(500).json(err);
+        await res.status(500).json(err);
     }
 }
 
@@ -145,10 +144,10 @@ async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
                 },
             });
             const result = await response.data;
-            res.json(result);
+            await res.json(result);
         }
         catch(err) {
-            res.status(500).json(err.response.data);
+            await res.status(500).json(err);
         }
     }
 }
@@ -167,11 +166,11 @@ async function putKlarnaOrder(req, res) {
                 },
             });
             const result = await response.data;
-            res.json(result);
+            await res.json(result);
         }
         catch(err) {
             console.log(err.response.data);
-            res.status(500).json(err);
+            await res.status(500).json(err);
         }
     }
 }
@@ -184,11 +183,10 @@ async function putOrder(req, res) {
         try{
             const { updateOrder } = require("../models/orders.model");
             const result = await updateOrder(orderId, newOrderDetails);
-            res.json(result);
+            await res.json(result);
         }
         catch(err) {
-            console.log(err);
-            res.status(500).json(err);
+            await res.status(500).json(err);
         }
     }
 }

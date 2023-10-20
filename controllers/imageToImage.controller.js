@@ -1,16 +1,24 @@
-function getAllCategoriesData(req, res) {
+async function getAllCategoriesData(req, res) {
     const { getAllCategoriesData } = require("../models/imageToImageCategories.model");
-    getAllCategoriesData()
-        .then((result) => res.json(result))
-        .catch((err) => res.status(500).json(err));
+    try{
+        const result = await getAllCategoriesData();
+        await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
-function get_all_category_Styles_Data(req, res) {
-    let categoryName = req.query.categoryName;
+async function get_all_category_Styles_Data(req, res) {
+    const categoryName = req.query.categoryName;
     const { get_all_category_Styles_Data } = require("../models/imageToImageStyles.model");
-    get_all_category_Styles_Data(categoryName)
-        .then((result) => res.json(result))
-        .catch((err) => res.status(500).json(err));
+    try{
+        const result = await get_all_category_Styles_Data(categoryName);
+        await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
 async function uploadImageAndProcessing(req, res) {
@@ -22,7 +30,7 @@ async function uploadImageAndProcessing(req, res) {
         if (width > height) imageType = "horizontal";
         else if (width < height) imageType = "vertical";
         else imageType = "square";
-        res.json({
+        await res.json({
             imageLink: `https://newapi.tavlorify.se/${filePath}`,
             imageType: imageType,
         });
@@ -30,8 +38,22 @@ async function uploadImageAndProcessing(req, res) {
     catch(err) {
         const { unlinkSync } = require("fs");
         unlinkSync(filePath);
-        console.log(err);
-        res.status(500).json(err);
+        await res.status(500).json(err);
+    }
+}
+
+async function runModel(model, input) {
+    const Replicate = require("replicate");
+    const replicate = new Replicate({
+        auth: process.env.REPLICATE_API_TOKEN,
+    });
+    try {
+        const output = await replicate.run(
+            model, { input, },
+        );
+        return output;
+    } catch (err) {
+        throw Error(err);
     }
 }
 
@@ -50,72 +72,74 @@ async function generateImage(req, res) {
                         ddim_steps: parseInt(imageToImageInfo.ddim_steps),
                         strength: Number(imageToImageInfo.strength),
                     });
-                console.log(output);
-                res.json(output);
+                await res.json(output);
                 break;
             }
             default: {
-                res.json("Error !!");
+                await res.status(400).json("Invalid Model Name !!");
             }
         }
     } catch (err) {
-        console.log(err);
-        res.json(err);
+        await res.status(500).json(err);
     }
 }
 
-function addNewCategory(req, res) {
+async function addNewCategory(req, res) {
     const bodyData = req.body;
     const categoryInfo = {
         ...Object.assign({}, bodyData),
         ...Object.assign({}, req.files),
     };
     const { addNewCategory } = require("../models/imageToImageCategories.model");
-    addNewCategory(categoryInfo).then((result) => {
-        res.json(result);
-    })
-        .catch(err => {
-            console.log(err);
-            const { unlinkSync } = require("fs");
-            unlinkSync(req.files["categoryImgFile"][0].path);
-            unlinkSync(req.files["styleImgFile"][0].path);
-            res.json(err);
-        });
+    try{
+        const result = await addNewCategory(categoryInfo);
+        await res.json(result);
+    }
+    catch(err) {
+        const { unlinkSync } = require("fs");
+        unlinkSync(req.files["categoryImgFile"][0].path);
+        unlinkSync(req.files["styleImgFile"][0].path);
+        await res.status(500).json(err);
+    }
 }
 
-function addNewStyle(req, res) {
+async function addNewStyle(req, res) {
     const bodyData = req.body;
     const styleData = {
         ...Object.assign({}, bodyData),
         imgSrc: req.file.path,
     };
     const { addNewStyle } = require("../models/imageToImageStyles.model");
-    addNewStyle(styleData).then((result) => {
-        res.json(result);
-    })
-        .catch((err) => {
-            console.log(err);
-            const { unlinkSync } = require("fs");
-            unlinkSync(req.file.path);
-            res.json(err);
-        });
-}
-
-function putCategoryData(req, res) {
-    const categoryId = req.params.categoryId;
-    const newCategorySortNumber = req.body.newCategorySortNumber;
-    const newCategoryName = req.body.newCategoryName;
-    if (!newCategorySortNumber || !categoryId || !newCategoryName) {
-        res.status(400).json("Sorry, Please Send Category Id, New Category Sort Number And Old Category Name And New Category Name !!");
-    } else {
-        const { updateCategoryData } = require("../models/imageToImageCategories.model");
-        updateCategoryData(categoryId, newCategorySortNumber, newCategoryName)
-            .then((result) => res.json(result))
-            .catch((err) => res.status(500).json(err));
+    try{
+        const result = await addNewStyle(styleData);
+        await res.json(result);
+    }
+    catch(err) {
+        const { unlinkSync } = require("fs");
+        unlinkSync(req.file.path);
+        await res.status(500).json(err);
     }
 }
 
-function putStyleData(req, res) {
+async function putCategoryData(req, res) {
+    const categoryId = req.params.categoryId;
+    const newCategorySortNumber = req.body.newCategorySortNumber;
+    const newCategoryName = req.body.newCategoryName;
+    try{
+        if (!newCategorySortNumber || !categoryId || !newCategoryName) {
+            await res.status(400).json("Sorry, Please Send Category Id, New Category Sort Number And Old Category Name And New Category Name !!");
+        } else {
+            const { updateCategoryData } = require("../models/imageToImageCategories.model");
+            const result = await updateCategoryData(categoryId, newCategorySortNumber, newCategoryName);
+            await res.json(result);
+        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
+}
+
+async function putStyleData(req, res) {
     const styleId = req.params.styleId;
     const categoryName = req.query.categoryName;
     const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber,
@@ -124,63 +148,59 @@ function putStyleData(req, res) {
         newNegativePrompt = req.body.newNegativePrompt,
         newDdimSteps = req.body.newDdimSteps,
         newStrength = req.body.newStrength;
-    if (!styleId || !categoryName || !newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt || !newDdimSteps || !newStrength) {
-        res.status(400).json("Sorry, Please Send All Requirments Field !!");
-    } else {
-        const { updateStyleData } = require("../models/imageToImageStyles.model");
-        updateStyleData(styleId, categoryName, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength)
-            .then((result) => res.json(result))
-            .catch((err) => res.status(500).json(err));
+    try{
+        if (!styleId || !categoryName || !newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt || !newDdimSteps || !newStrength) {
+            await res.status(400).json("Sorry, Please Send All Requirments Field !!");
+        } else {
+            const { updateStyleData } = require("../models/imageToImageStyles.model");
+            const result = await updateStyleData(styleId, categoryName, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength);
+            await res.json(result);
+        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
     }
 }
 
-function deleteCategoryData(req, res) {
+async function deleteCategoryData(req, res) {
     const categoryId = req.params.categoryId;
-    if (!categoryId) return "Sorry, Please Send Category Id";
-    const { deleteCategoryData } = require("../models/imageToImageCategories.model");
-    deleteCategoryData(categoryId)
-        .then((result) => {
-            console.log(result)
+    try{
+        if (!categoryId) await res.status(400).json("Sorry, Please Send Category Id");
+        else {
+            const { deleteCategoryData } = require("../models/imageToImageCategories.model");
+            const result = await deleteCategoryData(categoryId);
             if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
                 const { unlinkSync } = require("fs");
                 unlinkSync(result.categoryData.imgSrc);
                 for (let i = 0; i < result.categoryStylesData.length; i++) {
                     unlinkSync(result.categoryStylesData[i].imgSrc);
                 }
-                res.json("Category Deleting Process Is Succesfuly !!");
+                await res.json("Category Deleting Process Is Succesfuly !!");
             }
-        })
-        .catch((err) => res.status(500).json(err));
+        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
-function deleteStyleData(req, res) {
+async function deleteStyleData(req, res) {
     const styleId = req.params.styleId;
     const categoryName = req.query.categoryName;
-    if (!styleId || !categoryName) return "Sorry, Please Send Style Id And Category Name !!"; 
-    const { deleteStyleData } = require("../models/imageToImageStyles.model");
-    deleteStyleData(styleId, categoryName)
-        .then((result) => {
+    try{
+        if (!styleId || !categoryName) res.status(400).json("Sorry, Please Send Style Id And Category Name !!");
+        else {
+            const { deleteStyleData } = require("../models/imageToImageStyles.model");
+            const result = await deleteStyleData(styleId, categoryName);
             if (result) {
                 const { unlinkSync } = require("fs");
                 unlinkSync(result);
-                res.json("Category Style Deleting Process Is Succesfuly !!");
+                await res.json("Category Style Deleting Process Is Succesfuly !!");
             }
-        })
-        .catch((err) => res.status(500).json(err));
-}
-
-async function runModel(model, input) {
-    const Replicate = require("replicate");
-    const replicate = new Replicate({
-        auth: process.env.REPLICATE_API_TOKEN,
-    });
-    try {
-        const output = await replicate.run(
-            model, { input, },
-        );
-        return output;
-    } catch (err) {
-        return err;
+        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
     }
 }
 

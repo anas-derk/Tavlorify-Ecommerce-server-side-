@@ -1,55 +1,59 @@
-function getAllCategories(req, res) {
+async function getAllCategories(req, res) {
     const { getAllCategories } = require("../models/categories.model");
-    getAllCategories().then((result) => {
-        res.json(result);
-    }).catch((err) => {
-        console.log(err);
-        res.json(err);
-    });
+    try{
+        const result = await getAllCategories();
+        await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
-function addNewCategory(req, res) {
+async function addNewCategory(req, res) {
     const categoryType = req.params.categoryType;
     const categoryName = req.body.categoryName.toUpperCase();
     const { addNewCategory } = require("../models/categories.model");
-    addNewCategory(categoryType, categoryName).then((result) => {
-        res.json(result);
-    }).catch((err) => {
-        console.log(err);
-        res.json(err);
-    });
+    try{
+        const result = await addNewCategory(categoryType, categoryName);
+        await res.json(result);
+    }
+    catch(err){
+        await res.status(500).json(err);
+    }
 }
 
-function addNewSubCategory(req, res) {
+async function addNewSubCategory(req, res) {
     const categoryType = req.params.categoryType;
     const categoryName = req.params.categoryName;
     const subCategoryName = req.body.subCategoryName.toUpperCase();
     const { addNewSubCategory } = require("../models/categories.model");
-    addNewSubCategory(categoryType, categoryName, subCategoryName).then((result) => {
-        res.json(result);
-    }).catch((err) => {
-        console.log(err);
-        res.json(err);
-    });
+    try{
+        const result = await addNewSubCategory(categoryType, categoryName, subCategoryName);
+        await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
-function addNewSubCategoryFromSubCategory(req, res) {
+async function addNewSubCategoryFromSubCategory(req, res) {
     const categoryType = req.params.categoryType;
     const categoryName = req.params.categoryName;
     const subCategoryName = req.params.subCategoryName;
     const subCategoryFromSubCategoryName = req.body.subCategoryFromSubCategoryName.toUpperCase();
     const { addNewSubCategoryFromSubCategory } = require("../models/categories.model");
-    addNewSubCategoryFromSubCategory(
-        categoryType,
-        categoryName,
-        subCategoryName,
-        subCategoryFromSubCategoryName
-    ).then((result) => {
-        res.json(result);
-    }).catch((err) => {
-        console.log(err);
-        res.json(err);
-    });
+    try{
+        const result = await addNewSubCategoryFromSubCategory(
+            categoryType,
+            categoryName,
+            subCategoryName,
+            subCategoryFromSubCategoryName
+        );
+        await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
 }
 
 module.exports = {
