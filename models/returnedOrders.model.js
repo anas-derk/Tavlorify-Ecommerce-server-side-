@@ -1,6 +1,6 @@
 // Import Mongoose And Returned Order Model Object
 
-const { mongoose, returnedOrderModel } = require("../models/all.models");
+const { mongoose, orderModel, returnedOrderModel } = require("../models/all.models");
 
 async function getAllReturnedOrders() {
     try {
@@ -16,16 +16,30 @@ async function getAllReturnedOrders() {
     }
 }
 
-async function postNewReturnedOrder(returnedOrderDetails) {
+async function postNewReturnedOrder(orderId) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
+        const orderDetails = await orderModel.findById(orderId);
         const returnedOrdersCount = await returnedOrderModel.countDocuments();
-        const newReturnedOrder = new orderModel({ returnedOrderNumber: returnedOrdersCount + 1, ...returnedOrderDetails });
+        const newReturnedOrder = new returnedOrderModel({
+            returnedOrderNumber: returnedOrdersCount + 1,
+            orderNumber: orderDetails.orderNumber,
+            orderId,
+            order_amount: orderDetails.order_amount,
+            customer: {
+                first_name: orderDetails.billing_address.given_name,
+                last_name: orderDetails.billing_address.family_name,
+                email: orderDetails.billing_address.email,
+                phone: orderDetails.billing_address.phone,
+            },
+            order_lines: orderDetails.order_lines,
+        });
         await newReturnedOrder.save();
         await mongoose.disconnect();
-        return "Creating New Order Has Been Successfuly !!";
+        return "Creating New Returned Order Has Been Successfuly !!";
     } catch (err) {
+        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error(err);

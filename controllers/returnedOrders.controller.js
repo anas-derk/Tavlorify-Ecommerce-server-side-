@@ -12,7 +12,7 @@ async function getAllReturnedOrders(req, res) {
 async function postNewReturnedOrder(req, res) {
     try{
         const { postNewReturnedOrder } = require("../models/returnedOrders.model");
-        const result = await postNewReturnedOrder(req.body);
+        const result = await postNewReturnedOrder(req.params.orderId);
         await res.json(result);
     }
     catch(err) {

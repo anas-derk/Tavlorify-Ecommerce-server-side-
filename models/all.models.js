@@ -319,11 +319,9 @@ const returnedOrderSchema = mongoose.Schema({
     returnedOrderNumber: Number,
     orderNumber: Number,
     orderId: String,
-    klarnaOrderId: String,
-    klarnaReference: String,
     status: {
         type: String,
-        default: "pending",
+        default: "awaiting products",
     },
     order_amount: Number,
     customer: {

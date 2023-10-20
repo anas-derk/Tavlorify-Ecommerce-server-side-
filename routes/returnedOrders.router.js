@@ -4,6 +4,6 @@ const returnedOrdersController = require("../controllers/returnedOrders.controll
 
 returnedOrdersRouter.get("/all-orders", returnedOrdersController.getAllReturnedOrders);
 
-returnedOrdersRouter.post("/create-new-order", returnedOrdersController.postNewReturnedOrder);
+returnedOrdersRouter.post("/create-new-order/:orderId", returnedOrdersController.postNewReturnedOrder);
 
 module.exports = returnedOrdersRouter;
