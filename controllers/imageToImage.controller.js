@@ -1,6 +1,6 @@
 async function getAllCategoriesData(req, res) {
-    const { getAllCategoriesData } = require("../models/imageToImageCategories.model");
     try{
+        const { getAllCategoriesData } = require("../models/imageToImageCategories.model");
         const result = await getAllCategoriesData();
         await res.json(result);
     }
@@ -10,9 +10,9 @@ async function getAllCategoriesData(req, res) {
 }
 
 async function get_all_category_Styles_Data(req, res) {
-    const categoryName = req.query.categoryName;
-    const { get_all_category_Styles_Data } = require("../models/imageToImageStyles.model");
     try{
+        const categoryName = req.query.categoryName;
+        const { get_all_category_Styles_Data } = require("../models/imageToImageStyles.model");
         const result = await get_all_category_Styles_Data(categoryName);
         await res.json(result);
     }
@@ -22,9 +22,9 @@ async function get_all_category_Styles_Data(req, res) {
 }
 
 async function uploadImageAndProcessing(req, res) {
-    const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
-    const sharp = require("sharp");
     try {
+        const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
+        const sharp = require("sharp");
         const { width, height } = await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
         let imageType;
         if (width > height) imageType = "horizontal";
@@ -43,11 +43,11 @@ async function uploadImageAndProcessing(req, res) {
 }
 
 async function runModel(model, input) {
-    const Replicate = require("replicate");
-    const replicate = new Replicate({
-        auth: process.env.REPLICATE_API_TOKEN,
-    });
     try {
+        const Replicate = require("replicate");
+        const replicate = new Replicate({
+            auth: process.env.REPLICATE_API_TOKEN,
+        });
         const output = await replicate.run(
             model, { input, },
         );
@@ -58,8 +58,8 @@ async function runModel(model, input) {
 }
 
 async function generateImage(req, res) {
-    const imageToImageInfo = req.query;
     try {
+        const imageToImageInfo = req.query;
         switch (imageToImageInfo.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
                 const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
@@ -85,13 +85,13 @@ async function generateImage(req, res) {
 }
 
 async function addNewCategory(req, res) {
-    const bodyData = req.body;
-    const categoryInfo = {
-        ...Object.assign({}, bodyData),
-        ...Object.assign({}, req.files),
-    };
-    const { addNewCategory } = require("../models/imageToImageCategories.model");
     try{
+        const bodyData = req.body;
+        const categoryInfo = {
+            ...Object.assign({}, bodyData),
+            ...Object.assign({}, req.files),
+        };
+        const { addNewCategory } = require("../models/imageToImageCategories.model");
         const result = await addNewCategory(categoryInfo);
         await res.json(result);
     }
@@ -104,13 +104,13 @@ async function addNewCategory(req, res) {
 }
 
 async function addNewStyle(req, res) {
-    const bodyData = req.body;
-    const styleData = {
-        ...Object.assign({}, bodyData),
-        imgSrc: req.file.path,
-    };
-    const { addNewStyle } = require("../models/imageToImageStyles.model");
     try{
+        const bodyData = req.body;
+        const styleData = {
+            ...Object.assign({}, bodyData),
+            imgSrc: req.file.path,
+        };
+        const { addNewStyle } = require("../models/imageToImageStyles.model");
         const result = await addNewStyle(styleData);
         await res.json(result);
     }
@@ -122,10 +122,10 @@ async function addNewStyle(req, res) {
 }
 
 async function putCategoryData(req, res) {
-    const categoryId = req.params.categoryId;
-    const newCategorySortNumber = req.body.newCategorySortNumber;
-    const newCategoryName = req.body.newCategoryName;
     try{
+        const categoryId = req.params.categoryId;
+        const newCategorySortNumber = req.body.newCategorySortNumber;
+        const newCategoryName = req.body.newCategoryName;
         if (!newCategorySortNumber || !categoryId || !newCategoryName) {
             await res.status(400).json("Sorry, Please Send Category Id, New Category Sort Number And Old Category Name And New Category Name !!");
         } else {
@@ -140,15 +140,15 @@ async function putCategoryData(req, res) {
 }
 
 async function putStyleData(req, res) {
-    const styleId = req.params.styleId;
-    const categoryName = req.query.categoryName;
-    const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber,
-        newName = req.body.newName,
-        newPrompt = req.body.newPrompt,
-        newNegativePrompt = req.body.newNegativePrompt,
-        newDdimSteps = req.body.newDdimSteps,
-        newStrength = req.body.newStrength;
     try{
+        const styleId = req.params.styleId;
+        const categoryName = req.query.categoryName;
+        const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber,
+            newName = req.body.newName,
+            newPrompt = req.body.newPrompt,
+            newNegativePrompt = req.body.newNegativePrompt,
+            newDdimSteps = req.body.newDdimSteps,
+            newStrength = req.body.newStrength;
         if (!styleId || !categoryName || !newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt || !newDdimSteps || !newStrength) {
             await res.status(400).json("Sorry, Please Send All Requirments Field !!");
         } else {
@@ -163,8 +163,8 @@ async function putStyleData(req, res) {
 }
 
 async function deleteCategoryData(req, res) {
-    const categoryId = req.params.categoryId;
     try{
+        const categoryId = req.params.categoryId;
         if (!categoryId) await res.status(400).json("Sorry, Please Send Category Id");
         else {
             const { deleteCategoryData } = require("../models/imageToImageCategories.model");
@@ -185,9 +185,9 @@ async function deleteCategoryData(req, res) {
 }
 
 async function deleteStyleData(req, res) {
-    const styleId = req.params.styleId;
-    const categoryName = req.query.categoryName;
     try{
+        const styleId = req.params.styleId;
+        const categoryName = req.query.categoryName;
         if (!styleId || !categoryName) res.status(400).json("Sorry, Please Send Style Id And Category Name !!");
         else {
             const { deleteStyleData } = require("../models/imageToImageStyles.model");

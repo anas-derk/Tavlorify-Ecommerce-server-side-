@@ -1,6 +1,6 @@
 async function getAllCategoriesData(req, res) {
-    const { getAllCategoriesData } = require("../models/textToImageCategories.model");
     try{
+        const { getAllCategoriesData } = require("../models/textToImageCategories.model");
         const result = await getAllCategoriesData();
         await res.json(result);
     }
@@ -10,9 +10,9 @@ async function getAllCategoriesData(req, res) {
 }
 
 async function get_all_category_Styles_Data(req, res) {
-    const categoryName = req.query.categoryName;
-    const { get_all_category_Styles_Data } = require("../models/textToImageStyles.model");
     try{
+        const categoryName = req.query.categoryName;
+        const { get_all_category_Styles_Data } = require("../models/textToImageStyles.model");
         const result = await get_all_category_Styles_Data(categoryName);
         await res.json(result);
     }
@@ -22,11 +22,11 @@ async function get_all_category_Styles_Data(req, res) {
 }
 
 async function runModel(model, input) {
-    const Replicate = require("replicate");
-    const replicate = new Replicate({
-        auth: process.env.REPLICATE_API_TOKEN,
-    });
     try {
+        const Replicate = require("replicate");
+        const replicate = new Replicate({
+            auth: process.env.REPLICATE_API_TOKEN,
+        });
         const output = await replicate.run(
             model, { input, },
         );
@@ -37,7 +37,8 @@ async function runModel(model, input) {
 }
 
 async function generateImage(req, res) {
-    const textPrompt = req.query.textPrompt,
+    try{
+        const textPrompt = req.query.textPrompt,
         prompt = req.query.prompt,
         category = req.query.category,
         model_name = req.query.model_name,
@@ -46,7 +47,6 @@ async function generateImage(req, res) {
         refine = req.query.expert_ensemble_refiner,
         width = req.query.width,
         height = req.query.height;
-    try{
         switch (model_name) {
             case "dreamshaper": {
                 const output = await runModel("cjwbw/dreamshaper:ed6d8bee9a278b0d7125872bddfb9dd3fc4c401426ad634d8246a660e387475b",
@@ -126,16 +126,15 @@ async function generateImage(req, res) {
 }
 
 async function addNewCategory(req, res) {
-    const bodyData = req.body;
-    const categoryInfo = {
-        ...Object.assign({}, bodyData),
-        ...Object.assign({}, req.files),
-    };
-    const { addNewCategory } = require("../models/textToImageCategories.model");
     try{
+        const bodyData = req.body;
+        const categoryInfo = {
+            ...Object.assign({}, bodyData),
+            ...Object.assign({}, req.files),
+        };
+        const { addNewCategory } = require("../models/textToImageCategories.model");
         const result = await addNewCategory(categoryInfo);
         await res.json(result);
-
     }
     catch(err) {
         const { unlinkSync } = require("fs");
@@ -146,13 +145,13 @@ async function addNewCategory(req, res) {
 }
 
 async function addNewStyle(req, res) {
-    const bodyData = req.body;
-    const styleData = {
-        ...Object.assign({}, bodyData),
-        imgSrc: req.file.path,
-    };
-    const { addNewStyle } = require("../models/textToImageStyles.model");
     try{
+        const bodyData = req.body;
+        const styleData = {
+            ...Object.assign({}, bodyData),
+            imgSrc: req.file.path,
+        };
+        const { addNewStyle } = require("../models/textToImageStyles.model");
         const result = await addNewStyle(styleData);
         await res.json(result);
     }
@@ -164,14 +163,14 @@ async function addNewStyle(req, res) {
 }
 
 async function putStyleData(req, res) {
-    const styleId = req.params.styleId;
-    const categoryName = req.query.categoryName;
-    const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber, 
-        newName = req.body.newName,
-        newPrompt = req.body.newPrompt,
-        newNegativePrompt = req.body.newNegativePrompt,
-        newModelName = req.body.newModelName;
     try{
+        const styleId = req.params.styleId;
+        const categoryName = req.query.categoryName;
+        const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber, 
+            newName = req.body.newName,
+            newPrompt = req.body.newPrompt,
+            newNegativePrompt = req.body.newNegativePrompt,
+            newModelName = req.body.newModelName;
         if (!styleId || !categoryName || !newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt || !newModelName) {
             await res.status(400).json("Sorry, Please Send All Requirments Field !!");
         } else {
@@ -186,11 +185,11 @@ async function putStyleData(req, res) {
 }
 
 async function putCategoryData(req, res) {
-    const categoryId = req.params.categoryId;
-    const newCategorySortNumber = req.body.newCategorySortNumber;
-    const newCategoryName = req.body.newCategoryName;
     try{
-        if ( !newCategorySortNumber || !categoryId || !newCategoryName) {
+        const categoryId = req.params.categoryId;
+        const newCategorySortNumber = req.body.newCategorySortNumber;
+        const newCategoryName = req.body.newCategoryName;
+        if (!newCategorySortNumber || !categoryId || !newCategoryName) {
             await res.status(400).json("Sorry, Please Send Category Id, Old Category Sort Number And New Category Sort Number And Old Category Name And New Category Name !!");
         } else {
             const { updateCategoryData } = require("../models/textToImageCategories.model");
@@ -204,9 +203,9 @@ async function putCategoryData(req, res) {
 }
 
 async function deleteStyleData(req, res) {
-    const styleId = req.params.styleId;
-    const categoryName = req.query.categoryName;
     try{
+        const styleId = req.params.styleId;
+        const categoryName = req.query.categoryName;
         if (!styleId || !categoryName) await res.status(400).json("Sorry, Please Send Style Id And Category Name !!");
         const { deleteStyleData } = require("../models/textToImageStyles.model");
         const result = await deleteStyleData(styleId, categoryName);
@@ -222,8 +221,8 @@ async function deleteStyleData(req, res) {
 }
 
 async function deleteCategoryData(req, res) {
-    const categoryId = req.params.categoryId;
     try{
+        const categoryId = req.params.categoryId;
         if (!categoryId) await res.status(400).json("Sorry, Please Send Category Id"); 
         else {
             const { deleteCategoryData } = require("../models/textToImageCategories.model");

@@ -1,6 +1,6 @@
 async function getPricesByProductName(req, res) {
-    const productName = req.query.productName;
     try{
+        const productName = req.query.productName;
         if (!productName) await res.status(400).json("Please Send Product Name !!");
         else if (
             productName !== "poster" &&
@@ -20,10 +20,10 @@ async function getPricesByProductName(req, res) {
 }
 
 async function putProductPrice(req, res) {
-    const productId = req.params.productId;
-    const   newProductPriceBeforeDiscount = req.body.newProductPriceBeforeDiscount,
-            newProductPriceAfterDiscount = req.body.newProductPriceAfterDiscount;
     try{
+        const productId = req.params.productId;
+        const   newProductPriceBeforeDiscount = req.body.newProductPriceBeforeDiscount,
+                newProductPriceAfterDiscount = req.body.newProductPriceAfterDiscount;
         if (!productId) await res.status(400).json("Please Send Product Id !!");
         else {
             const { updateProductPrice } = require("../models/prices.model");
@@ -37,10 +37,10 @@ async function putProductPrice(req, res) {
 }
 
 async function getPriceByProductDetails(req, res) {
-    const   productName = req.query.productName,
-            position = req.query.position,
-            dimentions = req.query.dimentions;
     try{
+        const   productName = req.query.productName,
+                position = req.query.position,
+                dimentions = req.query.dimentions;
         if (!productName || !dimentions || !position) await res.status(400).json("Please Send All Product Details !!");
         else {
             const { getPriceByProductDetails } = require("../models/prices.model");

@@ -11,9 +11,9 @@ async function saveNewGeneratedImage(generatedImageURL) {
 }
 
 async function postNewGeneratedImageData(req, res) {
-    const generatedImageData = req.body;
-    const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
     try{
+        const generatedImageData = req.body;
+        const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
         const result = await saveNewGeneratedImage(generatedImageData.generatedImageURL);
         if (result.msg && result.msg === "success file downloaded !!") {
             const result1 = await saveNewGeneratedImageData({
@@ -29,18 +29,18 @@ async function postNewGeneratedImageData(req, res) {
 }
 
 async function getSpecificGeneratedImagesData(req, res) {
-    const service = req.query.service;
-    if (!service && (service !== "text-to-image" || service !== "image-to-image")) {
-        await res.status(400).json(`Invalid Service Name !!`);
-    } else {
-        const { getSpecificGeneratedImagesData } = require("../models/generatedImages.model");
-        try{
+    try{
+        const service = req.query.service;
+        if (!service && (service !== "text-to-image" || service !== "image-to-image")) {
+            await res.status(400).json(`Invalid Service Name !!`);
+        } else {
+            const { getSpecificGeneratedImagesData } = require("../models/generatedImages.model");
             const result = await getSpecificGeneratedImagesData(service);
             await res.json(result);
         }
-        catch(err) {
-            await res.status(500).json(err);
-        }
+    }
+    catch(err){
+        await res.status(500).json(err);
     }
 }
 

@@ -1,8 +1,8 @@
 async function getAllOrders(req, res) {
-    const { getAllOrders } = require("../models/orders.model");
     try{
+        const { getAllOrders } = require("../models/orders.model");
         const result = await getAllOrders();
-        await res.json(result);;
+        await res.json(result);
     }
     catch(err) {
         await res.status(500).json(err);
@@ -10,24 +10,24 @@ async function getAllOrders(req, res) {
 }
 
 async function getOrderDetails(req, res) {
-    const orderId = req.params.orderId;
-    if (!orderId) await res.status(400).json("Please Send Order Id !!");
-    else {
-        const { getOrderDetails } = require("../models/orders.model");
-        try{
+    try{
+        const orderId = req.params.orderId;
+        if (!orderId) await res.status(400).json("Please Send Order Id !!");
+        else {
+            const { getOrderDetails } = require("../models/orders.model");
             await res.json(await getOrderDetails(orderId));
         }
-        catch(err){
-            await res.status(500).json(err);
-        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
     }
 }
 
 async function postNewOrderToGelato(req, res) {
-    const GELATO_BASE_API_URL = "https://order.gelatoapis.com";
-    const GELATO_API_KEY = "4ed3eafd-b375-4c9c-bcb9-e998af3f7444-45075504-d3a7-4605-9ebb-a63a590096f1:ab1d5850-26a0-4d76-8738-bbefcc109f8f";
-    const axios = require("axios");
     try {
+        const GELATO_BASE_API_URL = "https://order.gelatoapis.com";
+        const GELATO_API_KEY = "4ed3eafd-b375-4c9c-bcb9-e998af3f7444-45075504-d3a7-4605-9ebb-a63a590096f1:ab1d5850-26a0-4d76-8738-bbefcc109f8f";
+        const axios = require("axios");
         const response = await axios.post(`${GELATO_BASE_API_URL}/v4/orders`, req.body, {
             headers: {
                 "Content-Type": "application/json",
@@ -42,9 +42,9 @@ async function postNewOrderToGelato(req, res) {
 }
 
 async function postNewOrderToKlarna(req, res) {
-    const orderDetails = req.body;
-    const { post } = require("axios");
     try {
+        const orderDetails = req.body;
+        const { post } = require("axios");
         const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders`, orderDetails, {
             headers: {
                 "Content-Type": "application/json",
@@ -132,11 +132,11 @@ async function postKlarnaCheckoutComplete(req, res) {
 }
 
 async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
-    const orderId = req.params.orderId;
-    if (!orderId) res.status(400).json("Please Send Order Id !!");
-    else {
-        const { get } = require("axios");
-        try{
+    try{
+        const orderId = req.params.orderId;
+        if (!orderId) res.status(400).json("Please Send Order Id !!");
+        else {
+            const { get } = require("axios");
             const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -146,19 +146,19 @@ async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
             const result = await response.data;
             await res.json(result);
         }
-        catch(err) {
-            await res.status(500).json(err);
-        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
     }
 }
 
 async function putKlarnaOrder(req, res) {
-    const orderId = req.params.orderId;
-    const newOrderDetails = req.body;
-    if (!orderId) res.status(400).json("Please Send Order Id !!");
-    else {
-        const { post } = require("axios");
-        try{
+    try{
+        const orderId = req.params.orderId;
+        const newOrderDetails = req.body;
+        if (!orderId) await res.status(400).json("Please Send Order Id !!");
+        else {
+            const { post } = require("axios");
             const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, newOrderDetails, {
                 headers: {
                     "Content-Type": "application/json",
@@ -168,26 +168,25 @@ async function putKlarnaOrder(req, res) {
             const result = await response.data;
             await res.json(result);
         }
-        catch(err) {
-            console.log(err.response.data);
-            await res.status(500).json(err);
-        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
     }
 }
 
 async function putOrder(req, res) {
-    const orderId = req.params.orderId;
-    const newOrderDetails = req.body;
-    if (!orderId) res.status(400).json("Please Send Order Id !!");
-    else {
-        try{
+    try{
+        const orderId = req.params.orderId;
+        const newOrderDetails = req.body;
+        if (!orderId) await res.status(400).json("Please Send Order Id !!");
+        else {
             const { updateOrder } = require("../models/orders.model");
             const result = await updateOrder(orderId, newOrderDetails);
             await res.json(result);
         }
-        catch(err) {
-            await res.status(500).json(err);
-        }
+    }
+    catch(err){
+        await res.status(500).json(err);
     }
 }
 

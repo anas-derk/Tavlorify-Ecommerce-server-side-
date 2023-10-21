@@ -1,6 +1,6 @@
 async function getAllReturnedOrders(req, res) {
-    const { getAllReturnedOrders } = require("../models/returnedOrders.model");
     try{
+        const { getAllReturnedOrders } = require("../models/returnedOrders.model");
         const result = await getAllReturnedOrders();
         await res.json(result);
     }
@@ -10,16 +10,16 @@ async function getAllReturnedOrders(req, res) {
 }
 
 async function getReturnedOrderDetails(req, res) {
-    const orderId = req.params.orderId;
-    if (!orderId) await res.status(400).json("Please Send Returned Order Id !!");
-    else {
-        const { getReturnedOrderDetails } = require("../models/returnedOrders.model");
-        try{
+    try{
+        const orderId = req.params.orderId;
+        if (!orderId) await res.status(400).json("Please Send Returned Order Id !!");
+        else {
+            const { getReturnedOrderDetails } = require("../models/returnedOrders.model");
             await res.json(await getReturnedOrderDetails(orderId));
         }
-        catch(err){
-            await res.status(500).json(err);
-        }
+    }
+    catch(err) {
+        await res.status(500).json(err);
     }
 }
 
