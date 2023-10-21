@@ -87,11 +87,14 @@ async function postKlarnaCheckoutComplete(req, res) {
             // ----------------------------------------------
             if (result.status == "AUTHORIZED") {
                 const { updateOrder } = require("../models/orders.model");
+                const order_lines_after_modify_unit_price_and_total_amount = result.order_lines.map((order_line) => {
+                    return { ...order_line, unit_price: order_line.unit_price / 100, total_amount: order_line.total_amount / 100 };
+                });
                 result = await updateOrder(undefined, {
                     klarnaOrderId: orderId,
                     klarnaReference: result.klarna_reference,
                     checkout_status: result.status,
-                    order_amount: result.order_amount,
+                    order_amount: result.order_amount / 100,
                     billing_address: {
                         city: result.billing_address.city,
                         email: result.billing_address.email || "none",
@@ -110,7 +113,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                         postal_code: result.shipping_address.postal_code || "none",
                         street_address: result.shipping_address.street_address || "none",
                     },
-                    order_lines: result.order_lines,
+                    order_lines: order_lines_after_modify_unit_price_and_total_amount,
                 });
                 const { v4 } = require("uuid");
                 response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, undefined , {
@@ -122,7 +125,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                 });
                 await res.json(result);
             } else {
-                await res.status(500).json("checkout_incomplete");
+                await res.status(400).json("checkout_incomplete");
             }
         }
     }
