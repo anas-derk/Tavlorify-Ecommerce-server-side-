@@ -85,7 +85,7 @@ async function postKlarnaCheckoutComplete(req, res) {
             });
             let result = await response.data;
             // ----------------------------------------------
-            if (result.status == "AUTHORIZED") {
+            if (result.status == "AUTHORIZED" || result.status == "CAPTURED") {
                 const { updateOrder } = require("../models/orders.model");
                 const order_lines_after_modify_unit_price_and_total_amount = result.order_lines.map((order_line) => {
                     return { ...order_line, unit_price: order_line.unit_price / 100, total_amount: order_line.total_amount / 100 };
