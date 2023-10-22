@@ -36,7 +36,7 @@ async function postNewReturnedOrder(req, res) {
 
 async function putReturnedOrder(req, res) {
     try{
-        const returnedOrderId = req.params.returnedOrderId;
+        const returnedOrderId = req.params.orderId;
         const newReturnedOrderDetails = req.body;
         if (!returnedOrderId) await res.status(400).json("Please Send Returned Order Id !!");
         else {
