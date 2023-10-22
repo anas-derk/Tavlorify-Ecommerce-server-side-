@@ -50,6 +50,7 @@ async function postNewReturnedOrder(orderId) {
             order_lines: orderDetails.order_lines,
         });
         await newReturnedOrder.save();
+        await orderModel.updateOne({ _id: orderId }, { isReturned: true });
         await mongoose.disconnect();
         return "Creating New Returned Order Has Been Successfuly !!";
     } catch (err) {

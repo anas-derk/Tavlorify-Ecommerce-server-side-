@@ -255,6 +255,10 @@ const orderSchema = mongoose.Schema({
         default: Date.now(),
     },
     orderNumber: Number,
+    isReturned: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 // Create Order Model From Order Schema
