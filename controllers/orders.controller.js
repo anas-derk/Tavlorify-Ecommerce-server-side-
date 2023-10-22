@@ -193,6 +193,21 @@ async function putOrder(req, res) {
     }
 }
 
+async function deleteOrder(req, res) {
+    try{
+        const orderId = req.params.orderId;
+        if (!orderId) await res.status(400).json("Please Send Order Id !!");
+        else {
+            const { deleteOrder } = require("../models/orders.model");
+            const result = await deleteOrder(orderId);
+            await res.json(result);
+        }
+    }
+    catch(err){
+
+    }
+}
+
 module.exports = {
     getAllOrders,
     getOrderDetails,
@@ -203,4 +218,5 @@ module.exports = {
     postKlarnaCheckoutComplete,
     putKlarnaOrder,
     putOrder,
+    deleteOrder,
 }

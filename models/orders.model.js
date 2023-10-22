@@ -69,9 +69,22 @@ async function updateOrder(orderId, newOrderDetails) {
     }
 }
 
+async function deleteOrder(orderId){
+    try{
+        await mongoose.connect(process.env.DB_URL);
+        await orderModel.deleteOne({ _id: orderId });
+        return "Deleting This Order Has Been Successfuly !!";
+    }
+    catch(err){
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getAllOrders,
     getOrderDetails,
     postNewOrder,
     updateOrder,
+    deleteOrder,
 }

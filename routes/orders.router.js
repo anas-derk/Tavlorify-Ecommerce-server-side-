@@ -20,4 +20,6 @@ ordersRouter.put("/update-klarna-order/:orderId", ordersController.putKlarnaOrde
 
 ordersRouter.put("/update-order/:orderId", ordersController.putOrder);
 
+ordersRouter.delete("/delete-order/:orderId", ordersController.deleteOrder);
+
 module.exports = ordersRouter;
