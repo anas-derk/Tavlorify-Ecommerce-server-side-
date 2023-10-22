@@ -69,6 +69,26 @@ async function updateOrder(orderId, newOrderDetails) {
     }
 }
 
+async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const { order_lines } = await orderModel.findOne({ _id: orderId });
+        const productIndex = order_lines.findIndex((order_line) => order_line._id == productId);
+        order_lines[productIndex].quantity = newOrderProductDetails.quantity;
+        order_lines[productIndex].name = newOrderProductDetails.name;
+        order_lines[productIndex].unit_price = newOrderProductDetails.unit_price;
+        order_lines[productIndex].total_amount = newOrderProductDetails.total_amount;
+        await orderModel.updateOne({ _id: orderId }, { order_lines });
+        await mongoose.disconnect();
+        return "Updating Order Details Has Been Successfuly !!";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 async function deleteOrder(orderId){
     try{
         await mongoose.connect(process.env.DB_URL);
@@ -81,10 +101,28 @@ async function deleteOrder(orderId){
     }
 }
 
+async function deleteProductFromOrder(orderId, productId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const { order_lines } = await orderModel.findOne({ _id: orderId });
+        const newOrderLines = order_lines.filter((order_line) => order_line._id == productId);
+        await orderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines });
+        await mongoose.disconnect();
+        return "Deleting Product From Order Has Been Successfuly !!";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getAllOrders,
     getOrderDetails,
     postNewOrder,
     updateOrder,
+    updateOrderProduct,
     deleteOrder,
+    deleteProductFromOrder,
 }
