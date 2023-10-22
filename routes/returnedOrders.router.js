@@ -10,6 +10,10 @@ returnedOrdersRouter.post("/create-new-order/:orderId", returnedOrdersController
 
 returnedOrdersRouter.put("/update-order/:orderId", returnedOrdersController.putReturnedOrder);
 
+returnedOrdersRouter.put("/products/update-product/:orderId/:productId", returnedOrdersController.putReturnedOrderProduct);
+
 returnedOrdersRouter.delete("/delete-order/:orderId", returnedOrdersController.deleteReturnedOrder);
+
+returnedOrdersRouter.delete("/products/delete-product/:orderId/:productId", returnedOrdersController.deleteProductFromReturnedOrder);
 
 module.exports = returnedOrdersRouter;

@@ -75,6 +75,27 @@ async function updateReturnedOrder(returnedOrderId, newReturnedOrderDetails) {
     }
 }
 
+async function updateReturnedOrderProduct(returnedOrderId, productId, newReturnedOrderDetails) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const { order_lines } = await returnedOrderModel.findOne({ _id: returnedOrderId });
+        const productIndex = order_lines.findIndex((order_line) => order_line._id == productId);
+        order_lines[productIndex].quantity = newReturnedOrderDetails.quantity;
+        order_lines[productIndex].name = newReturnedOrderDetails.name;
+        order_lines[productIndex].unit_price = newReturnedOrderDetails.unit_price;
+        order_lines[productIndex].total_amount = newReturnedOrderDetails.total_amount;
+        order_lines[productIndex].reason = newReturnedOrderDetails.reason;
+        await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines });
+        await mongoose.disconnect();
+        return "Updating Returned Order Details Has Been Successfuly !!";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 async function deleteReturnedOrder(returnedOrderId){
     try{
         await mongoose.connect(process.env.DB_URL);
@@ -93,7 +114,7 @@ async function deleteProductFromReturnedOrder(returnedOrderId, productId) {
         await mongoose.connect(process.env.DB_URL);
         const { order_lines } = await returnedOrderModel.findOne({ _id: returnedOrderId });
         const newOrderLines = order_lines.filter((order_line) => order_line._id == productId);
-        await returnedOrderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines });
+        await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines: newOrderLines });
         await mongoose.disconnect();
         return "Deleting Product From Returned Order Has Been Successfuly !!";
     } catch (err) {
@@ -108,6 +129,7 @@ module.exports = {
     getReturnedOrderDetails,
     postNewReturnedOrder,
     updateReturnedOrder,
+    updateReturnedOrderProduct,
     deleteReturnedOrder,
     deleteProductFromReturnedOrder,
 }

@@ -50,6 +50,23 @@ async function putReturnedOrder(req, res) {
     }
 }
 
+async function putReturnedOrderProduct(req, res) {
+    try{
+        const   returnedOrderId = req.params.orderId,
+                returnedProductId = req.params.productId;
+        const newReturnedOrderProductDetails = req.body;
+        if (!returnedOrderId || !returnedProductId) await res.status(400).json("Please Send Returned Order Id And Product Id !!");
+        else {
+            const { updateReturnedOrderProduct } = require("../models/returnedOrders.model");
+            const result = await updateReturnedOrderProduct(returnedOrderId, returnedProductId, newReturnedOrderProductDetails);
+            await res.json(result);
+        }
+    }
+    catch(err){
+        await res.status(500).json(err);
+    }
+}
+
 async function deleteReturnedOrder(req, res) {
     try{
         const returnedOrderId = req.params.orderId;
@@ -69,7 +86,7 @@ async function deleteProductFromReturnedOrder(req, res) {
     try{
         const   returnedOrderId = req.params.orderId,
                 productId = req.params.productId;
-        if (!orderId || !productId) await res.status(400).json("Please Send Returned Order Id And Product Id !!");
+        if (!returnedOrderId || !productId) await res.status(400).json("Please Send Returned Order Id And Product Id !!");
         else {
             const { deleteProductFromReturnedOrder } = require("../models/returnedOrders.model");
             const result = await deleteProductFromReturnedOrder(returnedOrderId, productId);
@@ -77,6 +94,7 @@ async function deleteProductFromReturnedOrder(req, res) {
         }
     }
     catch(err){
+        console.log(err);
         await res.status(500).json(err);
     }
 }
@@ -86,6 +104,7 @@ module.exports = {
     getReturnedOrderDetails,
     postNewReturnedOrder,
     putReturnedOrder,
+    putReturnedOrderProduct,
     deleteReturnedOrder,
     deleteProductFromReturnedOrder,
 }
