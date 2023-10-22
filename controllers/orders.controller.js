@@ -221,7 +221,7 @@ async function deleteOrder(req, res) {
         }
     }
     catch(err){
-
+        await res.status(500).json(err);
     }
 }
 

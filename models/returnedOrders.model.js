@@ -61,8 +61,53 @@ async function postNewReturnedOrder(orderId) {
     }
 }
 
+async function updateReturnedOrder(returnedOrderId, newReturnedOrderDetails) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        await returnedOrderModel.updateOne( { _id: returnedOrderId } , { ...newReturnedOrderDetails });
+        await mongoose.disconnect();
+        return "Updating Returned Order Details Has Been Successfuly !!";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
+async function deleteReturnedOrder(returnedOrderId){
+    try{
+        await mongoose.connect(process.env.DB_URL);
+        await returnedOrderModel.deleteOne({ _id: returnedOrderId });
+        return "Deleting This Returned Order Has Been Successfuly !!";
+    }
+    catch(err){
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
+async function deleteProductFromReturnedOrder(returnedOrderId, productId) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const { order_lines } = await returnedOrderModel.findOne({ _id: returnedOrderId });
+        const newOrderLines = order_lines.filter((order_line) => order_line._id == productId);
+        await returnedOrderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines });
+        await mongoose.disconnect();
+        return "Deleting Product From Returned Order Has Been Successfuly !!";
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getAllReturnedOrders,
     getReturnedOrderDetails,
     postNewReturnedOrder,
+    updateReturnedOrder,
+    deleteReturnedOrder,
+    deleteProductFromReturnedOrder,
 }
