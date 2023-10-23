@@ -36,6 +36,18 @@ async function runModel(model, input) {
     }
 }
 
+async function translateText(text){
+    const { Translate } = require("@google-cloud/translate").v2;
+    const credentials = JSON.parse(process.env.GOOGLE_CLOUD_TRANSLATE_API_CREDENTIALS);
+    const translate = new Translate({
+        credentials: credentials,
+        projectId: credentials.projectId
+    });
+    let [ result ] = await translate.detect(text);
+    const [ translation ] = await translate.translate(text, { to: "en" });
+    return translation;
+}
+
 async function generateImage(req, res) {
     try{
         const textPrompt = req.query.textPrompt,
@@ -47,11 +59,12 @@ async function generateImage(req, res) {
         refine = req.query.expert_ensemble_refiner,
         width = req.query.width,
         height = req.query.height;
+        const textAfterTranslation = await translateText(textPrompt);
         switch (model_name) {
             case "dreamshaper": {
                 const output = await runModel("cjwbw/dreamshaper:ed6d8bee9a278b0d7125872bddfb9dd3fc4c401426ad634d8246a660e387475b",
                 {
-                    prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${category}, ${prompt}`,
                     negative_prompt,
                     width: parseInt(width),
                     height: parseInt(height),
@@ -62,7 +75,7 @@ async function generateImage(req, res) {
             case "stable-diffusion": {
                 const output = await runModel("stability-ai/stable-diffusion:27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
                 {
-                    prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${category}, ${prompt}`,
                     negative_prompt,
                     width: parseInt(width),
                     height: parseInt(height),
@@ -73,7 +86,7 @@ async function generateImage(req, res) {
             case "midjourney-diffusion": {
                 const output = await runModel("tstramer/midjourney-diffusion:436b051ebd8f68d23e83d22de5e198e0995357afef113768c20f0b6fcef23c8b",
                 {
-                    prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${category}, ${prompt}`,
                     negative_prompt,
                     width: parseInt(width),
                     height: parseInt(height),
@@ -84,7 +97,7 @@ async function generateImage(req, res) {
             case "deliberate-v2": {
                 const output = await runModel("mcai/deliberate-v2:8e6663822bbbc982648e3c34214cf42d29fe421b2620cc33d8bda767fc57fe5a",
                 {
-                    prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${category}, ${prompt}`,
                     negative_prompt,
                     width: parseInt(width),
                     height: parseInt(height),
@@ -95,7 +108,7 @@ async function generateImage(req, res) {
             case "sdxl": {
                 const output = await runModel("stability-ai/sdxl:2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2", 
                 {
-                    prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${category}, ${prompt}`,
                     negative_prompt: negative_prompt,
                     num_inference_steps: num_inference_steps,
                     refine: refine,
@@ -108,7 +121,7 @@ async function generateImage(req, res) {
             case "openjourney": {
                 const output = await runModel("prompthero/openjourney:9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
                 {
-                    prompt: `${textPrompt}, ${category}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${category}, ${prompt}`,
                     width: parseInt(width),
                     height: parseInt(height),
                 });
@@ -121,6 +134,7 @@ async function generateImage(req, res) {
         }
     }
     catch(err) {
+        console.log(err);
         await res.status(500).json(err);
     }
 }

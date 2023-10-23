@@ -1,6 +1,7 @@
 {
   "main": "server.js",
   "dependencies": {
+    "@google-cloud/translate": "^8.0.2",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
