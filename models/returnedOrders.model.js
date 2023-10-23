@@ -85,7 +85,7 @@ async function updateReturnedOrderProduct(returnedOrderId, productId, newReturne
         order_lines[productIndex].name = newReturnedOrderDetails.name;
         order_lines[productIndex].unit_price = newReturnedOrderDetails.unit_price;
         order_lines[productIndex].total_amount = newReturnedOrderDetails.total_amount;
-        order_lines[productIndex].reason = newReturnedOrderDetails.reason;
+        order_lines[productIndex].return_reason = newReturnedOrderDetails.return_reason;
         await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines });
         await mongoose.disconnect();
         return "Updating Returned Order Details Has Been Successfuly !!";
