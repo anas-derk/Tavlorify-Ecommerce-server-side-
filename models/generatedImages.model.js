@@ -19,7 +19,7 @@ async function saveNewGeneratedImageData(generatedImageData) {
 async function getSpecificGeneratedImagesData(service) {
     try {
         await mongoose.connect(process.env.DB_URL);
-        const generatedImagesData = await generatedImageModel.find({ service: service }).sort({ imageGegenerationDate: -1 });
+        const generatedImagesData = await generatedImageModel.find({ service: service }).sort({ imageGenerationDate: -1 });
         await mongoose.disconnect();
         return generatedImagesData;
     }
