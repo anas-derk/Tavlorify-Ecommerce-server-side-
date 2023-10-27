@@ -25,6 +25,7 @@ async function adminLogin(email, password) {
         }
     }
     catch (err) {
+        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error("Sorry, Error In Process, Please Repeated This Process !!");

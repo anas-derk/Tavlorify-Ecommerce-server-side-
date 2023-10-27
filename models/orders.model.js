@@ -79,7 +79,8 @@ async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
         order_lines[productIndex].name = newOrderProductDetails.name;
         order_lines[productIndex].unit_price = newOrderProductDetails.unit_price;
         order_lines[productIndex].total_amount = newOrderProductDetails.total_amount;
-        await orderModel.updateOne({ _id: orderId }, { order_lines });
+        const { calcOrderAmount } = require("../global/functions");
+        await orderModel.updateOne({ _id: orderId }, { order_lines, order_amount: calcOrderAmount(order_lines) });
         await mongoose.disconnect();
         return "Updating Order Details Has Been Successfuly !!";
     } catch (err) {
