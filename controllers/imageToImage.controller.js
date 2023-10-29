@@ -23,17 +23,10 @@ async function get_all_category_Styles_Data(req, res) {
 
 async function uploadImageAndProcessing(req, res) {
     try {
-        const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
         const sharp = require("sharp");
-        const { width, height } = await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
-        let imageType;
-        if (width > height) imageType = "horizontal";
-        else if (width < height) imageType = "vertical";
-        else imageType = "square";
-        await res.json({
-            imageLink: `https://newapi.tavlorify.se/${filePath}`,
-            imageType: imageType,
-        });
+        const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
+        await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
+        await res.json(`https://newapi.tavlorify.se/${filePath}`);
     }
     catch(err) {
         const { unlinkSync } = require("fs");
