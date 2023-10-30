@@ -135,15 +135,19 @@ async function generateImage(req, res) {
             }
         }
         if (tempOutput && Array.isArray(tempOutput)) {
-            if (tempOutput.length === 2) {
+            if (tempOutput.length === 1) {
                 const { saveNewGeneratedImage } = require("./generatedImages.controller");
-                const result = await saveNewGeneratedImage(tempOutput[1]);
+                const result = await saveNewGeneratedImage(tempOutput[0]);
                 if (result.msg && result.msg === "success file downloaded !!") {
                     generatedImagePathInServer = result.imagePath;
                     generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
+                    console.log("aa")
+                    console.log(result)
                     await res.json(result.imagePath);
                 }
-            } else await res.status(500).json(err);
+            } else {
+                await res.status(500).json("Error In Generating");
+            }
         }
     }
     catch(err) {

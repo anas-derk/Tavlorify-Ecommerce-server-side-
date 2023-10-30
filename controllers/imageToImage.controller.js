@@ -86,6 +86,7 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
         } else if (generatingInfo.service === "text-to-image") {
             await saveNewGeneratedImageData({
                 service: generatingInfo.service,
+                textPrompt: generatingInfo.textPrompt,
                 categoryName: generatingInfo.categoryName,
                 styleName: generatingInfo.styleName,
                 paintingType: generatingInfo.paintingType,
@@ -274,4 +275,5 @@ module.exports = {
     putStyleData,
     deleteCategoryData,
     deleteStyleData,
+    saveNewGeneratedImageDataGlobalFunc,
 }
