@@ -49,6 +49,7 @@ async function translateText(text){
 }
 
 async function generateImage(req, res) {
+    let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     try{
         const textPrompt = req.query.textPrompt,
         prompt = req.query.prompt,
@@ -60,6 +61,7 @@ async function generateImage(req, res) {
         width = req.query.width,
         height = req.query.height;
         const textAfterTranslation = await translateText(textPrompt);
+        let tempOutput;
         switch (model_name) {
             case "dreamshaper": {
                 const output = await runModel("cjwbw/dreamshaper:ed6d8bee9a278b0d7125872bddfb9dd3fc4c401426ad634d8246a660e387475b",
@@ -69,7 +71,7 @@ async function generateImage(req, res) {
                     width: parseInt(width),
                     height: parseInt(height),
                 });
-                await res.json(output);
+                tempOutput = output;
                 break;
             }
             case "stable-diffusion": {
@@ -80,7 +82,7 @@ async function generateImage(req, res) {
                     width: parseInt(width),
                     height: parseInt(height),
                 });
-                await res.json(output);
+                tempOutput = output;
                 break;
             }
             case "midjourney-diffusion": {
@@ -91,7 +93,7 @@ async function generateImage(req, res) {
                     width: parseInt(width),
                     height: parseInt(height),
                 });
-                await res.json(output);
+                tempOutput = output;
                 break;
             }
             case "deliberate-v2": {
@@ -102,7 +104,7 @@ async function generateImage(req, res) {
                     width: parseInt(width),
                     height: parseInt(height),
                 });
-                await res.json(output);
+                tempOutput = output;
                 break;
             }
             case "sdxl": {
@@ -115,7 +117,7 @@ async function generateImage(req, res) {
                     width: parseInt(width),
                     height: parseInt(height),
                 });
-                await res.json(output);
+                tempOutput = output;
                 break;
             }
             case "openjourney": {
@@ -125,18 +127,31 @@ async function generateImage(req, res) {
                     width: parseInt(width),
                     height: parseInt(height),
                 });
-                await res.json(output);
+                tempOutput = output;
                 break;
             }
             default: {
                 await res.status(400).json("Invalid Model Name !!");
             }
         }
+        if (tempOutput && Array.isArray(tempOutput)) {
+            if (tempOutput.length === 2) {
+                const { saveNewGeneratedImage } = require("./generatedImages.controller");
+                const result = await saveNewGeneratedImage(tempOutput[1]);
+                if (result.msg && result.msg === "success file downloaded !!") {
+                    generatedImagePathInServer = result.imagePath;
+                    generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
+                    await res.json(result.imagePath);
+                }
+            } else await res.status(500).json(err);
+        }
     }
     catch(err) {
         console.log(err);
         await res.status(500).json(err);
     }
+    const { saveNewGeneratedImageDataGlobalFunc } = require("./imageToImage.controller");
+    if (generatedImagePathInServer) await saveNewGeneratedImageDataGlobalFunc({ ...req.query, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
 }
 
 async function addNewCategory(req, res) {

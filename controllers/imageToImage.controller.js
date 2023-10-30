@@ -50,38 +50,54 @@ async function runModel(model, input) {
     }
 }
 
-async function saveNewGeneratedImageDataGlobalFunc(imageToImageInfo, generatedImageAsArrayBuffer) {
+async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
     try{
         const sharp = require("sharp");
         const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
-        let imageOrientation = "", size = "";
-        if (width < height) {
-            imageOrientation = "vertical";
-            size = "50x70";
-        }
-        else if (width > height) {
-            imageOrientation = "horizontal";
-            size = "70x50";
-        }
-        else {
-            imageOrientation = "square";
-            size = "30x30";
-        }
         const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
-        await saveNewGeneratedImageData({
-            service: imageToImageInfo.service,
-            uploadedImageURL: imageToImageInfo.imageLink,
-            categoryName: imageToImageInfo.categoryName,
-            styleName: imageToImageInfo.styleName,
-            paintingType: imageToImageInfo.paintingType,
-            position: imageOrientation,
-            size: size,
-            isExistWhiteBorder: imageToImageInfo.isExistWhiteBorder,
-            width: width,
-            height: height,
-            frameColor: imageToImageInfo.frameColor,
-            generatedImageURL: imageToImageInfo.generatedImageURL,
-        });
+        if (generatingInfo.service === "image-to-image") {
+            let imageOrientation = "", size = "";
+            if (width < height) {
+                imageOrientation = "vertical";
+                size = "50x70";
+            }
+            else if (width > height) {
+                imageOrientation = "horizontal";
+                size = "70x50";
+            }
+            else {
+                imageOrientation = "square";
+                size = "30x30";
+            }
+            await saveNewGeneratedImageData({
+                service: generatingInfo.service,
+                uploadedImageURL: generatingInfo.imageLink,
+                categoryName: generatingInfo.categoryName,
+                styleName: generatingInfo.styleName,
+                paintingType: generatingInfo.paintingType,
+                position: imageOrientation,
+                size: size,
+                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
+                width: width,
+                height: height,
+                frameColor: generatingInfo.frameColor,
+                generatedImageURL: generatingInfo.generatedImageURL,
+            });
+        } else if (generatingInfo.service === "text-to-image") {
+            await saveNewGeneratedImageData({
+                service: generatingInfo.service,
+                categoryName: generatingInfo.categoryName,
+                styleName: generatingInfo.styleName,
+                paintingType: generatingInfo.paintingType,
+                position: generatingInfo.position,
+                size: generatingInfo.dimentionsInCm,
+                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
+                width: width,
+                height: height,
+                frameColor: generatingInfo.frameColor,
+                generatedImageURL: generatingInfo.generatedImageURL,
+            });
+        }
     }
     catch(err) {
         console.log(err);
