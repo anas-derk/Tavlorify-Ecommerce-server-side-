@@ -52,8 +52,10 @@ async function runModel(model, input) {
 
 async function saveNewGeneratedImageDataGlobalFunc(imageToImageInfo) {
     try{
+        const path = require("path");
+        const imagePath = path.join(__dirname, "..", imageToImageInfo.generatedImageURL);
         const sharp = require("sharp");
-        const { width, height } = await sharp(imageToImageInfo.generatedImageURL).metadata();
+        const { width, height } = await sharp(imagePath).metadata();
         let imageOrientation = "", size = "";
         if (width < height) {
             imageOrientation = "vertical";
