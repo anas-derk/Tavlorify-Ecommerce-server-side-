@@ -141,8 +141,6 @@ async function generateImage(req, res) {
                 if (result.msg && result.msg === "success file downloaded !!") {
                     generatedImagePathInServer = result.imagePath;
                     generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
-                    console.log("aa")
-                    console.log(result)
                     await res.json(result.imagePath);
                 }
             } else {
