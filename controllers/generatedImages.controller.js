@@ -1,13 +1,13 @@
 async function saveNewGeneratedImage(generatedImageURL) {
     const { get } = require('axios');
-    const { createWriteStream } = require('fs');
     const randomImageName = `${Math.random()}_${Date.now()}__generatedImage.png`;
     const path = require("path");
     const destination = path.join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
-    const res = await get(generatedImageURL, { responseType: 'stream' });
+    const res = await get(generatedImageURL, { responseType: 'arraybuffer' });
     const result = await res.data;
-    result.pipe(createWriteStream(destination));
-    return { msg: "success file downloaded !!", imagePath: `assets/images/generatedImages/${randomImageName}` };
+    const sharp = require("sharp");
+    await sharp(result).toFile(destination);
+    return { msg: "success file downloaded !!", imagePath: `assets/images/generatedImages/${randomImageName}`, imageAsArrayBuffer: result };
 }
 
 async function postNewGeneratedImageData(req, res) {

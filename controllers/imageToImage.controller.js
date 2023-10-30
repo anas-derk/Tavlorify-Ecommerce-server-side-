@@ -50,12 +50,10 @@ async function runModel(model, input) {
     }
 }
 
-async function saveNewGeneratedImageDataGlobalFunc(imageToImageInfo) {
+async function saveNewGeneratedImageDataGlobalFunc(imageToImageInfo, generatedImageAsArrayBuffer) {
     try{
-        const path = require("path");
-        const imagePath = path.join(__dirname, "..", imageToImageInfo.generatedImageURL);
         const sharp = require("sharp");
-        const { width, height } = await sharp(imagePath).metadata();
+        const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
         let imageOrientation = "", size = "";
         if (width < height) {
             imageOrientation = "vertical";
@@ -91,7 +89,7 @@ async function saveNewGeneratedImageDataGlobalFunc(imageToImageInfo) {
 }
 
 async function generateImage(req, res) {
-    let generatedImagePathInServer = "";
+    let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     const imageToImageInfo = req.query;
     try {
         switch (imageToImageInfo.modelName) {
@@ -112,6 +110,7 @@ async function generateImage(req, res) {
                         const result = await saveNewGeneratedImage(output[1]);
                         if (result.msg && result.msg === "success file downloaded !!") {
                             generatedImagePathInServer = result.imagePath;
+                            generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
                             await res.json(result.imagePath);
                         }
                     } else await res.status(500).json(err);
@@ -125,7 +124,7 @@ async function generateImage(req, res) {
     } catch (err) {
         await res.status(500).json(err);
     }
-    if (generatedImagePathInServer) await saveNewGeneratedImageDataGlobalFunc({ ...imageToImageInfo, generatedImageURL: generatedImagePathInServer });
+    if (generatedImagePathInServer) await saveNewGeneratedImageDataGlobalFunc({ ...imageToImageInfo, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
 }
 
 async function addNewCategory(req, res) {
