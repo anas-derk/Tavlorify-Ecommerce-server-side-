@@ -50,61 +50,6 @@ async function runModel(model, input) {
     }
 }
 
-async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
-    try{
-        const sharp = require("sharp");
-        const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
-        const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
-        if (generatingInfo.service === "image-to-image") {
-            let imageOrientation = "", size = "";
-            if (width < height) {
-                imageOrientation = "vertical";
-                size = "50x70";
-            }
-            else if (width > height) {
-                imageOrientation = "horizontal";
-                size = "70x50";
-            }
-            else {
-                imageOrientation = "square";
-                size = "30x30";
-            }
-            await saveNewGeneratedImageData({
-                service: generatingInfo.service,
-                uploadedImageURL: generatingInfo.imageLink,
-                categoryName: generatingInfo.categoryName,
-                styleName: generatingInfo.styleName,
-                paintingType: generatingInfo.paintingType,
-                position: imageOrientation,
-                size: size,
-                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
-                width: width,
-                height: height,
-                frameColor: generatingInfo.frameColor,
-                generatedImageURL: generatingInfo.generatedImageURL,
-            });
-        } else if (generatingInfo.service === "text-to-image") {
-            await saveNewGeneratedImageData({
-                service: generatingInfo.service,
-                textPrompt: generatingInfo.textPrompt,
-                categoryName: generatingInfo.categoryName,
-                styleName: generatingInfo.styleName,
-                paintingType: generatingInfo.paintingType,
-                position: generatingInfo.position,
-                size: generatingInfo.dimentionsInCm,
-                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
-                width: width,
-                height: height,
-                frameColor: generatingInfo.frameColor,
-                generatedImageURL: generatingInfo.generatedImageURL,
-            });
-        }
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
-
 async function generateImage(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     const imageToImageInfo = req.query;
@@ -123,7 +68,7 @@ async function generateImage(req, res) {
                     });
                 if (Array.isArray(output)) {
                     if (output.length === 2) {
-                        const { saveNewGeneratedImage } = require("./generatedImages.controller");
+                        const { saveNewGeneratedImage } = require("../global/functions");
                         const result = await saveNewGeneratedImage(output[1]);
                         if (result.msg && result.msg === "success file downloaded !!") {
                             generatedImagePathInServer = result.imagePath;
@@ -141,7 +86,10 @@ async function generateImage(req, res) {
     } catch (err) {
         await res.status(500).json(err);
     }
-    if (generatedImagePathInServer) await saveNewGeneratedImageDataGlobalFunc({ ...imageToImageInfo, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+    if (generatedImagePathInServer) {
+        const { saveNewGeneratedImageDataGlobalFunc } = require("../global/functions");
+        await saveNewGeneratedImageDataGlobalFunc({ ...imageToImageInfo, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+    }
 }
 
 async function addNewCategory(req, res) {
@@ -275,5 +223,4 @@ module.exports = {
     putStyleData,
     deleteCategoryData,
     deleteStyleData,
-    saveNewGeneratedImageDataGlobalFunc,
 }

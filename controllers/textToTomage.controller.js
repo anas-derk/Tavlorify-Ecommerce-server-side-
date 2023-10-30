@@ -136,7 +136,7 @@ async function generateImage(req, res) {
         }
         if (tempOutput && Array.isArray(tempOutput)) {
             if (tempOutput.length === 1) {
-                const { saveNewGeneratedImage } = require("./generatedImages.controller");
+                const { saveNewGeneratedImage } = require("../global/functions");
                 const result = await saveNewGeneratedImage(tempOutput[0]);
                 if (result.msg && result.msg === "success file downloaded !!") {
                     generatedImagePathInServer = result.imagePath;
@@ -154,8 +154,10 @@ async function generateImage(req, res) {
         console.log(err);
         await res.status(500).json(err);
     }
-    const { saveNewGeneratedImageDataGlobalFunc } = require("./imageToImage.controller");
-    if (generatedImagePathInServer) await saveNewGeneratedImageDataGlobalFunc({ ...req.query, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+    if (generatedImagePathInServer) {
+        const { saveNewGeneratedImageDataGlobalFunc } = require("../global/functions");
+        await saveNewGeneratedImageDataGlobalFunc({ ...req.query, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+    }
 }
 
 async function addNewCategory(req, res) {

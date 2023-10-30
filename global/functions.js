@@ -10,7 +10,76 @@ function calcOrderAmount(order_lines) {
     return newOrderAmount;
 }
 
+async function saveNewGeneratedImage(generatedImageURL) {
+    const { get } = require('axios');
+    const randomImageName = `${Math.random()}_${Date.now()}__generatedImage.png`;
+    const path = require("path");
+    const destination = path.join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
+    const res = await get(generatedImageURL, { responseType: 'arraybuffer' });
+    const result = await res.data;
+    const sharp = require("sharp");
+    await sharp(result).toFile(destination);
+    return { msg: "success file downloaded !!", imagePath: `assets/images/generatedImages/${randomImageName}`, imageAsArrayBuffer: result };
+}
+
+async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
+    try{
+        const sharp = require("sharp");
+        const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
+        const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
+        if (generatingInfo.service === "image-to-image") {
+            let imageOrientation = "", size = "";
+            if (width < height) {
+                imageOrientation = "vertical";
+                size = "50x70";
+            }
+            else if (width > height) {
+                imageOrientation = "horizontal";
+                size = "70x50";
+            }
+            else {
+                imageOrientation = "square";
+                size = "30x30";
+            }
+            await saveNewGeneratedImageData({
+                service: generatingInfo.service,
+                uploadedImageURL: generatingInfo.imageLink,
+                categoryName: generatingInfo.categoryName,
+                styleName: generatingInfo.styleName,
+                paintingType: generatingInfo.paintingType,
+                position: imageOrientation,
+                size: size,
+                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
+                width: width,
+                height: height,
+                frameColor: generatingInfo.frameColor,
+                generatedImageURL: generatingInfo.generatedImageURL,
+            });
+        } else if (generatingInfo.service === "text-to-image") {
+            await saveNewGeneratedImageData({
+                service: generatingInfo.service,
+                textPrompt: generatingInfo.textPrompt,
+                categoryName: generatingInfo.categoryName,
+                styleName: generatingInfo.styleName,
+                paintingType: generatingInfo.paintingType,
+                position: generatingInfo.position,
+                size: generatingInfo.dimentionsInCm,
+                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
+                width: width,
+                height: height,
+                frameColor: generatingInfo.frameColor,
+                generatedImageURL: generatingInfo.generatedImageURL,
+            });
+        }
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     isEmail,
     calcOrderAmount,
+    saveNewGeneratedImage,
+    saveNewGeneratedImageDataGlobalFunc,
 }

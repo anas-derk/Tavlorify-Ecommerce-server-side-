@@ -1,15 +1,3 @@
-async function saveNewGeneratedImage(generatedImageURL) {
-    const { get } = require('axios');
-    const randomImageName = `${Math.random()}_${Date.now()}__generatedImage.png`;
-    const path = require("path");
-    const destination = path.join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
-    const res = await get(generatedImageURL, { responseType: 'arraybuffer' });
-    const result = await res.data;
-    const sharp = require("sharp");
-    await sharp(result).toFile(destination);
-    return { msg: "success file downloaded !!", imagePath: `assets/images/generatedImages/${randomImageName}`, imageAsArrayBuffer: result };
-}
-
 async function postNewGeneratedImageData(req, res) {
     try{
         const generatedImageData = req.body;
@@ -60,7 +48,6 @@ async function deleteGeneratedImageData(req, res) {
 }
 
 module.exports = {
-    saveNewGeneratedImage,
     postNewGeneratedImageData,
     getSpecificGeneratedImagesData,
     deleteGeneratedImageData,
