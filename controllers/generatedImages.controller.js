@@ -60,6 +60,7 @@ async function deleteGeneratedImageData(req, res) {
 }
 
 module.exports = {
+    saveNewGeneratedImage,
     postNewGeneratedImageData,
     getSpecificGeneratedImagesData,
     deleteGeneratedImageData,

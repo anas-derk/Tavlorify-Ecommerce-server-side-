@@ -50,9 +50,48 @@ async function runModel(model, input) {
     }
 }
 
+async function saveNewGeneratedImageDataGlobalFunc(imageToImageInfo) {
+    try{
+        const sharp = require("sharp");
+        const { width, height } = await sharp(imageToImageInfo.generatedImageURL).metadata();
+        let imageOrientation = "", size = "";
+        if (width < height) {
+            imageOrientation = "vertical";
+            size = "50x70";
+        }
+        else if (width > height) {
+            imageOrientation = "horizontal";
+            size = "70x50";
+        }
+        else {
+            imageOrientation = "square";
+            size = "30x30";
+        }
+        const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
+        await saveNewGeneratedImageData({
+            service: imageToImageInfo.service,
+            uploadedImageURL: imageToImageInfo.imageLink,
+            categoryName: imageToImageInfo.categoryName,
+            styleName: imageToImageInfo.styleName,
+            paintingType: imageToImageInfo.paintingType,
+            position: imageOrientation,
+            size: size,
+            isExistWhiteBorder: imageToImageInfo.isExistWhiteBorder,
+            width: width,
+            height: height,
+            frameColor: imageToImageInfo.frameColor,
+            generatedImageURL: imageToImageInfo.generatedImageURL,
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
 async function generateImage(req, res) {
+    let generatedImagePathInServer = "";
+    const imageToImageInfo = req.query;
     try {
-        const imageToImageInfo = req.query;
         switch (imageToImageInfo.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
                 const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
@@ -65,7 +104,16 @@ async function generateImage(req, res) {
                         ddim_steps: parseInt(imageToImageInfo.ddim_steps),
                         strength: Number(imageToImageInfo.strength),
                     });
-                await res.json(output);
+                if (Array.isArray(output)) {
+                    if (output.length === 2) {
+                        const { saveNewGeneratedImage } = require("./generatedImages.controller");
+                        const result = await saveNewGeneratedImage(output[1]);
+                        if (result.msg && result.msg === "success file downloaded !!") {
+                            generatedImagePathInServer = result.imagePath;
+                            await res.json(result.imagePath);
+                        }
+                    } else await res.status(500).json(err);
+                }
                 break;
             }
             default: {
@@ -75,6 +123,7 @@ async function generateImage(req, res) {
     } catch (err) {
         await res.status(500).json(err);
     }
+    if (generatedImagePathInServer) await saveNewGeneratedImageDataGlobalFunc({ ...imageToImageInfo, generatedImageURL: generatedImagePathInServer });
 }
 
 async function addNewCategory(req, res) {
