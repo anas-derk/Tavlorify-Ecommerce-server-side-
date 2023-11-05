@@ -22,15 +22,14 @@ async function get_all_category_Styles_Data(req, res) {
 }
 
 async function uploadImageAndProcessing(req, res) {
+    const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
     try {
         const sharp = require("sharp");
-        const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
-        await sharp(req.file.buffer).withMetadata().rotate().toFile(filePath);
-        await res.json(`https://newapi.tavlorify.se/${filePath}`);
+        await sharp(req.file.buffer, { failOn: "error" }).withMetadata().rotate().toFile(filePath);
+        await res.json(filePath);
     }
     catch(err) {
-        const { unlinkSync } = require("fs");
-        unlinkSync(filePath);
+        console.log(err);
         await res.status(500).json(err);
     }
 }
