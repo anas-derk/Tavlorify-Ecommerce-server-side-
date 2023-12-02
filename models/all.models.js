@@ -82,49 +82,6 @@ const imageToImageCategorySchema = mongoose.Schema({
 
 const imageToImageCategoryModel = mongoose.model("image_to_image_categorie", imageToImageCategorySchema);
 
-// Create Product Schema
-
-const productSchema = mongoose.Schema({
-    imageSrc: String,
-    name: String,
-    orientation: String,
-    subjects: Array,
-    rooms: Array,
-    styles: Array,
-    colors: Array,
-    price: Number,
-    numberOfOrders: {
-        type: Number,
-        default: 0,
-    },
-    postOfDate: {
-        type: Date,
-        default: Date.now(),
-    },
-});
-
-// Create Product Model From Product Schema
-
-const productModel = mongoose.model("product", productSchema);
-
-// Create Category Schema
-
-const categorySchema = mongoose.Schema({
-    categoryType: String,
-    name: String,
-    subCategories: {
-        type: [{
-            subCategoryName: String,
-            subCategories: [{ subCategoryName: String }],
-        }],
-        default: [],
-    },
-});
-
-// Create Category Model From Category Schema
-
-const categoryModel = mongoose.model("categorie", categorySchema);
-
 // Create Order Schema
 
 const orderSchema = mongoose.Schema({
@@ -358,8 +315,6 @@ module.exports = {
     textToImageCategoryModel,
     imageToImageStyleModel,
     imageToImageCategoryModel,
-    productModel,
-    categoryModel,
     orderModel,
     generatedImageModel,
     productPricesModel,

@@ -41,7 +41,6 @@ const usersRouter = require("./routes/users.router"),
     adminRouter = require("./routes/admin.router"),
     textToImageRouter = require("./routes/textToImage.router"),
     imageToImageRouter = require("./routes/imageToImage.router"),
-    productsRouter = require("./routes/products.router"),
     ordersRouter = require("./routes/orders.router"),
     categoriesRouter = require("./routes/categories.router"),
     generatedImagesRouter = require("./routes/generatedImages.router"),
@@ -55,8 +54,6 @@ app.use("/admin", adminRouter);
 app.use("/text-to-image", textToImageRouter);
 
 app.use("/image-to-image", imageToImageRouter);
-
-app.use("/products", productsRouter);
 
 app.use("/orders", ordersRouter);
 
