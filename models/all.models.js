@@ -2,32 +2,16 @@
 
 const mongoose = require("mongoose");
 
-// Create User Schema
+// Create Admin Schema
 
 const adminSchema = mongoose.Schema({
     email: String,
     password: String,
 });
 
-// Create User Model From User Schema
+// Create Admin Model From Admin Schema
 
 const adminModel = mongoose.model("admin", adminSchema);
-
-// Create User Schema
-
-const userSchema = mongoose.Schema({
-    email: String,
-    password: String,
-    country: String,
-    registerationDate: {
-        type: Date,
-        default: Date.now(),
-    },
-});
-
-// Create User Model From User Schema
-
-const userModel = mongoose.model("user", userSchema);
 
 // Create Text To Image Style Schema
 
@@ -370,7 +354,6 @@ const returnedOrderModel = mongoose.model("returned_order", returnedOrderSchema)
 module.exports = {
     mongoose,
     adminModel,
-    userModel,
     textToImageStyleModel,
     textToImageCategoryModel,
     imageToImageStyleModel,
