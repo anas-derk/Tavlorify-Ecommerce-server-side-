@@ -50,7 +50,7 @@ async function updateOrder(orderId, newOrderDetails) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        await orderModel.updateOne({
+        const { orderNumber } = await orderModel.findOneAndUpdate({
             $or: [
                 {
                     _id: orderId,
@@ -61,7 +61,7 @@ async function updateOrder(orderId, newOrderDetails) {
             ]
         }, { ...newOrderDetails });
         await mongoose.disconnect();
-        return "Updating Order Details Has Been Successfuly !!";
+        return orderNumber;
     } catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();

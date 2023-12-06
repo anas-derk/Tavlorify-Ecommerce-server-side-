@@ -90,7 +90,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                 const order_lines_after_modify_unit_price_and_total_amount = result.order_lines.map((order_line) => {
                     return { ...order_line, unit_price: order_line.unit_price / 100, total_amount: order_line.total_amount / 100 };
                 });
-                result = await updateOrder(undefined, {
+                const orderNumber = await updateOrder(undefined, {
                     klarnaOrderId: orderId,
                     klarnaReference: result.klarna_reference,
                     checkout_status: result.status,
@@ -124,8 +124,11 @@ async function postKlarnaCheckoutComplete(req, res) {
                     },
                 });
                 const { sendPaymentConfirmationMessage } = require("../global/functions");
-                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com");
-                await res.json(result);
+                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
+                    orderNumber: orderNumber,
+                    ...result,
+                });
+                await res.json("Updating Order Details Has Been Successfuly !!");
                 
             } else {
                 await res.status(400).json("checkout_incomplete");
@@ -189,7 +192,7 @@ async function putOrder(req, res) {
         else {
             const { updateOrder } = require("../models/orders.model");
             const result = await updateOrder(orderId, newOrderDetails);
-            await res.json(result);
+            await res.json("Updating Order Details Has Been Successfuly !!");
         }
     }
     catch(err){

@@ -97,10 +97,10 @@ const { join } = require("path");
 const { readFileSync } = require("fs");
 const { compile } = require("ejs");
 
-function sendPaymentConfirmationMessage(email) {
+function sendPaymentConfirmationMessage(email, orderDetails) {
     const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_template.ejs"), "utf-8");
     const compiledTemplate = compile(templateContent);
-    const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate(undefined);
+    const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate(orderDetails);
     // إعداد الرسالة قبل إرسالها
     const mailConfigurations = {
         from: "info@asfourintlco.com",

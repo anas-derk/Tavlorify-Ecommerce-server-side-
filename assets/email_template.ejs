@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tavlorify - Orderbekräftelse</title>
+        <title>Tavlorify - Order confirmation</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +47,7 @@
         <div class="page-content p-4">
             <h1 class="text-center mb-4 pb-2 border-bottom border-2 border-dark fw-bold">Tavlorify</h1>
             <h2 class="text-center mb-3 fw-bold">Payment Confirmation</h2>
-            <h6 class="fw-bold mb-5">Order Number: 1</h6>
+            <h6 class="fw-bold mb-5">Order Number: <%= orderNumber %></h6>
             <section class="addresses-info mb-5">
                 <div class="row">
                     <div class="col-md-6">
@@ -82,7 +82,7 @@
                     <div class="col-md-2">
                         <img
                             src="http://localhost:5300/assets/images/generatedImages/0.900985316941832_1699153586874__generatedImage.png"
-                            alt=""
+                            alt="Product Image"
                         >
                     </div>
                     <div class="col-md-4">
@@ -121,7 +121,7 @@
                         <hr />
                         <div class="row">
                             <div class="col-md-9 text-start content">Total Price After Discount</div>
-                            <div class="col-md-3 text-end content">50 kr</div>
+                            <div class="col-md-3 text-end content"><%= order_amount / 100 %> kr</div>
                         </div>
                     </div>
                 </div>
