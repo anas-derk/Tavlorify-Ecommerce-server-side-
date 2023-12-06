@@ -129,7 +129,6 @@ async function postKlarnaCheckoutComplete(req, res) {
                     ...result,
                 });
                 await res.json("Updating Order Details Has Been Successfuly !!");
-                
             } else {
                 await res.status(400).json("checkout_incomplete");
             }
