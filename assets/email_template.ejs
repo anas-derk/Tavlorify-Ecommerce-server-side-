@@ -1,124 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tavlorify - Order confirmation</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300;1,400;1,500&display=swap"
-            rel="stylesheet" />
-        <style>
-            * {
-                font-family: 'Montserrat', sans-serif;
-            }
-            h1 {
-                width: fit-content;
-                margin: 0 auto;
-            }
-            body {
-                height: 100vh;
-                background-color: #EEE;
-            }
-            .page-content {
-                background-color: #FFF;
-                border-radius: 5px;
-                width: 75%;
-                margin: 0 auto;
-            }
-            ul {
-                padding: 0;
-                margin: 0;
-                list-style: none;
-            }
-            .order-products-info{
-                background-color: #EEE;
-            }
-            .order-products-info img{
-                max-width: 100%;
-                width: 100px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="page-content p-4">
-            <h1 class="text-center mb-4 pb-2 border-bottom border-2 border-dark fw-bold">Tavlorify</h1>
-            <h2 class="text-center mb-3 fw-bold">Payment Confirmation</h2>
-            <h6 class="fw-bold mb-5">Order Number: <%= orderNumber %></h6>
-            <section class="addresses-info mb-5">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="fw-bold mb-4 border p-2 border-2 border-dark">Billing Address</h6>
-                        <ul class="info-list border p-3 border-2 border-dark">
-                            <li class="mb-2"><span class="fw-bold">City</span>: <%= billing_address.city %></li>
-                            <li class="mb-2"><span class="fw-bold">Email</span>: <%= billing_address.email %> </li>
-                            <li class="mb-2"><span class="fw-bold">Name</span>: <%= billing_address.given_name %></li>
-                            <li class="mb-2"><span class="fw-bold">Family Name</span>: <%= billing_address.family_name %></li>
-                            <li class="mb-2"><span class="fw-bold">Phone</span>: <%= billing_address.phone %></li>
-                            <li class="mb-2"><span class="fw-bold">Postal Code</span>: <%= billing_address.postal_code %></li>
-                            <li><span class="fw-bold">Street Address</span>: <%= billing_address.street_address %></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="fw-bold mb-4 border p-2 border-2 border-dark">Shipping Address</h6>
-                        <ul class="info-list border p-3 border-2 border-dark">
-                            <ul class="info-list border p-3 border-2 border-dark">
-                                <li class="mb-2"><span class="fw-bold">City</span>: <%= shipping_address.city %></li>
-                                <li class="mb-2"><span class="fw-bold">Email</span>: <%= shipping_address.email %> </li>
-                                <li class="mb-2"><span class="fw-bold">Name</span>: <%= shipping_address.given_name %></li>
-                                <li class="mb-2"><span class="fw-bold">Family Name</span>: <%= shipping_address.family_name %></li>
-                                <li class="mb-2"><span class="fw-bold">Phone</span>: <%= shipping_address.phone %></li>
-                                <li class="mb-2"><span class="fw-bold">Postal Code</span>: <%= shipping_address.postal_code %></li>
-                                <li><span class="fw-bold">Street Address</span>: <%= shipping_address.street_address %></li>
-                            </ul>
-                        </ul>
-                    </div>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tavlorify - Order confirmation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        h1 {
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        body {
+            height: 100vh;
+            background-color: #EEE;
+        }
+
+        .page-content {
+            background-color: #FFF;
+            border-radius: 5px;
+            width: 75%;
+            margin: 0 auto;
+        }
+
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .order-products-info {
+            background-color: #EEE;
+        }
+
+        .order-products-info img {
+            max-width: 100%;
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-content p-4">
+        <h1 class="text-center mb-4 pb-2 border-bottom border-2 border-dark fw-bold">Tavlorify</h1>
+        <h2 class="text-center mb-3 fw-bold">Payment Confirmation</h2>
+        <h6 class="fw-bold mb-5">Order Number: <%= orderNumber %>
+        </h6>
+        <section class="addresses-info mb-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="fw-bold mb-4 border p-2 border-2 border-dark">Billing Address</h6>
+                    <ul class="info-list border p-3 border-2 border-dark">
+                        <li class="mb-2"><span class="fw-bold">City</span>: <%= billing_address.city %>
+                        </li>
+                        <li class="mb-2"><span class="fw-bold">Email</span>: <%= billing_address.email %>
+                        </li>
+                        <li class="mb-2"><span class="fw-bold">Name</span>: <%= billing_address.given_name %>
+                        </li>
+                        <li class="mb-2"><span class="fw-bold">Family Name</span>: <%= billing_address.family_name %>
+                        </li>
+                        <li class="mb-2"><span class="fw-bold">Phone</span>: <%= billing_address.phone %>
+                        </li>
+                        <li class="mb-2"><span class="fw-bold">Postal Code</span>: <%= billing_address.postal_code %>
+                        </li>
+                        <li><span class="fw-bold">Street Address</span>: <%= billing_address.street_address %>
+                        </li>
+                    </ul>
                 </div>
-            </section>
-            <h6 class="fw-bold text-center mb-3">Order Products Information</h6>
-            <section class="order-products-info p-3">
-                <div class="row align-items-center">
-                    <% for(let productInfo of order_lines) { %>
-                        <div class="col-md-2">
-                            <img
-                                src="<%= productInfo.image_url %>"
-                                alt="Product Image"
-                            >
-                        </div>
-                        <div class="col-md-4">
-                            <h6 class="fw-bold mb-3"><%= productInfo.name %></h6>
-                            
-                        </div>
-                        <div class="col-md-2">
-                            <h6 class="fw-bold mb-3">Quantity: <%= productInfo.quantity %></h6>
-                            <h6 class="fw-bold mb-3">Unit Price: <%= productInfo.unit_price / 100 %> kr</h6>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <h6 class="fw-bold mb-3">Sub Total: <%= productInfo.total_amount / 100 %> kr</h6>
-                        </div>
+                <div class="col-md-6">
+                    <h6 class="fw-bold mb-4 border p-2 border-2 border-dark">Shipping Address</h6>
+                    <ul class="info-list border p-3 border-2 border-dark">
+                        <ul class="info-list border p-3 border-2 border-dark">
+                            <li class="mb-2"><span class="fw-bold">City</span>: <%= shipping_address.city %>
+                            </li>
+                            <li class="mb-2"><span class="fw-bold">Email</span>: <%= shipping_address.email %>
+                            </li>
+                            <li class="mb-2"><span class="fw-bold">Name</span>: <%= shipping_address.given_name %>
+                            </li>
+                            <li class="mb-2"><span class="fw-bold">Family Name</span>: <%= shipping_address.family_name
+                                    %>
+                            </li>
+                            <li class="mb-2"><span class="fw-bold">Phone</span>: <%= shipping_address.phone %>
+                            </li>
+                            <li class="mb-2"><span class="fw-bold">Postal Code</span>: <%= shipping_address.postal_code
+                                    %>
+                            </li>
+                            <li><span class="fw-bold">Street Address</span>: <%= shipping_address.street_address %>
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <h6 class="fw-bold text-center mb-3">Order Products Information</h6>
+        <section class="order-products-info p-3">
+            <div class="row align-items-center">
+                <% for(let productInfo of order_lines) { %>
+                    <div class="col-md-2">
+                        <img src="<%= productInfo.image_url %>" alt="Product Image">
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="fw-bold mb-3">
+                            <%= productInfo.name %>
+                        </h6>
+
+                    </div>
+                    <div class="col-md-2">
+                        <h6 class="fw-bold mb-3">Quantity: <%= productInfo.quantity %>
+                        </h6>
+                        <h6 class="fw-bold mb-3">Unit Price: <%= productInfo.unit_price / 100 %> kr</h6>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <h6 class="fw-bold mb-3">Sub Total: <%= productInfo.total_amount / 100 %> kr</h6>
+                    </div>
                     <% } %>
-                </div>  
-                <hr />
-                <div class="row align-items-center text-center">
-                    <div class="col-md-6">
-                        <h6 class="fw-bold">Summary</h6>
+            </div>
+            <hr />
+            <div class="row align-items-center text-center">
+                <div class="col-md-6">
+                    <h6 class="fw-bold">Summary</h6>
+                </div>
+                <div class="col-md-6 fw-bold">
+                    <div class="row">
+                        <div class="col-md-9 text-start content">Shipping</div>
+                        <div class="col-md-3 text-end content">0 kr</div>
                     </div>
-                    <div class="col-md-6 fw-bold">
-                        <div class="row">
-                            <div class="col-md-9 text-start content">Shipping</div>
-                            <div class="col-md-3 text-end content">0 kr</div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-md-9 text-start content">Total Price</div>
-                            <div class="col-md-3 text-end content"><%= order_amount / 100 %> kr</div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-9 text-start content">Total Price</div>
+                        <div class="col-md-3 text-end content">
+                            <%= order_amount / 100 %> kr
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
-    </body>
+            </div>
+        </section>
+    </div>
+</body>
+
 </html>
