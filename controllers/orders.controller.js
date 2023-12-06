@@ -124,7 +124,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                     },
                 });
                 const { sendPaymentConfirmationMessage } = require("../global/functions");
-                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
+                await sendPaymentConfirmationMessage(result.shipping_address.email, {
                     orderNumber: orderNumber,
                     ...result,
                 });
@@ -135,7 +135,6 @@ async function postKlarnaCheckoutComplete(req, res) {
         }
     }
     catch(err){
-        console.log(err);
         await res.status(500).json(err);
     }
 }
