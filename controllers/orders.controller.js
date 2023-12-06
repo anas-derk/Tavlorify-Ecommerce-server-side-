@@ -123,13 +123,17 @@ async function postKlarnaCheckoutComplete(req, res) {
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
+                const { sendPaymentConfirmationMessage } = require("../global/functions");
+                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com");
                 await res.json(result);
+                
             } else {
                 await res.status(400).json("checkout_incomplete");
             }
         }
     }
     catch(err){
+        console.log(err);
         await res.status(500).json(err);
     }
 }
