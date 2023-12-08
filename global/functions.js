@@ -81,13 +81,13 @@ function transporterObj() {
     const nodemailer = require('nodemailer');
     // إنشاء ناقل بيانات لسيرفر SMTP مع إعداده 
     const transporter = nodemailer.createTransport({
-        host: "smtp.titan.email",
+        host: "smtp.hostinger.com",
         port: 465,
         secure: true,
         requireTLS: true,
         auth: {
-            user: "info@asfourintlco.com",
-            pass: "Asfour@intlco3853",
+            user: "info@tavlorify.se",
+            pass: "Tavlorify-1571",
         }
     });
     return transporter;
@@ -103,7 +103,7 @@ function sendPaymentConfirmationMessage(email, orderDetails) {
     const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate(orderDetails);
     // إعداد الرسالة قبل إرسالها
     const mailConfigurations = {
-        from: "info@asfourintlco.com",
+        from: "info@tavlorify.se",
         to: email,
         subject: "Payment Confirmation On Tavlorify Store",
         html: htmlContentAfterCompilingEjsTemplateFile,
