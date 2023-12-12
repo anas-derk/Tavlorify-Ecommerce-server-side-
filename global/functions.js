@@ -53,7 +53,7 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
                 width: width,
                 height: height,
                 frameColor: generatingInfo.frameColor,
-                generatedImageURL: generatingInfo.generatedImageURL,
+                generatedImagePath: generatingInfo.generatedImageURL,
             });
         } else if (generatingInfo.service === "text-to-image") {
             await saveNewGeneratedImageData({
@@ -68,7 +68,7 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
                 width: width,
                 height: height,
                 frameColor: generatingInfo.frameColor,
-                generatedImageURL: generatingInfo.generatedImageURL,
+                generatedImagePath: generatingInfo.generatedImageURL,
             });
         }
     }

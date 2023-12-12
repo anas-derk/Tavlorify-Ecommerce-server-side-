@@ -233,7 +233,7 @@ const generatedImageSchema = mongoose.Schema({
         type: String,
         default: "none",
     },
-    generatedImageURL: String,
+    generatedImagePath: String,
     imageGenerationDate: {
         type: Date,
         default: Date.now(),
