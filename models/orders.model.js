@@ -2,13 +2,27 @@
 
 const { mongoose, orderModel } = require("../models/all.models");
 
-async function getAllOrders() {
+async function getAllOrdersInsideThePage(pageNumber, pageSize) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const orders = await orderModel.find({}).sort({ added_date: -1 });
+        const orders = await orderModel.find({}).skip((pageNumber - 1) * pageSize).limit(pageSize);
         await mongoose.disconnect();
         return orders;
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
+async function getOrdersCount() {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const ordersCount = await orderModel.countDocuments({});
+        await mongoose.disconnect();
+        return ordersCount;
     } catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
@@ -119,7 +133,8 @@ async function deleteProductFromOrder(orderId, productId) {
 }
 
 module.exports = {
-    getAllOrders,
+    getAllOrdersInsideThePage,
+    getOrdersCount,
     getOrderDetails,
     postNewOrder,
     updateOrder,

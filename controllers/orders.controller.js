@@ -1,8 +1,18 @@
-async function getAllOrders(req, res) {
+async function getAllOrdersInsideThePage(req, res) {
     try{
-        const { getAllOrders } = require("../models/orders.model");
-        const result = await getAllOrders();
+        const { getAllOrdersInsideThePage } = require("../models/orders.model");
+        const result = await getAllOrdersInsideThePage(req.query.pageNumber, req.query.pageSize);
         await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
+}
+
+async function getOrdersCount(req, res) {
+    try{
+        const { getOrdersCount } = require("../models/orders.model");
+        await res.json(await getOrdersCount());
     }
     catch(err) {
         await res.status(500).json(err);
@@ -247,7 +257,8 @@ async function deleteProductFromOrder(req, res) {
 }
 
 module.exports = {
-    getAllOrders,
+    getAllOrdersInsideThePage,
+    getOrdersCount,
     getOrderDetails,
     getOrderDetailsFromKlarnaInCheckoutPeriod,
     postNewOrderToGelato,
