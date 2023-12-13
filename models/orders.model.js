@@ -2,11 +2,11 @@
 
 const { mongoose, orderModel } = require("../models/all.models");
 
-async function getAllOrdersInsideThePage(pageNumber, pageSize) {
+async function getAllOrdersInsideThePage(pageNumber, pageSize, filters) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const orders = await orderModel.find({}).skip((pageNumber - 1) * pageSize).limit(pageSize);
+        const orders = await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize);
         await mongoose.disconnect();
         return orders;
     } catch (err) {
@@ -16,11 +16,11 @@ async function getAllOrdersInsideThePage(pageNumber, pageSize) {
     }
 }
 
-async function getOrdersCount() {
+async function getOrdersCount(filters) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const ordersCount = await orderModel.countDocuments({});
+        const ordersCount = await orderModel.countDocuments(filters);
         await mongoose.disconnect();
         return ordersCount;
     } catch (err) {
