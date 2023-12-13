@@ -7,7 +7,6 @@ async function getAllReturnedOrdersInsideThePage(req, res) {
                 objectKey !== "pageSize" &&
                 objectKey !== "orderNumber" &&
                 objectKey !== "_id" &&
-                objectKey !== "klarnaReference" &&
                 objectKey !== "status" &&
                 objectKey !== "customerName" &&
                 objectKey !== "email"
@@ -28,10 +27,9 @@ function getFiltersObject(filters) {
     for (let objectKey in filters) {
         if (objectKey === "orderNumber") filtersObject[objectKey] = Number(filters[objectKey]);
         if (objectKey === "_id") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "klarnaReference") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "status") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "customerName") filtersObject[`billing_address.given_name`] = filters[objectKey];
-        if (objectKey === "email") filtersObject[`billing_address.email`] = filters[objectKey];
+        if (objectKey === "customerName") filtersObject[`customer.first_name`] = filters[objectKey];;
+        if (objectKey === "email") filtersObject[`customer.email`] = filters[objectKey];
     }
     return filtersObject;
 }
@@ -45,7 +43,6 @@ async function getReturnedOrdersCount(req, res) {
                 objectKey !== "pageSize" &&
                 objectKey !== "orderNumber" &&
                 objectKey !== "_id" &&
-                objectKey !== "klarnaReference" &&
                 objectKey !== "status" &&
                 objectKey !== "customerName" &&
                 objectKey !== "email"
