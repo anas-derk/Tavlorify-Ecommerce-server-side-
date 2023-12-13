@@ -1,8 +1,7 @@
 async function getAllOrdersInsideThePage(req, res) {
-    console.log(req.query);
     try{
-        let filtersObject = {};
-        for (let objectKey in req.query) {
+        const filters = req.query;
+        for (let objectKey in filters) {
             if (
                 objectKey !== "pageNumber" &&
                 objectKey !== "pageSize" &&
@@ -13,18 +12,9 @@ async function getAllOrdersInsideThePage(req, res) {
                 objectKey !== "customerName" &&
                 objectKey !== "email"
             ) { await res.status(400).json("Invalid Request, Please Send Valid Keys !!"); return; }
-            else {
-                if (objectKey === "orderNumber") filtersObject[objectKey] = Number(req.query[objectKey]);
-                if (objectKey === "_id") filtersObject[objectKey] = req.query[objectKey];
-                if (objectKey === "klarnaReference") filtersObject[objectKey] = req.query[objectKey];
-                if (objectKey === "status") filtersObject[objectKey] = req.query[objectKey];
-                if (objectKey === "customerName") filtersObject[objectKey] = req.query[objectKey];
-                if (objectKey === "email") filtersObject[objectKey] = req.query[objectKey];
-            }
         }
-        console.log(filtersObject)
         const { getAllOrdersInsideThePage } = require("../models/orders.model");
-        const result = await getAllOrdersInsideThePage(req.query.pageNumber, req.query.pageSize, filtersObject);
+        const result = await getAllOrdersInsideThePage(req.query.pageNumber, req.query.pageSize, getFiltersObject(filters));
         await res.json(result);
     }
     catch(err) {
@@ -33,10 +23,36 @@ async function getAllOrdersInsideThePage(req, res) {
     }
 }
 
+function getFiltersObject(filters) {
+    let filtersObject = {};
+    for (let objectKey in filters) {
+        if (objectKey === "orderNumber") filtersObject[objectKey] = Number(filters[objectKey]);
+        if (objectKey === "_id") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "klarnaReference") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "status") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "customerName") filtersObject[`billing_address.given_name`] = filters[objectKey];
+        if (objectKey === "email") filtersObject[`billing_address.email`] = filters[objectKey];
+    }
+    return filtersObject;
+}
+
 async function getOrdersCount(req, res) {
     try{
+        const filters = req.query;
+        for (let objectKey in filters) {
+            if (
+                objectKey !== "pageNumber" &&
+                objectKey !== "pageSize" &&
+                objectKey !== "orderNumber" &&
+                objectKey !== "_id" &&
+                objectKey !== "klarnaReference" &&
+                objectKey !== "status" &&
+                objectKey !== "customerName" &&
+                objectKey !== "email"
+            ) { await res.status(400).json("Invalid Request, Please Send Valid Keys !!"); return; }
+        }
         const { getOrdersCount } = require("../models/orders.model");
-        await res.json(await getOrdersCount(req.query));
+        await res.json(await getOrdersCount(getFiltersObject(filters)));
     }
     catch(err) {
         await res.status(500).json(err);
