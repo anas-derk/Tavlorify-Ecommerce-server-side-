@@ -2,13 +2,27 @@
 
 const { mongoose, orderModel, returnedOrderModel } = require("../models/all.models");
 
-async function getAllReturnedOrders() {
+async function getAllReturnedOrdersInsideThePage(pageNumber, pageSize, filters) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const orders = await returnedOrderModel.find({}).sort({ added_date: -1 });
+        const orders = await returnedOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize);
         await mongoose.disconnect();
         return orders;
+    } catch (err) {
+        // Disconnect In DB
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
+async function getReturnedOrdersCount(filters) {
+    try {
+        // Connect To DB
+        await mongoose.connect(process.env.DB_URL);
+        const ordersCount = await returnedOrderModel.countDocuments(filters);
+        await mongoose.disconnect();
+        return ordersCount;
     } catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
@@ -126,7 +140,8 @@ async function deleteProductFromReturnedOrder(returnedOrderId, productId) {
 }
 
 module.exports = {
-    getAllReturnedOrders,
+    getAllReturnedOrdersInsideThePage,
+    getReturnedOrdersCount,
     getReturnedOrderDetails,
     postNewReturnedOrder,
     updateReturnedOrder,

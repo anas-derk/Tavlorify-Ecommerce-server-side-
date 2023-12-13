@@ -14,7 +14,7 @@ async function getAllOrdersInsideThePage(req, res) {
             ) { await res.status(400).json("Invalid Request, Please Send Valid Keys !!"); return; }
         }
         const { getAllOrdersInsideThePage } = require("../models/orders.model");
-        const result = await getAllOrdersInsideThePage(req.query.pageNumber, req.query.pageSize, getFiltersObject(filters));
+        const result = await getAllOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters));
         await res.json(result);
     }
     catch(err) {

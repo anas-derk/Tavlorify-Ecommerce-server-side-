@@ -2,7 +2,9 @@ const returnedOrdersRouter = require("express").Router();
 
 const returnedOrdersController = require("../controllers/returnedOrders.controller");
 
-returnedOrdersRouter.get("/all-orders", returnedOrdersController.getAllReturnedOrders);
+returnedOrdersRouter.get("/all-orders-inside-the-page", returnedOrdersController.getAllReturnedOrdersInsideThePage);
+
+returnedOrdersRouter.get("/orders-count", returnedOrdersController.getReturnedOrdersCount);
 
 returnedOrdersRouter.get("/order-details/:orderId", returnedOrdersController.getReturnedOrderDetails);
 
