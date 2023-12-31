@@ -37,16 +37,13 @@ app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:$
 
 /* Start Handle The Routes */
 
-const usersRouter = require("./routes/users.router"),
-    adminRouter = require("./routes/admin.router"),
+const adminRouter = require("./routes/admin.router"),
     textToImageRouter = require("./routes/textToImage.router"),
     imageToImageRouter = require("./routes/imageToImage.router"),
     ordersRouter = require("./routes/orders.router"),
     generatedImagesRouter = require("./routes/generatedImages.router"),
     pricesRouter = require("./routes/prices.router"),
     returnedOrdersRouter = require("./routes/returnedOrders.router");
-
-app.use("/users", usersRouter);
 
 app.use("/admin", adminRouter);
 
