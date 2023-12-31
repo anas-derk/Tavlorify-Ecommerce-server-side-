@@ -6,7 +6,7 @@ const multer = require("multer");
 
 textToImageRouter.get("/categories/all-categories-data", textToImageController.getAllCategoriesData);
 
-textToImageRouter.get("/styles/category-styles-data", textToImageController.get_all_category_Styles_Data);
+textToImageRouter.get("/styles/category-styles-data", textToImageController.get_all_category_styles_data);
 
 textToImageRouter.get("/generate-image", textToImageController.generateImage);
 

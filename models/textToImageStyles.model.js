@@ -2,7 +2,7 @@
 
 const { mongoose, textToImageStyleModel } = require("../models/all.models");
 
-async function get_all_category_Styles_Data(categoryName) {
+async function get_all_category_styles_data(categoryName) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
@@ -120,7 +120,7 @@ async function deleteStyleData(styleId, categoryName) {
 }
 
 module.exports = {
-    get_all_category_Styles_Data,
+    get_all_category_styles_data,
     updateStyleData,
     deleteStyleData,
     addNewStyle,

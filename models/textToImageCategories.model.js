@@ -6,22 +6,14 @@ async function getAllCategoriesData() {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        // Check If Email Is Exist
-        let categorieData = await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
-        if (categorieData) {
-            await mongoose.disconnect();
-            return categorieData;
-        }
-        else {
-            mongoose.disconnect();
-            return "Sorry, There Is No Categories Data Now !!";
-        }
+        const categorieData = await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
+        await mongoose.disconnect();
+        return categorieData;
     }
     catch (err) {
-        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 

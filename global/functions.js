@@ -2,6 +2,20 @@ function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
 }
 
+function checkDataTypeForFields(fieldNamesAndValuesAndDataTypes) {
+    for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
+        if (typeof fieldnameAndValueAndDataType.fieldValue !== fieldnameAndValueAndDataType.dataType)
+        return `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`;
+    }
+}
+
+function checkIsExistValueForFields(fieldNamesAndValues) {
+    for (let fieldNameAndValue of fieldNamesAndValues) {
+        if (!fieldNameAndValue.fieldValue)
+        return `Invalid Request, Please Send ${fieldNameAndValue.fieldName} Value !!`;
+    }
+}
+
 function calcOrderAmount(order_lines) {
     let newOrderAmount = 0;
     for (let i = 0; i < order_lines.length; i++) {
@@ -121,6 +135,8 @@ function sendPaymentConfirmationMessage(email, orderDetails) {
 
 module.exports = {
     isEmail,
+    checkDataTypeForFields,
+    checkIsExistValueForFields,
     calcOrderAmount,
     saveNewGeneratedImage,
     saveNewGeneratedImageDataGlobalFunc,

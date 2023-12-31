@@ -9,11 +9,23 @@ async function getAllCategoriesData(req, res) {
     }
 }
 
-async function get_all_category_Styles_Data(req, res) {
+async function get_all_category_styles_data(req, res) {
     try{
         const categoryName = req.query.categoryName;
-        const { get_all_category_Styles_Data } = require("../models/textToImageStyles.model");
-        const result = await get_all_category_Styles_Data(categoryName);
+        const { checkIsExistValueForFields } = require("../global/functions");
+        let checkResult = checkIsExistValueForFields([{ fieldName: "Category Name", fieldValue: categoryName }]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { checkDataTypeForFields } = require("../global/functions");
+        checkResult = checkDataTypeForFields([{ fieldName: "Category Name", fieldValue: categoryName, dataType: "string" }]);
+        if (checkResult) {
+            await res.status(400).json("Invalid Request, Please Fix Type Of Category Name ( Required: String ) !!");
+            return;
+        }
+        const { get_all_category_styles_data } = require("../models/textToImageStyles.model");
+        const result = await get_all_category_styles_data(categoryName);
         await res.json(result);
     }
     catch(err) {
@@ -60,6 +72,20 @@ async function generateImage(req, res) {
         refine = req.query.expert_ensemble_refiner,
         width = req.query.width,
         height = req.query.height;
+        if (!textPrompt || !prompt || !model_name || !negative_prompt || !width || !height) {
+            await res.status(400).json("Invalid Request, Please Send All Required Fields !!");
+            return;
+        }
+        const { checkDataTypeForFields } = require("../global/functions");
+        const checkResult = checkDataTypeForFields([{ fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", }]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        if (typeof textPrompt !== "string") {
+            await res.status(400).json("Invalid Request, Please Send Valid Text Prompt Data Type ( String ) !!");
+            return;
+        }
         const textAfterTranslation = await translateText(textPrompt);
         let tempOutput;
         switch (model_name) {
@@ -277,7 +303,7 @@ async function deleteCategoryData(req, res) {
 
 module.exports = {
     getAllCategoriesData,
-    get_all_category_Styles_Data,
+    get_all_category_styles_data,
     generateImage,
     addNewStyle,
     addNewCategory,
