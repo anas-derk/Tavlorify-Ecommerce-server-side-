@@ -49,8 +49,8 @@ async function getOrdersCount(req, res) {
         const filters = req.query;
         const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: true },
+            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
+            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: false },
         ]);
         if (checkResult) {
             await res.status(400).json(checkResult);
