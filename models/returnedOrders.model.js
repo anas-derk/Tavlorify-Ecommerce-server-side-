@@ -49,9 +49,9 @@ async function postNewReturnedOrder(orderId) {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
         const orderDetails = await orderModel.findById(orderId);
-        const returnedOrdersCount = await returnedOrderModel.countDocuments();
+        const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
         const newReturnedOrder = new returnedOrderModel({
-            returnedOrderNumber: returnedOrdersCount + 1,
+            returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
             orderNumber: orderDetails.orderNumber,
             orderId,
             order_amount: orderDetails.order_amount,
@@ -68,7 +68,6 @@ async function postNewReturnedOrder(orderId) {
         await mongoose.disconnect();
         return "Creating New Returned Order Has Been Successfuly !!";
     } catch (err) {
-        console.log(err);
         // Disconnect In DB
         await mongoose.disconnect();
         throw Error(err);

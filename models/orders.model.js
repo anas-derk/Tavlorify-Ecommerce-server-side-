@@ -48,8 +48,8 @@ async function postNewOrder() {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const { orderNumber } = await orderModel.findOne().sort({ orderNumber: -1 });
-        const newOrder = new orderModel({ orderNumber: orderNumber ? orderNumber + 1 : 623456 });
+        const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
+        const newOrder = new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 });
         const orderDetails = await newOrder.save();
         await mongoose.disconnect();
         return { msg: "Creating New Order Has Been Successfuly !!", orderId: orderDetails._id };
