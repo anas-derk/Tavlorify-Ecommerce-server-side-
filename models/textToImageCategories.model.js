@@ -43,7 +43,7 @@ async function addNewCategory(categoryInfo) {
     catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
@@ -52,43 +52,37 @@ async function getCategoryData(categoryName) {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
         // Check If Email Is Exist
-        let categoryData = await textToImageCategoryModel.findOne({ name: categoryName });
-        if (categoryData) {
-            await mongoose.disconnect();
-            return categoryData;
-        }
-        else {
-            mongoose.disconnect();
-            return "Sorry, The Category Is Not Exist !!, Please Enter Another Category Name ..";
-        }
+        const categoryData = await textToImageCategoryModel.findOne({ name: categoryName });
+        await mongoose.disconnect();
+        return categoryData;
     }
     catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
-async function updateCategoryData(categoryId, newCategorySortNumber, newCategoryName) {
+async function updateCategoryData(categoryId, newCategoryInfo) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const theSecondCategory = await textToImageCategoryModel.findOne({ sortNumber: newCategorySortNumber });
+        const theSecondCategory = await textToImageCategoryModel.findOne({ sortNumber: newCategoryInfo.newCategorySortNumber });
         const theFirstCategory = await textToImageCategoryModel.findOneAndUpdate({ _id: categoryId }, {
-            name: newCategoryName,
-            sortNumber: newCategorySortNumber,
+            name: newCategoryInfo.newCategoryName,
+            sortNumber: newCategoryInfo.newCategorySortNumber,
         }, { returnOriginal: true });
         await textToImageCategoryModel.updateOne({
             _id: theSecondCategory._id,
         }, {
             sortNumber: theFirstCategory.sortNumber,
         });
-        if (newCategoryName === theFirstCategory.name) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+        if (newCategoryInfo.newCategoryName === theFirstCategory.name) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
         else {
             await textToImageStyleModel.updateMany({
                 categoryName: theFirstCategory.name,
             }, {
-                categoryName: newCategoryName,
+                categoryName: newCategoryInfo.newCategoryName,
             });
             await mongoose.disconnect();
             return "Category Updating Process Is Succesfuly !!"
@@ -97,7 +91,7 @@ async function updateCategoryData(categoryId, newCategorySortNumber, newCategory
     catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
