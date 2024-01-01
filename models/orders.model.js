@@ -6,7 +6,7 @@ async function getAllOrdersInsideThePage(pageNumber, pageSize, filters) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const orders = await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize);
+        const orders = await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 });
         await mongoose.disconnect();
         return orders;
     } catch (err) {
@@ -48,8 +48,8 @@ async function postNewOrder() {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const ordersCount = await orderModel.countDocuments();
-        const newOrder = new orderModel({ orderNumber: ordersCount + 1 });
+        const { orderNumber } = await orderModel.findOne().sort({ orderNumber: -1 });
+        const newOrder = new orderModel({ orderNumber: orderNumber ? orderNumber + 1 : 623456 });
         const orderDetails = await newOrder.save();
         await mongoose.disconnect();
         return { msg: "Creating New Order Has Been Successfuly !!", orderId: orderDetails._id };
@@ -107,7 +107,7 @@ async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
 async function deleteOrder(orderId){
     try{
         await mongoose.connect(process.env.DB_URL);
-        await orderModel.deleteOne({ _id: orderId });
+        await orderModel.updateOne({ _id: orderId }, { isDeleted: true });
         return "Deleting This Order Has Been Successfuly !!";
     }
     catch(err){

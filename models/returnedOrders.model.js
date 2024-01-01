@@ -6,7 +6,7 @@ async function getAllReturnedOrdersInsideThePage(pageNumber, pageSize, filters) 
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const orders = await returnedOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize);
+        const orders = await returnedOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ returnedOrderNumber: -1 });
         await mongoose.disconnect();
         return orders;
     } catch (err) {
