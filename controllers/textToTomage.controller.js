@@ -12,16 +12,12 @@ async function getAllCategoriesData(req, res) {
 async function get_all_category_styles_data(req, res) {
     try{
         const categoryName = req.query.categoryName;
-        const { checkIsExistValueForFields } = require("../global/functions");
-        let checkResult = checkIsExistValueForFields([{ fieldName: "Category Name", fieldValue: categoryName }]);
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        let checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+        ]);
         if (checkResult) {
             await res.status(400).json(checkResult);
-            return;
-        }
-        const { checkDataTypeForFields } = require("../global/functions");
-        checkResult = checkDataTypeForFields([{ fieldName: "Category Name", fieldValue: categoryName, dataType: "string" }]);
-        if (checkResult) {
-            await res.status(400).json("Invalid Request, Please Fix Type Of Category Name ( Required: String ) !!");
             return;
         }
         const { get_all_category_styles_data } = require("../models/textToImageStyles.model");
@@ -70,20 +66,19 @@ async function generateImage(req, res) {
         negative_prompt = req.query.negative_prompt,
         num_inference_steps = req.query.num_inference_steps,
         refine = req.query.expert_ensemble_refiner,
-        width = req.query.width,
-        height = req.query.height;
-        if (!textPrompt || !prompt || !model_name || !negative_prompt || !width || !height) {
-            await res.status(400).json("Invalid Request, Please Send All Required Fields !!");
-            return;
-        }
-        const { checkDataTypeForFields } = require("../global/functions");
-        const checkResult = checkDataTypeForFields([{ fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", }]);
+        width = Number(req.query.width),
+        height = Number(req.query.height);
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        let checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: category, dataType: "string", isRequiredValue: false },
+            { fieldName: "Model Name", fieldValue: model_name, dataType: "string", isRequiredValue: true },
+            { fieldName: "Width", fieldValue: width, dataType: "number", isRequiredValue: true },
+            { fieldName: "Height", fieldValue: height, dataType: "number", isRequiredValue: true },
+        ]);
         if (checkResult) {
             await res.status(400).json(checkResult);
-            return;
-        }
-        if (typeof textPrompt !== "string") {
-            await res.status(400).json("Invalid Request, Please Send Valid Text Prompt Data Type ( String ) !!");
             return;
         }
         const textAfterTranslation = await translateText(textPrompt);
@@ -175,7 +170,6 @@ async function generateImage(req, res) {
         }
     }
     catch(err) {
-        console.log(err);
         await res.status(500).json(err);
     }
     if (generatedImagePathInServer) {

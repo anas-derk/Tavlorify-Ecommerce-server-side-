@@ -2,17 +2,16 @@ function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
 }
 
-function checkDataTypeForFields(fieldNamesAndValuesAndDataTypes) {
+function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes) {
     for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
-        if (typeof fieldnameAndValueAndDataType.fieldValue !== fieldnameAndValueAndDataType.dataType)
-        return `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`;
-    }
-}
-
-function checkIsExistValueForFields(fieldNamesAndValues) {
-    for (let fieldNameAndValue of fieldNamesAndValues) {
-        if (!fieldNameAndValue.fieldValue)
-        return `Invalid Request, Please Send ${fieldNameAndValue.fieldName} Value !!`;
+        if (fieldnameAndValueAndDataType.isRequiredValue) {
+            if (!fieldnameAndValueAndDataType.fieldValue) 
+                return `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`;
+        }
+        if (fieldnameAndValueAndDataType.fieldValue) {
+            if (typeof fieldnameAndValueAndDataType.fieldValue !== fieldnameAndValueAndDataType.dataType)
+                return `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`;
+        }
     }
 }
 
@@ -135,8 +134,7 @@ function sendPaymentConfirmationMessage(email, orderDetails) {
 
 module.exports = {
     isEmail,
-    checkDataTypeForFields,
-    checkIsExistValueForFields,
+    checkIsExistValueForFieldsAndDataTypes,
     calcOrderAmount,
     saveNewGeneratedImage,
     saveNewGeneratedImageDataGlobalFunc,
