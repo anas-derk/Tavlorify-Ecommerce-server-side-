@@ -12,6 +12,14 @@ async function getAllCategoriesData(req, res) {
 async function get_all_category_Styles_Data(req, res) {
     try{
         const categoryName = req.query.categoryName;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
         const { get_all_category_Styles_Data } = require("../models/imageToImageStyles.model");
         const result = await get_all_category_Styles_Data(categoryName);
         await res.json(result);
@@ -29,7 +37,6 @@ async function uploadImageAndProcessing(req, res) {
         await res.json(filePath);
     }
     catch(err) {
-        console.log(err);
         await res.status(500).json(err);
     }
 }
@@ -52,6 +59,19 @@ async function runModel(model, input) {
 async function generateImage(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     const imageToImageInfo = req.query;
+    const checkResult = checkIsExistValueForFieldsAndDataTypes([
+        { fieldName: "Image Link", fieldValue: imageToImageInfo.imageLink, dataType: "string", isRequiredValue: true },
+        { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
+        { fieldName: "Negative Prompt", fieldValue:imageToImageInfo.negative_prompt, dataType: "string", isRequiredValue: true },
+        { fieldName: "Image Resolution", fieldValue: Number(imageToImageInfo.image_resolution), dataType: "number", isRequiredValue: false },
+        { fieldName: "Preprocessor Resolution", fieldValue: Number(imageToImageInfo.preprocessor_resolution), dataType: "number", isRequiredValue: true },
+        { fieldName: "Ddim Steps", fieldValue: Number(imageToImageInfo.ddim_steps), dataType: "number", isRequiredValue: true },
+        { fieldName: "Strength", fieldValue: Number(imageToImageInfo.strength), dataType: "number", isRequiredValue: true },
+    ]);
+    if (checkResult) {
+        await res.status(400).json(checkResult);
+        return;
+    }
     try {
         switch (imageToImageInfo.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
@@ -94,6 +114,19 @@ async function generateImage(req, res) {
 async function addNewCategory(req, res) {
     try{
         const bodyData = req.body;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: bodyData.categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: bodyData.styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Prompt", fieldValue: bodyData.stylePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Negative Prompt", fieldValue: bodyData.styleNegativePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Ddim Steps", fieldValue: Number(bodyData.ddim_steps), dataType: "number", isRequiredValue: true },
+            { fieldName: "Strength", fieldValue: Number(bodyData.strength), dataType: "number", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
         const categoryInfo = {
             ...Object.assign({}, bodyData),
             ...Object.assign({}, req.files),
@@ -113,6 +146,19 @@ async function addNewCategory(req, res) {
 async function addNewStyle(req, res) {
     try{
         const bodyData = req.body;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: bodyData.categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: bodyData.styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Prompt", fieldValue: bodyData.stylePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Negative Prompt", fieldValue: bodyData.styleNegativePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Ddim Steps", fieldValue: Number(bodyData.ddim_steps), dataType: "number", isRequiredValue: true },
+            { fieldName: "Strength", fieldValue: Number(bodyData.strength), dataType: "number", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
         const styleData = {
             ...Object.assign({}, bodyData),
             imgSrc: req.file.path,
@@ -131,17 +177,23 @@ async function addNewStyle(req, res) {
 async function putCategoryData(req, res) {
     try{
         const categoryId = req.params.categoryId;
-        const newCategorySortNumber = req.body.newCategorySortNumber;
-        const newCategoryName = req.body.newCategoryName;
-        if (!newCategorySortNumber || !categoryId || !newCategoryName) {
-            await res.status(400).json("Sorry, Please Send Category Id, New Category Sort Number And Old Category Name And New Category Name !!");
-        } else {
-            const { updateCategoryData } = require("../models/imageToImageCategories.model");
-            const result = await updateCategoryData(categoryId, newCategorySortNumber, newCategoryName);
-            await res.json(result);
+        const bodyData = req.body;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Id", fieldValue: categoryId, dataType: "string", isRequiredValue: true },
+            { fieldName: "New Category Sort Number", fieldValue: Number(bodyData.newCategorySortNumber), dataType: "number", isRequiredValue: true },
+            { fieldName: "New Category Name", fieldValue: bodyData.newCategoryName, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
         }
+        const { updateCategoryData } = require("../models/imageToImageCategories.model");
+        const result = await updateCategoryData(categoryId, bodyData);
+        await res.json(result);
     }
     catch(err) {
+        console.log(err)
         await res.status(500).json(err);
     }
 }
@@ -150,19 +202,25 @@ async function putStyleData(req, res) {
     try{
         const styleId = req.params.styleId;
         const categoryName = req.query.categoryName;
-        const newCategoryStyleSortNumber = req.body.newCategoryStyleSortNumber,
-            newName = req.body.newName,
-            newPrompt = req.body.newPrompt,
-            newNegativePrompt = req.body.newNegativePrompt,
-            newDdimSteps = req.body.newDdimSteps,
-            newStrength = req.body.newStrength;
-        if (!styleId || !categoryName || !newCategoryStyleSortNumber || !newName || !newPrompt || !newNegativePrompt || !newDdimSteps || !newStrength) {
-            await res.status(400).json("Sorry, Please Send All Requirments Field !!");
-        } else {
-            const { updateStyleData } = require("../models/imageToImageStyles.model");
-            const result = await updateStyleData(styleId, categoryName, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength);
-            await res.json(result);
-        }
+        const bodyData = req.body;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Style Id", fieldValue: styleId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "New Category Style Sort Number", fieldValue: Number(bodyData.newCategoryStyleSortNumber), dataType: "number", isRequiredValue: false },
+            { fieldName: "New Name", fieldValue: bodyData.newName, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Prompt", fieldValue: bodyData.newPrompt, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Negative Prompt", fieldValue: bodyData.newNegativePrompt, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Ddim Steps", fieldValue: Number(bodyData.newDdimSteps), dataType: "number", isRequiredValue: false },
+            { fieldName: "New Strength", fieldValue: Number(bodyData.newStrength), dataType: "number", isRequiredValue: false },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        } 
+        const { updateStyleData } = require("../models/imageToImageStyles.model");
+        const result = await updateStyleData(styleId, categoryName, bodyData);
+        await res.json(result);
     }
     catch(err) {
         await res.status(500).json(err);
@@ -172,18 +230,23 @@ async function putStyleData(req, res) {
 async function deleteCategoryData(req, res) {
     try{
         const categoryId = req.params.categoryId;
-        if (!categoryId) await res.status(400).json("Sorry, Please Send Category Id");
-        else {
-            const { deleteCategoryData } = require("../models/imageToImageCategories.model");
-            const result = await deleteCategoryData(categoryId);
-            if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
-                const { unlinkSync } = require("fs");
-                unlinkSync(result.categoryData.imgSrc);
-                for (let i = 0; i < result.categoryStylesData.length; i++) {
-                    unlinkSync(result.categoryStylesData[i].imgSrc);
-                }
-                await res.json("Category Deleting Process Is Succesfuly !!");
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Id", fieldValue: categoryId, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { deleteCategoryData } = require("../models/imageToImageCategories.model");
+        const result = await deleteCategoryData(categoryId);
+        if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
+            const { unlinkSync } = require("fs");
+            unlinkSync(result.categoryData.imgSrc);
+            for (let i = 0; i < result.categoryStylesData.length; i++) {
+                unlinkSync(result.categoryStylesData[i].imgSrc);
             }
+            await res.json("Category Deleting Process Is Succesfuly !!");
         }
     }
     catch(err) {
@@ -195,15 +258,21 @@ async function deleteStyleData(req, res) {
     try{
         const styleId = req.params.styleId;
         const categoryName = req.query.categoryName;
-        if (!styleId || !categoryName) res.status(400).json("Sorry, Please Send Style Id And Category Name !!");
-        else {
-            const { deleteStyleData } = require("../models/imageToImageStyles.model");
-            const result = await deleteStyleData(styleId, categoryName);
-            if (result) {
-                const { unlinkSync } = require("fs");
-                unlinkSync(result);
-                await res.json("Category Style Deleting Process Is Succesfuly !!");
-            }
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Style Id", fieldValue: styleId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { deleteStyleData } = require("../models/imageToImageStyles.model");
+        const result = await deleteStyleData(styleId, categoryName);
+        if (result) {
+            const { unlinkSync } = require("fs");
+            unlinkSync(result);
+            await res.json("Category Style Deleting Process Is Succesfuly !!");
         }
     }
     catch(err) {

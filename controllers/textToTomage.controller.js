@@ -290,32 +290,6 @@ async function putStyleData(req, res) {
     }
 }
 
-async function deleteStyleData(req, res) {
-    try{
-        const styleId = req.params.styleId;
-        const categoryName = req.query.categoryName;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Style Id", fieldValue: styleId, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { deleteStyleData } = require("../models/textToImageStyles.model");
-        const result = await deleteStyleData(styleId, categoryName);
-        if (result) {
-            const { unlinkSync } = require("fs");
-            unlinkSync(result);
-            await res.json("Category Style Deleting Process Is Succesfuly !!");
-        }
-    }
-    catch(err) {
-        await res.status(500).json(err);
-    }
-}
-
 async function deleteCategoryData(req, res) {
     try{
         const categoryId = req.params.categoryId;
@@ -339,6 +313,32 @@ async function deleteCategoryData(req, res) {
         }
     }
     catch(err){
+        await res.status(500).json(err);
+    }
+}
+
+async function deleteStyleData(req, res) {
+    try{
+        const styleId = req.params.styleId;
+        const categoryName = req.query.categoryName;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Style Id", fieldValue: styleId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { deleteStyleData } = require("../models/textToImageStyles.model");
+        const result = await deleteStyleData(styleId, categoryName);
+        if (result) {
+            const { unlinkSync } = require("fs");
+            unlinkSync(result);
+            await res.json("Category Style Deleting Process Is Succesfuly !!");
+        }
+    }
+    catch(err) {
         await res.status(500).json(err);
     }
 }

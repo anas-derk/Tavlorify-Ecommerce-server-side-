@@ -49,18 +49,18 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, categoryName, newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newDdimSteps, newStrength){
+async function updateStyleData(styleId, categoryName, newCategoryStyleInfo){
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const theSecondStyle = await imageToImageStyleModel.findOne({ sortNumber: newCategoryStyleSortNumber, categoryName: categoryName });
+        const theSecondStyle = await imageToImageStyleModel.findOne({ sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber, categoryName });
         const theFirstStyle = await imageToImageStyleModel.findOneAndUpdate({ _id: styleId }, {
-            name: newName,
-            prompt: newPrompt,
-            negative_prompt: newNegativePrompt,
-            ddim_steps: newDdimSteps,
-            strength: newStrength,
-            sortNumber: newCategoryStyleSortNumber,
+            name: newCategoryStyleInfo.newName,
+            prompt: newCategoryStyleInfo.newPrompt,
+            negative_prompt: newCategoryStyleInfo.newNegativePrompt,
+            ddim_steps: newCategoryStyleInfo.newDdimSteps,
+            strength: newCategoryStyleInfo.newStrength,
+            sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber,
         }, { returnOriginal: true });
         await imageToImageStyleModel.updateOne({
             _id: theSecondStyle._id,
@@ -72,7 +72,7 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleSortNumber
     catch (err) {
         // Disconnect In DB
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 

@@ -48,17 +48,17 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, categoryName, newCategoryInfo) {
+async function updateStyleData(styleId, categoryName, newCategoryStyleInfo) {
     try {
         // Connect To DB
         await mongoose.connect(process.env.DB_URL);
-        const theSecondStyle = await textToImageStyleModel.findOne({ sortNumber: newCategoryInfo.newCategoryStyleSortNumber, categoryName });
+        const theSecondStyle = await textToImageStyleModel.findOne({ sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber, categoryName });
         const theFirstStyle = await textToImageStyleModel.findOneAndUpdate({ _id: styleId }, {
-            name: newCategoryInfo.newName,
-            prompt: newCategoryInfo.newPrompt,
-            negative_prompt: newCategoryInfo.newNegativePrompt,
-            sortNumber: newCategoryInfo.newCategoryStyleSortNumber,
-            modelName: newCategoryInfo.newModelName,
+            name: newCategoryStyleInfo.newName,
+            prompt: newCategoryStyleInfo.newPrompt,
+            negative_prompt: newCategoryStyleInfo.newNegativePrompt,
+            sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber,
+            modelName: newCategoryStyleInfo.newModelName,
         }, { returnOriginal: true });
         await textToImageStyleModel.updateOne({
             _id: theSecondStyle._id,
