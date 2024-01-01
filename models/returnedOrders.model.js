@@ -114,7 +114,7 @@ async function updateReturnedOrderProduct(returnedOrderId, productId, newReturne
 async function deleteReturnedOrder(returnedOrderId){
     try{
         await mongoose.connect(process.env.DB_URL);
-        await returnedOrderModel.deleteOne({ _id: returnedOrderId });
+        await returnedOrderModel.updateOne({ _id: returnedOrderId }, { isDeleted: true });
         return "Deleting This Returned Order Has Been Successfuly !!";
     }
     catch(err){

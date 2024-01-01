@@ -203,7 +203,7 @@ const orderSchema = mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 // Create Order Model From Order Schema
@@ -305,6 +305,10 @@ const returnedOrderSchema = mongoose.Schema({
     added_date: {
         type: Date,
         default: Date.now(),
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
     },
 });
 
