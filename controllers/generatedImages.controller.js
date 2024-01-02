@@ -1,3 +1,50 @@
+async function getAllGeneratedImagesDataInsideThePage(req, res) {
+    try{
+        const filters = req.query;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: filters.service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
+            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: false },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        if (filters.service !== "text-to-image" && filters.service !== "image-to-image") {
+            await res.status(400).json(`Invalid Service Name !!`);
+            return;
+        }
+        const { getAllGeneratedImagesDataInsideThePage } = require("../models/generatedImages.model");
+        const result = await getAllGeneratedImagesDataInsideThePage(filters.service, filters.pageNumber, filters.pageSize);
+        await res.json(result);
+    }
+    catch(err){
+        await res.status(500).json(err);
+    }
+}
+
+async function getGeneratedImagesDataCount(req, res) {
+    try{
+        const filters = req.query;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: filters.service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
+            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: false },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { getGeneratedImagesDataCount } = require("../models/generatedImages.model");
+        await res.json(await getGeneratedImagesDataCount(filters));
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
+}
+
 async function postNewGeneratedImageData(req, res) {
     try{
         const generatedImageData = req.body;
@@ -70,30 +117,6 @@ async function postImageAfterCroping(req, res) {
     }
 }
 
-async function getSpecificGeneratedImagesData(req, res) {
-    try{
-        const service = req.query.service;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        if (service !== "text-to-image" || service !== "image-to-image") {
-            await res.status(400).json(`Invalid Service Name !!`);
-            return;
-        }
-        const { getSpecificGeneratedImagesData } = require("../models/generatedImages.model");
-        const result = await getSpecificGeneratedImagesData(service);
-        await res.json(result);
-    }
-    catch(err){
-        await res.status(500).json(err);
-    }
-}
-
 async function deleteGeneratedImageData(req, res) {
     try{
         const generatedImageDataId = req.params.generatedImageDataId;
@@ -115,8 +138,9 @@ async function deleteGeneratedImageData(req, res) {
 }
 
 module.exports = {
+    getAllGeneratedImagesDataInsideThePage,
+    getGeneratedImagesDataCount,
     postNewGeneratedImageData,
     postImageAfterCroping,
-    getSpecificGeneratedImagesData,
     deleteGeneratedImageData,
 }
