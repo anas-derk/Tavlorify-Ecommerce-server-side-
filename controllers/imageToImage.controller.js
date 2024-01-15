@@ -103,6 +103,7 @@ async function generateImage(req, res) {
                 await res.status(400).json("Invalid Model Name !!");
             }
         }
+        console.log(output);
     } catch (err) {
         console.log(err);
         await res.status(500).json(err);
