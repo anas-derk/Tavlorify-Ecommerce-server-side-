@@ -62,7 +62,7 @@ async function generateImage(req, res) {
     const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: imageToImageInfo.imageLink, dataType: "string", isRequiredValue: true },
-        { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
+        { fieldName: "Prompt", fieldValue: imageToImageInfo.prompt, dataType: "string", isRequiredValue: true },
         { fieldName: "Negative Prompt", fieldValue:imageToImageInfo.negative_prompt, dataType: "string", isRequiredValue: true },
         { fieldName: "Image Resolution", fieldValue: Number(imageToImageInfo.image_resolution), dataType: "number", isRequiredValue: false },
         { fieldName: "Preprocessor Resolution", fieldValue: Number(imageToImageInfo.preprocessor_resolution), dataType: "number", isRequiredValue: true },
