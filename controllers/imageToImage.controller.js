@@ -57,8 +57,10 @@ async function runModel(model, input) {
 }
 
 async function generateImage(req, res) {
+    console.log("aa")
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     const imageToImageInfo = req.query;
+    const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: imageToImageInfo.imageLink, dataType: "string", isRequiredValue: true },
         { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
