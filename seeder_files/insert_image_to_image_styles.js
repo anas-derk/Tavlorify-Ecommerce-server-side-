@@ -963,10 +963,10 @@ async function insert_image_to_image_styles_data() {
         await mongoose.connect(DB_URL);
         await imageToImageStyleModel.insertMany(imageToImageStylesData);
         await mongoose.disconnect();
-        return "Ok !!, Inserting Categories Data Process Is Successfuly !!";
+        return "Ok !!, Inserting Image To Image Styles Data Process Is Successfuly !!";
     } catch (err) {
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 

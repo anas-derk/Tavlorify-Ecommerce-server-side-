@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
 
-// Create Text To Image Style Schema
+// Create Face Swap Style Schema
 
-const textToImageStyleSchema = mongoose.Schema({
+const faceSwapStyleSchema = mongoose.Schema({
     imgSrc: String,
     name: String,
     prompt: String,
@@ -22,11 +22,11 @@ const textToImageStyleSchema = mongoose.Schema({
     sortNumber: Number,
 });
 
-// Create Text To Image Style Model From Style Schema
+// Create Face Swap Style Model From Face Swap Style Schema
 
-const textToImageStyleModel = mongoose.model("text_to_image_style", textToImageStyleSchema);
+const faceSwapStyleModel = mongoose.model("face_swap_style", faceSwapStyleSchema);
 
-const textToImageStylesData = [
+const faceSwapStyleStylesData = [
     {
         imgSrc: "assets/images/styles/textToImage/art/line_art.png",
         name: "line art",
@@ -770,16 +770,16 @@ const textToImageStylesData = [
     },
 ];
 
-async function insert_text_to_image_styles_data() {
+async function insert_face_swap_styles_data() {
     try {
         await mongoose.connect(DB_URL);
-        await textToImageStyleModel.insertMany(textToImageStylesData);
+        await faceSwapStyleModel.insertMany(faceSwapStyleStylesData);
         await mongoose.disconnect();
-        return "Ok !!, Inserting Text To Image Styles Data Process Is Successfuly !!";
+        return "Ok !!, Inserting Face Swap Styles Data Process Is Successfuly !!";
     } catch (err) {
         await mongoose.disconnect();
         throw Error(err);
     }
 }
 
-insert_text_to_image_styles_data().then((result) => console.log(result));
+insert_face_swap_styles_data().then((result) => console.log(result));

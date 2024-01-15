@@ -40,7 +40,7 @@ async function create_admin_user_account() {
         }
     } catch(err) {
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 

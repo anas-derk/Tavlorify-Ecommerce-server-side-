@@ -52,10 +52,10 @@ async function insert_image_to_image_categories_data() {
         await mongoose.connect(DB_URL);
         await imageToImageCategoryModel.insertMany(imageToImageCategoriesData);
         await mongoose.disconnect();
-        return "Ok !!, Inserting Categories Data Process Is Successfuly !!";
+        return "Ok !!, Inserting Image To Image Categories Data Process Is Successfuly !!";
     } catch (err) {
         await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
