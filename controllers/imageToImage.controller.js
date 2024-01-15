@@ -57,7 +57,6 @@ async function runModel(model, input) {
 }
 
 async function generateImage(req, res) {
-    console.log("aa")
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     const imageToImageInfo = req.query;
     const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
@@ -105,6 +104,7 @@ async function generateImage(req, res) {
             }
         }
     } catch (err) {
+        console.log(err);
         await res.status(500).json(err);
     }
     if (generatedImagePathInServer) {
