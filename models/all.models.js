@@ -316,6 +316,17 @@ const returnedOrderSchema = mongoose.Schema({
 
 const returnedOrderModel = mongoose.model("returned_order", returnedOrderSchema);
 
+// Create Face Swap Style Schema
+
+const faceSwapStyleSchema = mongoose.Schema({
+    imgSrcList: Array,
+    sortNumber: Number,
+});
+
+// Create Face Swap Style Model From Face Swap Style Schema
+
+const faceSwapStyleModel = mongoose.model("face_swap_style", faceSwapStyleSchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -327,4 +338,5 @@ module.exports = {
     generatedImageModel,
     productPricesModel,
     returnedOrderModel,
+    faceSwapStyleModel,
 }

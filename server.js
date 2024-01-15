@@ -43,7 +43,8 @@ const adminRouter = require("./routes/admin.router"),
     ordersRouter = require("./routes/orders.router"),
     generatedImagesRouter = require("./routes/generatedImages.router"),
     pricesRouter = require("./routes/prices.router"),
-    returnedOrdersRouter = require("./routes/returnedOrders.router");
+    returnedOrdersRouter = require("./routes/returnedOrders.router"),
+    faceSwapRouter = require("./routes/faceSwap.router");
 
 app.use("/admin", adminRouter);
 
@@ -57,6 +58,6 @@ app.use("/generated-images", generatedImagesRouter);
 
 app.use("/prices", pricesRouter);
 
-app.use("/returned-orders", returnedOrdersRouter);
+app.use("/face-swap", faceSwapRouter);
 
 /* End Handle The Routes */
