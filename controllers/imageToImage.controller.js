@@ -63,7 +63,7 @@ async function generateImage(req, res) {
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: imageToImageInfo.imageLink, dataType: "string", isRequiredValue: true },
         { fieldName: "Prompt", fieldValue: imageToImageInfo.prompt, dataType: "string", isRequiredValue: true },
-        { fieldName: "Negative Prompt", fieldValue:imageToImageInfo.negative_prompt, dataType: "string", isRequiredValue: true },
+        { fieldName: "Negative Prompt", fieldValue:imageToImageInfo.n_prompt, dataType: "string", isRequiredValue: true },
         { fieldName: "Image Resolution", fieldValue: Number(imageToImageInfo.image_resolution), dataType: "number", isRequiredValue: false },
         { fieldName: "Preprocessor Resolution", fieldValue: Number(imageToImageInfo.preprocessor_resolution), dataType: "number", isRequiredValue: true },
         { fieldName: "Ddim Steps", fieldValue: Number(imageToImageInfo.ddim_steps), dataType: "number", isRequiredValue: true },
