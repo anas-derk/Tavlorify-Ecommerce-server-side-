@@ -32,7 +32,6 @@ async function generateImage(req, res) {
                 local_target: faceSwapInfo.styleImageLink,
             }
         );
-        console.log(output);
         if (output.status === "succeed") {
             const { saveNewGeneratedImage } = require("../global/functions");
             const result = await saveNewGeneratedImage(output.image);
