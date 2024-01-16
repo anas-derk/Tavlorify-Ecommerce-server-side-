@@ -15,6 +15,7 @@ async function runModel(model, input) {
 
 async function generateImage(req, res) {
     const faceSwapInfo = req.query;
+    console.log(faceSwapInfo);
     const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: faceSwapInfo.imageLink, dataType: "string", isRequiredValue: true },
