@@ -15,7 +15,6 @@ async function runModel(model, input) {
 
 async function generateImage(req, res) {
     const faceSwapInfo = req.query;
-    console.log(req.query);
     const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: faceSwapInfo.imageLink, dataType: "string", isRequiredValue: true },
@@ -33,9 +32,9 @@ async function generateImage(req, res) {
             }
         );
         console.log(output);
-        if (output) {
+        if (output.status === "succeed") {
             const { saveNewGeneratedImage } = require("../global/functions");
-            const result = await saveNewGeneratedImage(output[1]);
+            const result = await saveNewGeneratedImage(output.image);
             if (result.msg && result.msg === "success file downloaded !!") {
                 await res.json(result.imagePath);
             }
