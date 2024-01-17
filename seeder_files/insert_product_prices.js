@@ -4,7 +4,7 @@ const { mongoose, productPricesModel } = require("../models/all.models");
 
 // Import Database URL
 
-const DB_URL = require("../global/DB_URL");
+const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
 
 const productPricesData = [
     {

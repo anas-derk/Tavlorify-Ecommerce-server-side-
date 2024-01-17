@@ -16,42 +16,42 @@ const textToImageCategoryModel = mongoose.model("text_to_image_categorie", textT
 
 const textToImageCategoriesData = [
     {
-        imgSrc: "assets/images/categories/textToImage/ART.png",
+        imgSrc: "assets/images/categories/textToImage/ART.jpg",
         name: "Art",
         sortNumber: 1,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/Animals.png",
+        imgSrc: "assets/images/categories/textToImage/Animals.jpg",
         name: "Animals",
         sortNumber: 2,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/photography.png",
+        imgSrc: "assets/images/categories/textToImage/photography.jpg",
         name: "Photography",
         sortNumber: 3,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/People.png",
+        imgSrc: "assets/images/categories/textToImage/People.jpg",
         name: "People",
         sortNumber: 4,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/LandscapeAndNature.png",
+        imgSrc: "assets/images/categories/textToImage/LandscapeAndNature.jpg",
         name: "Landscape And Nature",
         sortNumber: 5,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/Vehicles.png",
+        imgSrc: "assets/images/categories/textToImage/Vehicles.jpg",
         name: "Vehicles",
         sortNumber: 6,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/characters_Anime.png",
+        imgSrc: "assets/images/categories/textToImage/characters_Anime.jpg",
         name: "characters And Anime",
         sortNumber: 7,
     },
     {
-        imgSrc: "assets/images/categories/textToImage/Cityscapes.png",
+        imgSrc: "assets/images/categories/textToImage/Cityscapes.jpg",
         name: "Cityscapes",
         sortNumber: 8,
     }
