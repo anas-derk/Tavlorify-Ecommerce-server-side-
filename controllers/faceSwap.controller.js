@@ -45,10 +45,19 @@ async function generateImage(req, res) {
     }
 }
 
-async function getAllStylesData(req, res) {
+async function getAllCategoryStylesData(req, res) {
     try{
-        const { getAllStylesData } = require("../models/faceSwapStyle.model");
-        const result = await getAllStylesData();
+        const categoryName = req.query.categoryName;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { getAllCategoryStylesData } = require("../models/faceSwapStyle.model");
+        const result = await getAllCategoryStylesData(categoryName);
         await res.json(result);
     }
     catch(err) {
@@ -58,5 +67,5 @@ async function getAllStylesData(req, res) {
 
 module.exports = {
     generateImage,
-    getAllStylesData,
+    getAllCategoryStylesData,
 }

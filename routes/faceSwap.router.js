@@ -4,6 +4,6 @@ const faceSwapController = require("../controllers/faceSwap.controller");
 
 faceSwapRouter.get("/generate-image", faceSwapController.generateImage);
 
-faceSwapRouter.get("/styles/styles-data", faceSwapController.getAllStylesData);
+faceSwapRouter.get("/styles/category-styles-data", faceSwapController.getAllCategoryStylesData);
 
 module.exports = faceSwapRouter;
