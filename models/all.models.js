@@ -319,6 +319,7 @@ const returnedOrderModel = mongoose.model("returned_order", returnedOrderSchema)
 // Create Face Swap Style Schema
 
 const faceSwapStyleSchema = mongoose.Schema({
+    categoryName: String,
     imgSrcList: Array,
     sortNumber: Number,
 });
