@@ -18,162 +18,162 @@ const faceSwapStyleStylesData = [
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/1.jpg",
-            "assets/images/styles/faceSwap/Men/V/1.jpg",
-            "assets/images/styles/faceSwap/Men/S/1.jpg",
+            "assets/images/styles/faceSwap/Man/H/1.jpg",
+            "assets/images/styles/faceSwap/Man/V/1.jpg",
+            "assets/images/styles/faceSwap/Man/S/1.jpg",
         ],
         sortNumber: 1,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/2.jpg",
-            "assets/images/styles/faceSwap/Men/V/2.jpg",
-            "assets/images/styles/faceSwap/Men/S/2.jpg",
+            "assets/images/styles/faceSwap/Man/H/2.jpg",
+            "assets/images/styles/faceSwap/Man/V/2.jpg",
+            "assets/images/styles/faceSwap/Man/S/2.jpg",
         ],
         sortNumber: 2,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/3.jpg",
-            "assets/images/styles/faceSwap/Men/V/3.jpg",
-            "assets/images/styles/faceSwap/Men/S/3.jpg",
+            "assets/images/styles/faceSwap/Man/H/3.jpg",
+            "assets/images/styles/faceSwap/Man/V/3.jpg",
+            "assets/images/styles/faceSwap/Man/S/3.jpg",
         ],
         sortNumber: 3,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/4.jpg",
-            "assets/images/styles/faceSwap/Men/V/4.jpg",
-            "assets/images/styles/faceSwap/Men/S/4.jpg",
+            "assets/images/styles/faceSwap/Man/H/4.jpg",
+            "assets/images/styles/faceSwap/Man/V/4.jpg",
+            "assets/images/styles/faceSwap/Man/S/4.jpg",
         ],
         sortNumber: 4,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/5.jpg",
-            "assets/images/styles/faceSwap/Men/V/5.jpg",
-            "assets/images/styles/faceSwap/Men/S/5.jpg",
+            "assets/images/styles/faceSwap/Man/H/5.jpg",
+            "assets/images/styles/faceSwap/Man/V/5.jpg",
+            "assets/images/styles/faceSwap/Man/S/5.jpg",
         ],
         sortNumber: 5,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/6.jpg",
-            "assets/images/styles/faceSwap/Men/V/6.jpg",
-            "assets/images/styles/faceSwap/Men/S/6.jpg",
+            "assets/images/styles/faceSwap/Man/H/6.jpg",
+            "assets/images/styles/faceSwap/Man/V/6.jpg",
+            "assets/images/styles/faceSwap/Man/S/6.jpg",
         ],
         sortNumber: 6,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/7.jpg",
-            "assets/images/styles/faceSwap/Men/V/7.jpg",
-            "assets/images/styles/faceSwap/Men/S/7.jpg",
+            "assets/images/styles/faceSwap/Man/H/7.jpg",
+            "assets/images/styles/faceSwap/Man/V/7.jpg",
+            "assets/images/styles/faceSwap/Man/S/7.jpg",
         ],
         sortNumber: 7,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/8.jpg",
-            "assets/images/styles/faceSwap/Men/V/8.jpg",
-            "assets/images/styles/faceSwap/Men/S/8.jpg",
+            "assets/images/styles/faceSwap/Man/H/8.jpg",
+            "assets/images/styles/faceSwap/Man/V/8.jpg",
+            "assets/images/styles/faceSwap/Man/S/8.jpg",
         ],
         sortNumber: 8,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/9.jpg",
-            "assets/images/styles/faceSwap/Men/V/9.jpg",
-            "assets/images/styles/faceSwap/Men/S/9.jpg",
+            "assets/images/styles/faceSwap/Man/H/9.jpg",
+            "assets/images/styles/faceSwap/Man/V/9.jpg",
+            "assets/images/styles/faceSwap/Man/S/9.jpg",
         ],
         sortNumber: 9,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/10.jpg",
-            "assets/images/styles/faceSwap/Men/V/10.jpg",
-            "assets/images/styles/faceSwap/Men/S/10.jpg",
+            "assets/images/styles/faceSwap/Man/H/10.jpg",
+            "assets/images/styles/faceSwap/Man/V/10.jpg",
+            "assets/images/styles/faceSwap/Man/S/10.jpg",
         ],
         sortNumber: 10,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/11.jpg",
-            "assets/images/styles/faceSwap/Men/V/11.jpg",
-            "assets/images/styles/faceSwap/Men/S/11.jpg",
+            "assets/images/styles/faceSwap/Man/H/11.jpg",
+            "assets/images/styles/faceSwap/Man/V/11.jpg",
+            "assets/images/styles/faceSwap/Man/S/11.jpg",
         ],
         sortNumber: 11,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/12.jpg",
-            "assets/images/styles/faceSwap/Men/V/12.jpg",
-            "assets/images/styles/faceSwap/Men/S/12.jpg",
+            "assets/images/styles/faceSwap/Man/H/12.jpg",
+            "assets/images/styles/faceSwap/Man/V/12.jpg",
+            "assets/images/styles/faceSwap/Man/S/12.jpg",
         ],
         sortNumber: 12,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/13.jpg",
-            "assets/images/styles/faceSwap/Men/V/13.jpg",
-            "assets/images/styles/faceSwap/Men/S/13.jpg",
+            "assets/images/styles/faceSwap/Man/H/13.jpg",
+            "assets/images/styles/faceSwap/Man/V/13.jpg",
+            "assets/images/styles/faceSwap/Man/S/13.jpg",
         ],
         sortNumber: 13,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/14.jpg",
-            "assets/images/styles/faceSwap/Men/V/14.jpg",
-            "assets/images/styles/faceSwap/Men/S/14.jpg",
+            "assets/images/styles/faceSwap/Man/H/14.jpg",
+            "assets/images/styles/faceSwap/Man/V/14.jpg",
+            "assets/images/styles/faceSwap/Man/S/14.jpg",
         ],
         sortNumber: 14,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/15.jpg",
-            "assets/images/styles/faceSwap/Men/V/15.jpg",
-            "assets/images/styles/faceSwap/Men/S/15.jpg",
+            "assets/images/styles/faceSwap/Man/H/15.jpg",
+            "assets/images/styles/faceSwap/Man/V/15.jpg",
+            "assets/images/styles/faceSwap/Man/S/15.jpg",
         ],
         sortNumber: 15,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/16.jpg",
-            "assets/images/styles/faceSwap/Men/V/16.jpg",
-            "assets/images/styles/faceSwap/Men/S/16.jpg",
+            "assets/images/styles/faceSwap/Man/H/16.jpg",
+            "assets/images/styles/faceSwap/Man/V/16.jpg",
+            "assets/images/styles/faceSwap/Man/S/16.jpg",
         ],
         sortNumber: 16,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/17.jpg",
-            "assets/images/styles/faceSwap/Men/V/17.jpg",
-            "assets/images/styles/faceSwap/Men/S/17.jpg",
+            "assets/images/styles/faceSwap/Man/H/17.jpg",
+            "assets/images/styles/faceSwap/Man/V/17.jpg",
+            "assets/images/styles/faceSwap/Man/S/17.jpg",
         ],
         sortNumber: 17,
     },
     {
         categoryName: "Man",
         imgSrcList: [
-            "assets/images/styles/faceSwap/Men/H/18.jpg",
-            "assets/images/styles/faceSwap/Men/V/18.jpg",
-            "assets/images/styles/faceSwap/Men/S/18.jpg",
+            "assets/images/styles/faceSwap/Man/H/18.jpg",
+            "assets/images/styles/faceSwap/Man/V/18.jpg",
+            "assets/images/styles/faceSwap/Man/S/18.jpg",
         ],
         sortNumber: 18,
     },
@@ -340,6 +340,60 @@ const faceSwapStyleStylesData = [
         sortNumber: 18,
     },
     {
+        categoryName: "Flicka",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Flicka/H/19.jpg",
+            "assets/images/styles/faceSwap/Flicka/V/19.jpg",
+            "assets/images/styles/faceSwap/Flicka/S/19.jpg",
+        ],
+        sortNumber: 19,
+    },
+    {
+        categoryName: "Flicka",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Flicka/H/20.jpg",
+            "assets/images/styles/faceSwap/Flicka/V/20.jpg",
+            "assets/images/styles/faceSwap/Flicka/S/20.jpg",
+        ],
+        sortNumber: 20,
+    },
+    {
+        categoryName: "Flicka",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Flicka/H/21.jpg",
+            "assets/images/styles/faceSwap/Flicka/V/21.jpg",
+            "assets/images/styles/faceSwap/Flicka/S/21.jpg",
+        ],
+        sortNumber: 21,
+    },
+    {
+        categoryName: "Flicka",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Flicka/H/22.jpg",
+            "assets/images/styles/faceSwap/Flicka/V/22.jpg",
+            "assets/images/styles/faceSwap/Flicka/S/2.jpg",
+        ],
+        sortNumber: 22,
+    },
+    {
+        categoryName: "Flicka",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Flicka/H/23.jpg",
+            "assets/images/styles/faceSwap/Flicka/V/23.jpg",
+            "assets/images/styles/faceSwap/Flicka/S/23.jpg",
+        ],
+        sortNumber: 23,
+    },
+    {
+        categoryName: "Flicka",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Flicka/H/24.jpg",
+            "assets/images/styles/faceSwap/Flicka/V/24.jpg",
+            "assets/images/styles/faceSwap/Flicka/S/24.jpg",
+        ],
+        sortNumber: 24,
+    },
+    {
         categoryName: "Pojke",
         imgSrcList: [
             "assets/images/styles/faceSwap/Pojke/H/1.jpg",
@@ -502,6 +556,33 @@ const faceSwapStyleStylesData = [
         sortNumber: 18,
     },
     {
+        categoryName: "Pojke",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Pojke/H/19.jpg",
+            "assets/images/styles/faceSwap/Pojke/V/19.jpg",
+            "assets/images/styles/faceSwap/Pojke/S/19.jpg",
+        ],
+        sortNumber: 19,
+    },
+    {
+        categoryName: "Pojke",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Pojke/H/20.jpg",
+            "assets/images/styles/faceSwap/Pojke/V/20.jpg",
+            "assets/images/styles/faceSwap/Pojke/S/20.jpg",
+        ],
+        sortNumber: 20,
+    },
+    {
+        categoryName: "Pojke",
+        imgSrcList: [
+            "assets/images/styles/faceSwap/Pojke/H/21.jpg",
+            "assets/images/styles/faceSwap/Pojke/V/21.jpg",
+            "assets/images/styles/faceSwap/Pojke/S/21.jpg",
+        ],
+        sortNumber: 21,
+    },
+    {
         categoryName: "Kvinna",
         imgSrcList: [
             "assets/images/styles/faceSwap/Kvinna/H/1.jpg",
@@ -626,42 +707,6 @@ const faceSwapStyleStylesData = [
             "assets/images/styles/faceSwap/Kvinna/S/14.jpg",
         ],
         sortNumber: 14,
-    },
-    {
-        categoryName: "Kvinna",
-        imgSrcList: [
-            "assets/images/styles/faceSwap/Kvinna/H/15.jpg",
-            "assets/images/styles/faceSwap/Kvinna/V/15.jpg",
-            "assets/images/styles/faceSwap/Kvinna/S/15.jpg",
-        ],
-        sortNumber: 15,
-    },
-    {
-        categoryName: "Kvinna",
-        imgSrcList: [
-            "assets/images/styles/faceSwap/Kvinna/H/16.jpg",
-            "assets/images/styles/faceSwap/Kvinna/V/16.jpg",
-            "assets/images/styles/faceSwap/Kvinna/S/16.jpg",
-        ],
-        sortNumber: 16,
-    },
-    {
-        categoryName: "Kvinna",
-        imgSrcList: [
-            "assets/images/styles/faceSwap/Kvinna/H/17.jpg",
-            "assets/images/styles/faceSwap/Kvinna/V/17.jpg",
-            "assets/images/styles/faceSwap/Kvinna/S/17.jpg",
-        ],
-        sortNumber: 17,
-    },
-    {
-        categoryName: "Kvinna",
-        imgSrcList: [
-            "assets/images/styles/faceSwap/Kvinna/H/18.jpg",
-            "assets/images/styles/faceSwap/Kvinna/V/18.jpg",
-            "assets/images/styles/faceSwap/Kvinna/S/18.jpg",
-        ],
-        sortNumber: 18,
     },
 ];
 
