@@ -54,6 +54,8 @@ app.use("/image-to-image", imageToImageRouter);
 
 app.use("/orders", ordersRouter);
 
+app.use("/returned-orders", returnedOrdersRouter);
+
 app.use("/generated-images", generatedImagesRouter);
 
 app.use("/prices", pricesRouter);

@@ -65,7 +65,26 @@ async function getAllCategoryStylesData(req, res) {
     }
 }
 
+async function addNewStyle(req, res) {
+    try{
+        const styleImageFiles = {...Object.assign({}, req.files)};
+        const imagePaths = [
+            styleImageFiles.verticalStyleImage[0].path,
+            styleImageFiles.horizontalStyleImage[0].path,
+            styleImageFiles.squareStyleImage[0].path,
+        ];
+        const categoryName = req.query.categoryName;
+        const { addNewStyle } = require("../models/faceSwapStyle.model");
+        const result = await addNewStyle(imagePaths, categoryName);
+        await res.json(result);
+    }
+    catch(err) {
+        await res.status(500).json(err);
+    }
+}
+
 module.exports = {
     generateImage,
     getAllCategoryStylesData,
+    addNewStyle,
 }
