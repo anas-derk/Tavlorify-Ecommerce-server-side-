@@ -1,10 +1,22 @@
-// Import Mongoose And Product Prices Model Object
+const mongoose = require("mongoose");
 
-const { mongoose, productPricesModel } = require("../models/all.models");
+require("dotenv").config({
+    path: "../.env",
+});
 
-// Import Database URL
+// Create Product Prices Schema
 
-const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
+const productPricesSchema = mongoose.Schema({
+    productName: String,
+    dimentions: String,
+    position: String,
+    priceBeforeDiscount: Number,
+    priceAfterDiscount: Number,
+});
+
+// Create Product Prices Model From Product Prices Schema
+
+const productPricesModel = mongoose.model("prices", productPricesSchema);
 
 const productPricesData = [
     {

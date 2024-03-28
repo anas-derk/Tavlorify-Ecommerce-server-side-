@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-const DB_URL = "mongodb://127.0.0.1:27017/tavlorify-store";
+require("dotenv").config({
+    path: "../.env",
+});
 
 // Create Text To Image Category Schema
 

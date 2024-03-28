@@ -1,6 +1,6 @@
-// Import Mongoose And Admin Model Object
+// Import Admin, Text To Image Style Model And Image To Image Style Model Object
 
-const { mongoose, adminModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
+const { adminModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
 
 // require bcryptjs module for password encrypting
 
@@ -8,57 +8,39 @@ const bcrypt = require("bcryptjs");
 
 async function adminLogin(email, password) {
     try {
-        // Connect To DB
-        await mongoose.connect(process.env.DB_URL);
-        // Check If Email Is Exist
-        let user = await adminModel.findOne({ email });
+        const user = await adminModel.findOne({ email });
         if (user) {
             // Check From Password
-            let isTruePassword = await bcrypt.compare(password, user.password);
-            await mongoose.disconnect();
+            const isTruePassword = await bcrypt.compare(password, user.password);
             if (isTruePassword) return user;
-            else return "Sorry, The Password Entereted Is Not True !!"
+            return "Sorry, The Password Entereted Is Not True !!";
         }
-        else {
-            mongoose.disconnect();
-            return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
-        }
+        return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
     }
     catch (err) {
-        console.log(err);
-        // Disconnect In DB
-        await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
 async function handleChangeStyleImagePath(model, styleId, newFilePath) {
     const styleData = await model.findById(styleId);
     if (!styleData) {
-        await mongoose.disconnect();
         return "sorry, this style is not found";
-    } else {
-        await model.updateOne({
-            _id: styleId,
-        }, { imgSrc: newFilePath });
-        await mongoose.disconnect();
-        return styleData.imgSrc;
     }
+    await model.updateOne({
+        _id: styleId,
+    }, { imgSrc: newFilePath });
+    return styleData.imgSrc;
 }
 
 async function updateStyleImagePath(service, styleId, newFilePath) {
     try {
-        // Connect To DB
-        await mongoose.connect(process.env.DB_URL);
         if (service === "text-to-image") {
             return handleChangeStyleImagePath(textToImageStyleModel, styleId, newFilePath);
         } else {
             return handleChangeStyleImagePath(imageToImageStyleModel, styleId, newFilePath);
         }
     } catch (err) {
-        console.log(err);
-        // Disconnect In DB
-        await mongoose.disconnect();
         throw Error(err);
     }
 }

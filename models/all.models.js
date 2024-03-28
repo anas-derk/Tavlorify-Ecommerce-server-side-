@@ -1,6 +1,6 @@
 // Import Mongoose
 
-const mongoose = require("mongoose");
+const { mongoose } = require("../server");
 
 // Create Admin Schema
 
@@ -329,7 +329,6 @@ const faceSwapStyleSchema = mongoose.Schema({
 const faceSwapStyleModel = mongoose.model("face_swap_style", faceSwapStyleSchema);
 
 module.exports = {
-    mongoose,
     adminModel,
     textToImageStyleModel,
     textToImageCategoryModel,

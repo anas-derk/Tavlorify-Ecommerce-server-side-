@@ -15,7 +15,7 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-require('dotenv').config();
+require("dotenv").config();
 
 /* End Config The Server */
 
@@ -29,37 +29,51 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 /* Start Running The Server */
 
+const mongoose = require("mongoose");
+
 const PORT = process.env.PORT || 5300;
 
-app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:${PORT}`));
+app.listen(PORT, async () => {
+    console.log(`The Server Is Running On: http://localhost:${PORT}`);
+    await mongoose.connect(process.env.DB_URL);
+});
 
 /* End Running The Server */
 
 /* Start Handle The Routes */
 
-const adminRouter = require("./routes/admin.router"),
-    textToImageRouter = require("./routes/textToImage.router"),
-    imageToImageRouter = require("./routes/imageToImage.router"),
-    ordersRouter = require("./routes/orders.router"),
-    generatedImagesRouter = require("./routes/generatedImages.router"),
-    pricesRouter = require("./routes/prices.router"),
-    returnedOrdersRouter = require("./routes/returnedOrders.router"),
-    faceSwapRouter = require("./routes/faceSwap.router");
+app.use("/admin", require("./routes/admin.router"));
 
-app.use("/admin", adminRouter);
+app.use("/text-to-image", require("./routes/textToImage.router"));
 
-app.use("/text-to-image", textToImageRouter);
+app.use("/image-to-image", require("./routes/imageToImage.router"));
 
-app.use("/image-to-image", imageToImageRouter);
+app.use("/orders", require("./routes/orders.router"));
 
-app.use("/orders", ordersRouter);
+app.use("/returned-orders",  require("./routes/returnedOrders.router"));
 
-app.use("/returned-orders", returnedOrdersRouter);
+app.use("/generated-images", require("./routes/generatedImages.router"));
 
-app.use("/generated-images", generatedImagesRouter);
+app.use("/prices", require("./routes/prices.router"));
 
-app.use("/prices", pricesRouter);
-
-app.use("/face-swap", faceSwapRouter);
+app.use("/face-swap", require("./routes/faceSwap.router"));
 
 /* End Handle The Routes */
+
+/* Start Handling Events */
+
+mongoose.connection.on("connected", () => console.log("connected"));
+mongoose.connection.on("disconnected", () => console.log("disconnected"));
+mongoose.connection.on("reconnected", () => console.log("reconnected"));
+mongoose.connection.on("disconnecting", () => console.log("disconnecting"));
+mongoose.connection.on("close", () => console.log("close"));
+
+process.on("SIGINT", async () => {
+    await mongoose.connection.close();
+});
+
+/* End Handling Events */
+
+module.exports = {
+    mongoose,
+}

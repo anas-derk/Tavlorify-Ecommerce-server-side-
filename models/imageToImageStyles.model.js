@@ -1,32 +1,22 @@
-// Import Mongoose And Image To Image Style Model Object
+// Import Image To Image Style Model Object
 
-const { mongoose, imageToImageStyleModel } = require("../models/all.models");
+const { imageToImageStyleModel } = require("../models/all.models");
 
 async function get_all_category_Styles_Data(categoryName){
     try {
-        // Connect To DB
-        await mongoose.connect(process.env.DB_URL);
-        // Check If Email Is Exist
-        let categoryStylesData = await imageToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
+        const categoryStylesData = await imageToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
         if (categoryStylesData) {
-            await mongoose.disconnect();
             return categoryStylesData;
         }
-        else {
-            mongoose.disconnect();
-            return "Sorry, There Is No Styles For This Category Data Now !!";
-        }
+        return "Sorry, There Is No Styles For This Category Data Now !!";
     }
     catch (err) {
-        // Disconnect In DB
-        await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
 async function addNewStyle(styleData) {
     try {
-        await mongoose.connect(process.env.DB_URL);
         const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName: styleData.categoryName });
         const newStyleData = new imageToImageStyleModel({
             imgSrc: styleData.imgSrc,
@@ -40,19 +30,15 @@ async function addNewStyle(styleData) {
             sortNumber: stylesCount + 1,
         });
         await newStyleData.save();
-        await mongoose.disconnect();
         return "Adding New Category Style For Image To Image Page Process Is Succesfuly !!";
     }
     catch (err) {
-        await mongoose.disconnect();
-        throw Error("Sorry, Error In Process, Please Repeated This Process !!");
+        throw Error(err);
     }
 }
 
 async function updateStyleData(styleId, categoryName, newCategoryStyleInfo){
     try {
-        // Connect To DB
-        await mongoose.connect(process.env.DB_URL);
         const theSecondStyle = await imageToImageStyleModel.findOne({ sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber, categoryName });
         const theFirstStyle = await imageToImageStyleModel.findOneAndUpdate({ _id: styleId }, {
             name: newCategoryStyleInfo.newName,
@@ -67,25 +53,19 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleInfo){
         }, {
             sortNumber: theFirstStyle.sortNumber,
         });
-        await mongoose.disconnect();
     }
     catch (err) {
-        // Disconnect In DB
-        await mongoose.disconnect();
         throw Error(err);
     }
 }
 
 async function deleteStyleData(styleId, categoryName) {
     try {
-        // Connect To DB
-        await mongoose.connect(process.env.DB_URL);
         const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName: categoryName });
         const styleData = await imageToImageStyleModel.findOneAndDelete({
             _id: styleId,
         });
         if (!styleData) {
-            await mongoose.disconnect();
             return "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!";
         } else {
             if (stylesCount !== styleData.sortNumber) {
@@ -111,14 +91,10 @@ async function deleteStyleData(styleId, categoryName) {
                 await imageToImageStyleModel.deleteMany({ categoryName: categoryName });
                 await imageToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
             }
-            await mongoose.disconnect();
             return styleData.imgSrc;
         }
     }
     catch (err) {
-        console.log(err);
-        // Disconnect In DB
-        await mongoose.disconnect();
         throw Error(err);
     }
 }

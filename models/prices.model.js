@@ -1,23 +1,19 @@
-// Import Mongoose And Product Prices Model Object
+// Import Product Prices Model Object
 
-const { mongoose, productPricesModel } = require("../models/all.models");
+const { productPricesModel } = require("../models/all.models");
 
 async function getPricesByProductName(productName) {
     try{
-        await mongoose.connect(process.env.DB_URL);
         const pricesListByProductName = await productPricesModel.find({ productName });
-        await mongoose.disconnect();
         return pricesListByProductName;
     }
     catch(err) {
-        await mongoose.disconnect();
         throw Error(err);
     }
 }
 
 async function getPriceByProductDetails(productName, position, dimentions) {
     try{
-        await mongoose.connect(process.env.DB_URL);
         let productPrices;
         switch(productName) {
             case "poster": {
@@ -76,18 +72,15 @@ async function getPriceByProductDetails(productName, position, dimentions) {
                 console.log("Invalid Product Name !!");
             }
         }
-        await mongoose.disconnect();
         return productPrices;
     }
     catch(err) {
-        await mongoose.disconnect();
         throw Error(err);
     }
 }
 
 async function updateProductPrice(productId, newProductPriceBeforeDiscount, newProductPriceAfterDiscount) {
     try{
-        await mongoose.connect(process.env.DB_URL);
         await productPricesModel.updateOne(
             { _id: productId },
             {
@@ -95,11 +88,9 @@ async function updateProductPrice(productId, newProductPriceBeforeDiscount, newP
                 priceAfterDiscount: newProductPriceAfterDiscount
             }
         );
-        await mongoose.disconnect();
         return "Updating Product Price Process Has Been Successfuly !!";
     }
     catch(err) {
-        await mongoose.disconnect();
         throw Error(err);
     }
 }
