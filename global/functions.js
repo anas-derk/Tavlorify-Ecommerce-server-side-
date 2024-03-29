@@ -1,18 +1,46 @@
+const { join } = require("path");
+const { readFileSync } = require("fs");
+const { compile } = require("ejs");
+
 function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
+}
+
+function getResponseObject(msg, isError, data) {
+    return {
+        msg,
+        error: isError,
+        data,
+    }
 }
 
 function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes) {
     for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
         if (fieldnameAndValueAndDataType.isRequiredValue) {
             if (!fieldnameAndValueAndDataType.fieldValue) 
-                return `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`;
+                return getResponseObject(
+                    `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`,
+                    true,
+                    {}
+                );
         }
         if (fieldnameAndValueAndDataType.fieldValue) {
+            if (fieldnameAndValueAndDataType.dataType === "number" && isNaN(fieldnameAndValueAndDataType.fieldValue)) {
+                return getResponseObject(
+                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
+                    true,
+                    {}
+                );
+            } 
             if (typeof fieldnameAndValueAndDataType.fieldValue !== fieldnameAndValueAndDataType.dataType)
-                return `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`;
+                return getResponseObject(
+                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
+                    true,
+                    {}
+                );
         }
     }
+    return getResponseObject("Success In Check Is Exist Value For Fields And Data Types !!", false, {});
 }
 
 function calcOrderAmount(order_lines) {
@@ -105,10 +133,6 @@ function transporterObj() {
     });
     return transporter;
 }
-
-const { join } = require("path");
-const { readFileSync } = require("fs");
-const { compile } = require("ejs");
 
 function sendPaymentConfirmationMessage(email, orderDetails) {
     const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_template.ejs"), "utf-8");

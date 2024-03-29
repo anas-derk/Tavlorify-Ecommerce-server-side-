@@ -2,6 +2,8 @@ const adminRouter = require("express").Router();
 
 const adminController = require("../controllers/admin.controller");
 
+const { validateJWT } = require("../middlewares/global.middlewares");
+
 const multer = require("multer");
 
 function checkServiceName(req, res, next) {
@@ -11,6 +13,8 @@ function checkServiceName(req, res, next) {
 }
 
 adminRouter.get("/login", adminController.getAdminLogin);
+
+adminRouter.get("/user-info", validateJWT, adminController.getAdminUserInfo);
 
 adminRouter.put("/update-style-image", checkServiceName, multer({
     storage: multer.diskStorage({

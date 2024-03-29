@@ -2,22 +2,56 @@
 
 const { adminModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
 
-// require bcryptjs module for password encrypting
-
-const bcrypt = require("bcryptjs");
+const { compare } = require("bcryptjs");
 
 async function adminLogin(email, password) {
     try {
+        // Check If Email Is Exist
         const user = await adminModel.findOne({ email });
         if (user) {
+            // require bcryptjs module for password encrypting
             // Check From Password
-            const isTruePassword = await bcrypt.compare(password, user.password);
-            if (isTruePassword) return user;
-            return "Sorry, The Password Entereted Is Not True !!";
+            const isTruePassword = await compare(password, user.password);
+            if (isTruePassword)
+                return {
+                    msg: "Admin Logining Process Has Been Successfully !!",
+                    error: false,
+                    data: {
+                        _id: user._id,
+                    },
+                };
+            return {
+                msg: "Sorry, The Email Or Password Is Not Valid !!",
+                error: true,
+                data: {},
+            }
         }
-        return "Sorry, The User Is Not Exist !!, Please Enter Another Email ..";
+        return {
+            msg: "Sorry, The Email Or Password Is Not Valid !!",
+            error: true,
+            data: {},
+        }
     }
     catch (err) {
+        throw Error(err);
+    }
+}
+
+async function getAdminUserInfo(userId) {
+    try {
+        // Check If User Is Exist
+        const user = await adminModel.findById(userId);
+        if (user) return {
+            msg: `Get Admin Info For Id: ${user._id} Process Has Been Successfully !!`,
+            error: false,
+            data: user,
+        }
+        return {
+            msg: "Sorry, The User Is Not Exist, Please Enter Another User Id !!",
+            error: true,
+            data: {},
+        }
+    } catch (err) {
         throw Error(err);
     }
 }
@@ -37,9 +71,8 @@ async function updateStyleImagePath(service, styleId, newFilePath) {
     try {
         if (service === "text-to-image") {
             return handleChangeStyleImagePath(textToImageStyleModel, styleId, newFilePath);
-        } else {
-            return handleChangeStyleImagePath(imageToImageStyleModel, styleId, newFilePath);
         }
+        return handleChangeStyleImagePath(imageToImageStyleModel, styleId, newFilePath);
     } catch (err) {
         throw Error(err);
     }
@@ -47,5 +80,6 @@ async function updateStyleImagePath(service, styleId, newFilePath) {
 
 module.exports = {
     adminLogin,
+    getAdminUserInfo,
     updateStyleImagePath,
 }
