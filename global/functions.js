@@ -158,6 +158,7 @@ function sendPaymentConfirmationMessage(email, orderDetails) {
 
 module.exports = {
     isEmail,
+    getResponseObject,
     checkIsExistValueForFieldsAndDataTypes,
     calcOrderAmount,
     saveNewGeneratedImage,

@@ -4,13 +4,15 @@ const textToImageController = require("../controllers/textToTomage.controller");
 
 const multer = require("multer");
 
+const { validateJWT } = require("../middlewares/global.middlewares");
+
 textToImageRouter.get("/categories/all-categories-data", textToImageController.getAllCategoriesData);
 
 textToImageRouter.get("/styles/category-styles-data", textToImageController.get_all_category_styles_data);
 
 textToImageRouter.get("/generate-image", textToImageController.generateImage);
 
-textToImageRouter.post("/categories/add-new-category", multer({
+textToImageRouter.post("/categories/add-new-category", validateJWT, multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             if (file.fieldname === "categoryImgFile") {
@@ -23,13 +25,28 @@ textToImageRouter.post("/categories/add-new-category", multer({
         filename: (req, file, cb) => {
             cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
         },
-    })
+    }),
+    fileFilter: (req, file, cb) => {
+        if (!file) {
+            req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
+            return cb(null, false);
+        }
+        if (
+            file.mimetype !== "image/jpeg" &&
+            file.mimetype !== "image/png" &&
+            file.mimetype !== "image/webp"
+        ){
+            req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+            return cb(null, false);
+        }
+        cb(null, true);
+    }
 }).fields([{
     name: "categoryImgFile",
     maxCount: 1,
 }, { name: "styleImgFile", maxCount: 1 }]), textToImageController.addNewCategory);
 
-textToImageRouter.post("/styles/add-new-style", multer({
+textToImageRouter.post("/styles/add-new-style", validateJWT, multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             cb(null, "./assets/images/styles/textToImage");
@@ -37,7 +54,22 @@ textToImageRouter.post("/styles/add-new-style", multer({
         filename: (req, file, cb) => {
             cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
         },
-    })
+    }),
+    fileFilter: (req, file, cb) => {
+        if (!file) {
+            req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
+            return cb(null, false);
+        }
+        if (
+            file.mimetype !== "image/jpeg" &&
+            file.mimetype !== "image/png" &&
+            file.mimetype !== "image/webp"
+        ){
+            req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+            return cb(null, false);
+        }
+        cb(null, true);
+    }
 }).single("styleImgFile"), textToImageController.addNewStyle);
 
 textToImageRouter.put("/categories/update-category-data/:categoryId", textToImageController.putCategoryData);

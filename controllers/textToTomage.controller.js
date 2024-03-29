@@ -1,8 +1,9 @@
+const { getResponseObject, checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
 async function getAllCategoriesData(req, res) {
     try{
         const { getAllCategoriesData } = require("../models/textToImageCategories.model");
-        const result = await getAllCategoriesData();
-        await res.json(result);
+        await res.json(await getAllCategoriesData());
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -12,7 +13,6 @@ async function getAllCategoriesData(req, res) {
 async function get_all_category_styles_data(req, res) {
     try{
         const categoryName = req.query.categoryName;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
         ]);
@@ -21,8 +21,7 @@ async function get_all_category_styles_data(req, res) {
             return;
         }
         const { get_all_category_styles_data } = require("../models/textToImageStyles.model");
-        const result = await get_all_category_styles_data(categoryName);
-        await res.json(result);
+        await res.json(await get_all_category_styles_data(categoryName));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -162,10 +161,14 @@ async function generateImage(req, res) {
                 if (result.msg && result.msg === "success file downloaded !!") {
                     generatedImagePathInServer = result.imagePath;
                     generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
-                    await res.json(result.imagePath);
+                    await res.json({
+                        msg: "Generating Image Process Has Been Successfully !!",
+                        error: false,
+                        data: result.imagePath,
+                    });
                 }
             } else {
-                await res.status(500).json("Error In Generating");
+                await res.status(500).json(getResponseObject("Error In Generating", true, {}));
             }
         }
     }
@@ -180,6 +183,11 @@ async function generateImage(req, res) {
 
 async function addNewCategory(req, res) {
     try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            await res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
         const bodyData = req.body;
         const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
@@ -198,8 +206,7 @@ async function addNewCategory(req, res) {
             ...Object.assign({}, req.files),
         };
         const { addNewCategory } = require("../models/textToImageCategories.model");
-        const result = await addNewCategory(categoryInfo);
-        await res.json(result);
+        await res.json(await addNewCategory(categoryInfo));
     }
     catch(err) {
         const { unlinkSync } = require("fs");
@@ -211,6 +218,11 @@ async function addNewCategory(req, res) {
 
 async function addNewStyle(req, res) {
     try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            await res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
         const bodyData = req.body;
         const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
@@ -229,8 +241,7 @@ async function addNewStyle(req, res) {
             imgSrc: req.file.path,
         };
         const { addNewStyle } = require("../models/textToImageStyles.model");
-        const result = await addNewStyle(styleData);
-        await res.json(result);
+        await res.json(await addNewStyle(styleData));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

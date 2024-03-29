@@ -4,8 +4,7 @@ const { textToImageCategoryModel, textToImageStyleModel } = require("../models/a
 
 async function getAllCategoriesData() {
     try {
-        const categorieData = await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
-        return categorieData;
+        return await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
     }
     catch (err) {
         throw Error(err);
@@ -31,11 +30,13 @@ async function addNewCategory(categoryInfo) {
             sortNumber: 1,
         });
         await newStyle.save();
-        return "Add New Category And First Style For Text To Image Page Is Successfuly !!";
+        return {
+            msg: "Adding New Category And First Style For Text To Image Page Process Has Been Successfuly !!",
+            error: false,
+            data: {},
+        };
     }
     catch (err) {
-        // Disconnect In DB
-        await mongoose.disconnect();
         throw Error(err);
     }
 }

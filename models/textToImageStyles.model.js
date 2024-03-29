@@ -4,12 +4,10 @@ const { textToImageStyleModel } = require("../models/all.models");
 
 async function get_all_category_styles_data(categoryName) {
     try {
-        const categoryStylesData = await textToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
-        if (categoryStylesData) {
-            return categoryStylesData;
-        }
-        else {
-            return "Sorry, There Is No Styles For This Category Data Now !!";
+        return {
+            msg: "Get All Category Styles Data Process Has Been Successfully !!",
+            error: false,
+            data: await textToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 }),
         }
     }
     catch (err) {
@@ -30,7 +28,11 @@ async function addNewStyle(styleData) {
             sortNumber: stylesCount + 1,
         });
         await newStyleData.save();
-        return "Adding New Category Style For Text To Image Page Process Is Succesfuly !!";
+        return {
+            msg: "Adding New Category Style For Text To Image Page Process Is Succesfuly !!",
+            error: false,
+            data: await textToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 }),
+        }
     }
     catch (err) {
         throw Error(err);
