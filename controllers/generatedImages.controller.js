@@ -1,7 +1,8 @@
+const { getResponseObject, checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
 async function getAllGeneratedImagesDataInsideThePage(req, res) {
     try{
         const filters = req.query;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Service Name", fieldValue: filters.service, dataType: "string", isRequiredValue: true },
             { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
@@ -26,7 +27,6 @@ async function getAllGeneratedImagesDataInsideThePage(req, res) {
 async function getGeneratedImagesDataCount(req, res) {
     try{
         const filters = req.query;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Service Name", fieldValue: filters.service, dataType: "string", isRequiredValue: true },
             { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
@@ -47,7 +47,6 @@ async function getGeneratedImagesDataCount(req, res) {
 async function postNewGeneratedImageData(req, res) {
     try{
         const generatedImageData = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Service Name", fieldValue: generatedImageData.service, dataType: "string", isRequiredValue: true },
             { fieldName: "Upload Image URL", fieldValue: generatedImageData.uploadedImageURL, dataType: "string", isRequiredValue: generatedImageData.service === "image-to-image" },
@@ -85,7 +84,6 @@ async function postNewGeneratedImageData(req, res) {
 async function postImageAfterCroping(req, res) {
     try {
         const cropingDetails = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Width", fieldValue: Number(cropingDetails.width), dataType: "number", isRequiredValue: true },
             { fieldName: "Height", fieldValue: Number(cropingDetails.height), dataType: "number", isRequiredValue: true },
@@ -119,7 +117,6 @@ async function postImageAfterCroping(req, res) {
 async function deleteGeneratedImageData(req, res) {
     try{
         const generatedImageDataId = req.params.generatedImageDataId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Generated Image Data Id", fieldValue: generatedImageDataId, dataType: "string", isRequiredValue: true },
         ]);

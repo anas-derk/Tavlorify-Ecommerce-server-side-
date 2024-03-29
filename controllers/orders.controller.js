@@ -1,7 +1,8 @@
+const { getResponseObject, checkIsExistValueForFieldsAndDataTypes, sendPaymentConfirmationMessage } = require("../global/functions");
+
 async function getAllOrdersInsideThePage(req, res) {
     try{
         const filters = req.query;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: true },
@@ -10,21 +11,8 @@ async function getAllOrdersInsideThePage(req, res) {
             await res.status(400).json(checkResult);
             return;
         }
-        for (let objectKey in filters) {
-            if (
-                objectKey !== "pageNumber" &&
-                objectKey !== "pageSize" &&
-                objectKey !== "orderNumber" &&
-                objectKey !== "_id" &&
-                objectKey !== "klarnaReference" &&
-                objectKey !== "status" &&
-                objectKey !== "customerName" &&
-                objectKey !== "email"
-            ) { await res.status(400).json("Invalid Request, Please Send Valid Keys !!"); return; }
-        }
         const { getAllOrdersInsideThePage } = require("../models/orders.model");
-        const result = await getAllOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters));
-        await res.json(result);
+        await res.json(await getAllOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters)));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -47,7 +35,6 @@ function getFiltersObject(filters) {
 async function getOrdersCount(req, res) {
     try{
         const filters = req.query;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
             { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: false },
@@ -95,19 +82,41 @@ async function getOrderDetails(req, res) {
     }
 }
 
-async function postNewOrderToGelato(req, res) {
-    try {
-        const GELATO_BASE_API_URL = "https://order.gelatoapis.com";
-        const GELATO_API_KEY = "4ed3eafd-b375-4c9c-bcb9-e998af3f7444-45075504-d3a7-4605-9ebb-a63a590096f1:ab1d5850-26a0-4d76-8738-bbefcc109f8f";
-        const axios = require("axios");
-        const response = await axios.post(`${GELATO_BASE_API_URL}/v4/orders`, req.body, {
+async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
+    try{
+        const orderId = req.params.orderId;
+        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { get } = require("axios");
+        const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": GELATO_API_KEY,
+                "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+            },
+        });
+        await res.json(await response.data);
+    }
+    catch(err) {
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
+async function postNewOrderToGelato(req, res) {
+    try {
+        const axios = require("axios");
+        const response = await axios.post(`${process.env.GELATO_BASE_API_URL}/v4/orders`, req.body, {
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": process.env.GELATO_API_KEY,
             }
         });
-        const result = await response.data;
-        await res.json(result);
+        await res.json(await response.data);
     } catch (err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
@@ -124,8 +133,7 @@ async function postNewOrderToKlarna(req, res) {
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        const result = await response.data;
-        await res.json(result);
+        await res.json(await response.data);
     }
     catch (err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -135,8 +143,7 @@ async function postNewOrderToKlarna(req, res) {
 async function postNewOrder(req, res) {
     try{
         const { postNewOrder } = require("../models/orders.model");
-        const result = await postNewOrder();
-        await res.json(result);
+        await res.json(await postNewOrder());
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -168,7 +175,7 @@ async function postKlarnaCheckoutComplete(req, res) {
             const order_lines_after_modify_unit_price_and_total_amount = result.order_lines.map((order_line) => {
                 return { ...order_line, unit_price: order_line.unit_price / 100, total_amount: order_line.total_amount / 100 };
             });
-            const orderNumber = await updateOrder(undefined, {
+            const result1 = await updateOrder(undefined, {
                 klarnaOrderId: orderId,
                 klarnaReference: result.klarna_reference,
                 checkout_status: result.status,
@@ -193,51 +200,26 @@ async function postKlarnaCheckoutComplete(req, res) {
                 },
                 order_lines: order_lines_after_modify_unit_price_and_total_amount,
             });
-            const { v4 } = require("uuid");
-            response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, undefined , {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`,
-                    "Klarna-Idempotency-Key": v4(),
-                },
-            });
-            const { sendPaymentConfirmationMessage } = require("../global/functions");
-            await sendPaymentConfirmationMessage(result.shipping_address.email, {
-                orderNumber: orderNumber,
-                ...result,
-            });
-            await res.json("Updating Order Details Has Been Successfuly !!");
+            if (!result1.error) {
+                const { v4 } = require("uuid");
+                response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, undefined , {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`,
+                        "Klarna-Idempotency-Key": v4(),
+                    },
+                });
+                await sendPaymentConfirmationMessage(result.shipping_address.email, {
+                    orderNumber: result1.data,
+                    ...result,
+                });
+            }
+            await res.json(result1);
         } else {
-            await res.status(400).json("checkout_incomplete");
+            await res.status(400).json(getResponseObject("checkout_incomplete", true, {}));
         }
     }
     catch(err){
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
-    }
-}
-
-async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
-    try{
-        const orderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { get } = require("axios");
-        const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
-            },
-        });
-        const result = await response.data;
-        await res.json(result);
-    }
-    catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
@@ -261,8 +243,7 @@ async function putKlarnaOrder(req, res) {
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        const result = await response.data;
-        await res.json(result);
+        await res.json(await response.data);
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -282,8 +263,7 @@ async function putOrder(req, res) {
             return;
         }
         const { updateOrder } = require("../models/orders.model");
-        await updateOrder(orderId, newOrderDetails);
-        await res.json("Updating Order Details Has Been Successfuly !!");
+        await res.json(await updateOrder(orderId, newOrderDetails));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -305,8 +285,7 @@ async function putOrderProduct(req, res) {
         }
         const newOrderProductDetails = req.body;
         const { updateOrderProduct } = require("../models/orders.model");
-        const result = await updateOrderProduct(orderId, productId, newOrderProductDetails);
-        await res.json(result);
+        await res.json(await updateOrderProduct(orderId, productId, newOrderProductDetails));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -325,8 +304,7 @@ async function deleteOrder(req, res) {
             return;
         }
         const { deleteOrder } = require("../models/orders.model");
-        const result = await deleteOrder(orderId);
-        await res.json(result);
+        await res.json(await deleteOrder(orderId));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -347,8 +325,7 @@ async function deleteProductFromOrder(req, res) {
             return;
         }
         const { deleteProductFromOrder } = require("../models/orders.model");
-        const result = await deleteProductFromOrder(orderId, productId);
-        await res.json(result);
+        await res.json(await deleteProductFromOrder(orderId, productId));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

@@ -1,3 +1,5 @@
+const { getResponseObject, checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
 async function runModel(model, input) {
     try {
         const Replicate = require("replicate");
@@ -15,7 +17,6 @@ async function runModel(model, input) {
 
 async function generateImage(req, res) {
     const faceSwapInfo = req.query;
-    const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: faceSwapInfo.imageLink, dataType: "string", isRequiredValue: true },
         { fieldName: "Style Image Link", fieldValue: faceSwapInfo.styleImageLink, dataType: "string", isRequiredValue: true },
@@ -48,7 +49,6 @@ async function generateImage(req, res) {
 async function getAllCategoryStylesData(req, res) {
     try{
         const categoryName = req.query.categoryName;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
         ]);
