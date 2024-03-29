@@ -49,6 +49,11 @@ async function getAdminUserInfo(req, res) {
 
 async function putStyleImage(req, res) {
     try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            await res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
         const { updateStyleImagePath } = require("../models/admin.model");
         const result = await updateStyleImagePath(req.query.service, req.query.styleId, req.file.path);
         const { unlinkSync } = require("fs");
@@ -58,7 +63,7 @@ async function putStyleImage(req, res) {
             return;
         }
         unlinkSync(req.file.path);
-        await res.status(400).json("sorry, this style is not found");
+        await res.status(400).json(getResponseObject("Sorry, This Style Is Not Found", true, {}));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
