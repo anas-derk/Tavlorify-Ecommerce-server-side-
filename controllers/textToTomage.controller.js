@@ -1,33 +1,5 @@
 const { getResponseObject, checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
-async function getAllCategoriesData(req, res) {
-    try{
-        const { getAllCategoriesData } = require("../models/textToImageCategories.model");
-        await res.json(await getAllCategoriesData());
-    }
-    catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
-    }
-}
-
-async function get_all_category_styles_data(req, res) {
-    try{
-        const categoryName = req.query.categoryName;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { get_all_category_styles_data } = require("../models/textToImageStyles.model");
-        await res.json(await get_all_category_styles_data(categoryName));
-    }
-    catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
-    }
-}
-
 async function runModel(model, input) {
     try {
         const Replicate = require("replicate");
@@ -181,6 +153,34 @@ async function generateImage(req, res) {
     }
 }
 
+async function getAllCategoriesData(req, res) {
+    try{
+        const { getAllCategoriesData } = require("../models/textToImageCategories.model");
+        await res.json(await getAllCategoriesData());
+    }
+    catch(err) {
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
+async function get_all_category_styles_data(req, res) {
+    try{
+        const categoryName = req.query.categoryName;
+        const checkResult = checkIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+        ]);
+        if (checkResult) {
+            await res.status(400).json(checkResult);
+            return;
+        }
+        const { get_all_category_styles_data } = require("../models/textToImageStyles.model");
+        await res.json(await get_all_category_styles_data(categoryName));
+    }
+    catch(err) {
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
 async function addNewCategory(req, res) {
     try{
         const uploadError = req.uploadError;
@@ -312,9 +312,9 @@ async function deleteCategoryData(req, res) {
         const result = await deleteCategoryData(categoryId);
         if (!result.error) {
             const { unlinkSync } = require("fs");
-            unlinkSync(result.categoryData.imgSrc);
-            for(let i = 0; i < result.categoryStylesData.length; i++) {
-                unlinkSync(result.categoryStylesData[i].imgSrc);
+            unlinkSync(result.data.categoryData.imgSrc);
+            for(let i = 0; i < result.data.categoryStylesData.length; i++) {
+                unlinkSync(result.data.categoryStylesData[i].imgSrc);
             }
         }
         await res.json(result);

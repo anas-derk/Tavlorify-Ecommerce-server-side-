@@ -4,11 +4,11 @@ const { imageToImageStyleModel } = require("../models/all.models");
 
 async function get_all_category_Styles_Data(categoryName){
     try {
-        const categoryStylesData = await imageToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
-        if (categoryStylesData) {
-            return categoryStylesData;
+        return {
+            msg: "Get All Category Styles Data Process Has Been Successfully !!",
+            error: false,
+            data: await imageToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 }),
         }
-        return "Sorry, There Is No Styles For This Category Data Now !!";
     }
     catch (err) {
         throw Error(err);
@@ -30,7 +30,11 @@ async function addNewStyle(styleData) {
             sortNumber: stylesCount + 1,
         });
         await newStyleData.save();
-        return "Adding New Category Style For Image To Image Page Process Is Succesfuly !!";
+        return {
+            msg: "Adding New Category Style For Image To Image Page Process Has Been Succesfuly !!",
+            error: false,
+            data: {},
+        };
     }
     catch (err) {
         throw Error(err);
@@ -53,6 +57,11 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleInfo){
         }, {
             sortNumber: theFirstStyle.sortNumber,
         });
+        return {
+            msg: "Updating Style Data Process Has Been Successfully !!",
+            error: false,
+            data: {},
+        }
     }
     catch (err) {
         throw Error(err);
@@ -66,15 +75,22 @@ async function deleteStyleData(styleId, categoryName) {
             _id: styleId,
         });
         if (!styleData) {
-            return "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!";
-        } else {
-            if (stylesCount !== styleData.sortNumber) {
-                const allCategoryStyles = await imageToImageStyleModel.find({ categoryName: styleData.categoryName });
-                let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
-                    if (style.sortNumber > styleData.sortNumber) {
-                        style.sortNumber = style.sortNumber - 1;
-                    }
-                    return {
+            return {
+                msg: "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!",
+                error: true,
+                data: {},
+            };
+        }
+        if (stylesCount !== styleData.sortNumber) {
+            const allCategoryStyles = await imageToImageStyleModel.find({ categoryName: styleData.categoryName });
+            let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
+                if (style.sortNumber > styleData.sortNumber) {
+                    style.sortNumber = style.sortNumber - 1;
+                }
+                return {
+                    msg: "Deleting Style Data Process Has Been Successfully !!",
+                    error: false,
+                    data: {
                         imgSrc: style.imgSrc,
                         name: style.name,
                         prompt: style.prompt,
@@ -86,13 +102,17 @@ async function deleteStyleData(styleId, categoryName) {
                         strength: style.strength,
                         categoryName: style.categoryName,
                         sortNumber: style.sortNumber,
-                    };
-                });
-                await imageToImageStyleModel.deleteMany({ categoryName: categoryName });
-                await imageToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
-            }
-            return styleData.imgSrc;
+                    }
+                };
+            });
+            await imageToImageStyleModel.deleteMany({ categoryName: categoryName });
+            await imageToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
         }
+        return {
+            msg: "Deleting Style Data Process Has Been Successfully !!",
+            error: false,
+            data: styleData.imgSrc,
+        };
     }
     catch (err) {
         throw Error(err);

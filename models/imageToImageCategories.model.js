@@ -4,11 +4,11 @@ const { imageToImageCategoryModel, imageToImageStyleModel } = require("../models
 
 async function getAllCategoriesData() {
     try {
-        const categorieData = await imageToImageCategoryModel.find({}).sort({ sortNumber: 1 });
-        if (categorieData) {
-            return categorieData;
+        return {
+            msg: "Get All Categories Data Process Has Been Successfully !!",
+            error: false,
+            data: await imageToImageCategoryModel.find({}).sort({ sortNumber: 1 }),
         }
-        return "Sorry, There Is No Categories Data Now !!";
     }
     catch (err) {
         throw Error(err);
@@ -48,7 +48,11 @@ async function addNewCategory(categoryInfo) {
             sortNumber: 1,
         });
         await newStyle.save();
-        return "Add New Category And First Style For Image To Image Page Is Successfuly !!";
+        return {
+            msg: "Adding New Category And First Style For Image To Image Page Process Has Been Successfuly !!",
+            error: false,
+            data: {},
+        };
     }
     catch (err) {
         throw Error(err);
@@ -67,15 +71,23 @@ async function updateCategoryData(categoryId, newCategoryInfo) {
         }, {
             sortNumber: theFirstCategory.sortNumber,
         });
-        if (newCategoryInfo.newCategoryName === theFirstCategory.name) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
-        else {
-            await imageToImageStyleModel.updateMany({
-                categoryName: theFirstCategory.name,
-            }, {
-                categoryName: newCategoryInfo.newCategoryName,
-            });
-            return "Category Updating Process Is Succesfuly !!"
-        };
+        if (newCategoryInfo.newCategoryName === theFirstCategory.name) {
+            return {
+                msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
+                error: true,
+                data: {},
+            };
+        }
+        await imageToImageStyleModel.updateMany({
+            categoryName: theFirstCategory.name,
+        }, {
+            categoryName: newCategoryInfo.newCategoryName,
+        });
+        return {
+            msg: "Updating Category Info Process Has Been Succesfuly !!",
+            error: false,
+            data: {},
+        }
     }
     catch (err) {
         throw Error(err);
@@ -87,26 +99,32 @@ async function deleteCategoryData(categoryId) {
         const categoryData = await imageToImageCategoryModel.findById(categoryId);
         const categoryStylesData = await imageToImageStyleModel.find({ categoryName: categoryData.name });
         if (!categoryData) {
-            return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+            return {
+                msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
+                error: true,
+                data: {},
+            };
         }
-        else {
-            const categoriesCount = await imageToImageCategoryModel.countDocuments({});
-            await imageToImageCategoryModel.deleteOne({
-                _id: categoryId,
+        const categoriesCount = await imageToImageCategoryModel.countDocuments({});
+        await imageToImageCategoryModel.deleteOne({
+            _id: categoryId,
+        });
+        if (categoriesCount !== categoryData.sortNumber) {
+            const allCategoies = await imageToImageCategoryModel.find({});
+            let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
+                if (category.sortNumber > categoryData.sortNumber) {
+                    category.sortNumber = category.sortNumber - 1;
+                }
+                return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
             });
-            if (categoriesCount !== categoryData.sortNumber) {
-                const allCategoies = await imageToImageCategoryModel.find({});
-                let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
-                    if (category.sortNumber > categoryData.sortNumber) {
-                        category.sortNumber = category.sortNumber - 1;
-                    }
-                    return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
-                });
-                await imageToImageCategoryModel.deleteMany({});
-                await imageToImageCategoryModel.insertMany(allCategoiesAfterChangeSortNumber);
-            }
-            await imageToImageStyleModel.deleteMany({ categoryName: categoryData.name });
-            return { categoryData, categoryStylesData };
+            await imageToImageCategoryModel.deleteMany({});
+            await imageToImageCategoryModel.insertMany(allCategoiesAfterChangeSortNumber);
+        }
+        await imageToImageStyleModel.deleteMany({ categoryName: categoryData.name });
+        return {
+            msg: "Deleting Category Data Process Has Been Successfully !!",
+            error: false,
+            data: { categoryData, categoryStylesData },
         };
     }
     catch (err) {

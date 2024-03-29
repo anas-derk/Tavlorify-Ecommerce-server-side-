@@ -1,8 +1,9 @@
+const { getResponseObject, checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
 async function getAllCategoriesData(req, res) {
     try{
         const { getAllCategoriesData } = require("../models/imageToImageCategories.model");
-        const result = await getAllCategoriesData();
-        await res.json(result);
+        await res.json(await getAllCategoriesData());
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -12,7 +13,6 @@ async function getAllCategoriesData(req, res) {
 async function get_all_category_Styles_Data(req, res) {
     try{
         const categoryName = req.query.categoryName;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
         ]);
@@ -21,8 +21,7 @@ async function get_all_category_Styles_Data(req, res) {
             return;
         }
         const { get_all_category_Styles_Data } = require("../models/imageToImageStyles.model");
-        const result = await get_all_category_Styles_Data(categoryName);
-        await res.json(result);
+        await res.json(await get_all_category_Styles_Data(categoryName));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -30,11 +29,20 @@ async function get_all_category_Styles_Data(req, res) {
 }
 
 async function uploadImageAndProcessing(req, res) {
+    const uploadError = req.uploadError;
+    if (uploadError) {
+        await res.status(400).json(getResponseObject(uploadError, true, {}));
+        return;
+    }
     const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
     try {
         const sharp = require("sharp");
         await sharp(req.file.buffer, { failOn: "error" }).withMetadata().rotate().toFile(filePath);
-        await res.json(filePath);
+        await res.json({
+            msg: "Uploading Image Process Has Been Successfully !!",
+            error: false,
+            data: filePath,
+        });
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -59,7 +67,6 @@ async function runModel(model, input) {
 async function generateImage(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     const imageToImageInfo = req.query;
-    const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
     const checkResult = checkIsExistValueForFieldsAndDataTypes([
         { fieldName: "Image Link", fieldValue: imageToImageInfo.imageLink, dataType: "string", isRequiredValue: true },
         { fieldName: "Prompt", fieldValue: imageToImageInfo.prompt, dataType: "string", isRequiredValue: true },
@@ -100,7 +107,7 @@ async function generateImage(req, res) {
                 break;
             }
             default: {
-                await res.status(400).json("Invalid Model Name !!");
+                await res.status(400).json(getResponseObject("Invalid Model Name !!", true, {}));
             }
         }
     } catch (err) {
@@ -114,8 +121,12 @@ async function generateImage(req, res) {
 
 async function addNewCategory(req, res) {
     try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            await res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
         const bodyData = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: bodyData.categoryName, dataType: "string", isRequiredValue: true },
             { fieldName: "Style Name", fieldValue: bodyData.styleName, dataType: "string", isRequiredValue: true },
@@ -133,8 +144,7 @@ async function addNewCategory(req, res) {
             ...Object.assign({}, req.files),
         };
         const { addNewCategory } = require("../models/imageToImageCategories.model");
-        const result = await addNewCategory(categoryInfo);
-        await res.json(result);
+        await res.json(await addNewCategory(categoryInfo));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -143,8 +153,12 @@ async function addNewCategory(req, res) {
 
 async function addNewStyle(req, res) {
     try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            await res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
         const bodyData = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: bodyData.categoryName, dataType: "string", isRequiredValue: true },
             { fieldName: "Style Name", fieldValue: bodyData.styleName, dataType: "string", isRequiredValue: true },
@@ -162,8 +176,7 @@ async function addNewStyle(req, res) {
             imgSrc: req.file.path,
         };
         const { addNewStyle } = require("../models/imageToImageStyles.model");
-        const result = await addNewStyle(styleData);
-        await res.json(result);
+        await res.json(await addNewStyle(styleData));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -174,7 +187,6 @@ async function putCategoryData(req, res) {
     try{
         const categoryId = req.params.categoryId;
         const bodyData = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Id", fieldValue: categoryId, dataType: "string", isRequiredValue: true },
             { fieldName: "New Category Sort Number", fieldValue: Number(bodyData.newCategorySortNumber), dataType: "number", isRequiredValue: true },
@@ -185,8 +197,7 @@ async function putCategoryData(req, res) {
             return;
         }
         const { updateCategoryData } = require("../models/imageToImageCategories.model");
-        const result = await updateCategoryData(categoryId, bodyData);
-        await res.json(result);
+        await res.json(await updateCategoryData(categoryId, bodyData));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -198,7 +209,6 @@ async function putStyleData(req, res) {
         const styleId = req.params.styleId;
         const categoryName = req.query.categoryName;
         const bodyData = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Style Id", fieldValue: styleId, dataType: "string", isRequiredValue: true },
             { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
@@ -214,8 +224,7 @@ async function putStyleData(req, res) {
             return;
         } 
         const { updateStyleData } = require("../models/imageToImageStyles.model");
-        const result = await updateStyleData(styleId, categoryName, bodyData);
-        await res.json(result);
+        await res.json(await updateStyleData(styleId, categoryName, bodyData));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -225,7 +234,6 @@ async function putStyleData(req, res) {
 async function deleteCategoryData(req, res) {
     try{
         const categoryId = req.params.categoryId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Id", fieldValue: categoryId, dataType: "string", isRequiredValue: true },
         ]);
@@ -235,14 +243,14 @@ async function deleteCategoryData(req, res) {
         }
         const { deleteCategoryData } = require("../models/imageToImageCategories.model");
         const result = await deleteCategoryData(categoryId);
-        if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
+        if (!result.error) {
             const { unlinkSync } = require("fs");
-            unlinkSync(result.categoryData.imgSrc);
-            for (let i = 0; i < result.categoryStylesData.length; i++) {
-                unlinkSync(result.categoryStylesData[i].imgSrc);
+            unlinkSync(result.data.categoryData.imgSrc);
+            for (let i = 0; i < result.data.categoryStylesData.length; i++) {
+                unlinkSync(result.data.categoryStylesData[i].imgSrc);
             }
-            await res.json("Category Deleting Process Is Succesfuly !!");
         }
+        await res.json(result);
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -253,7 +261,6 @@ async function deleteStyleData(req, res) {
     try{
         const styleId = req.params.styleId;
         const categoryName = req.query.categoryName;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
         const checkResult = checkIsExistValueForFieldsAndDataTypes([
             { fieldName: "Style Id", fieldValue: styleId, dataType: "string", isRequiredValue: true },
             { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
@@ -264,11 +271,11 @@ async function deleteStyleData(req, res) {
         }
         const { deleteStyleData } = require("../models/imageToImageStyles.model");
         const result = await deleteStyleData(styleId, categoryName);
-        if (result) {
+        if (!result.error) {
             const { unlinkSync } = require("fs");
-            unlinkSync(result);
-            await res.json("Category Style Deleting Process Is Succesfuly !!");
+            unlinkSync(result.data);
         }
+        await res.json(result);
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

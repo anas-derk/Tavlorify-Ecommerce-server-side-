@@ -6,11 +6,11 @@ const multer = require("multer");
 
 const { validateJWT } = require("../middlewares/global.middlewares");
 
+textToImageRouter.get("/generate-image", textToImageController.generateImage);
+
 textToImageRouter.get("/categories/all-categories-data", textToImageController.getAllCategoriesData);
 
 textToImageRouter.get("/styles/category-styles-data", textToImageController.get_all_category_styles_data);
-
-textToImageRouter.get("/generate-image", textToImageController.generateImage);
 
 textToImageRouter.post("/categories/add-new-category", validateJWT, multer({
     storage: multer.diskStorage({
