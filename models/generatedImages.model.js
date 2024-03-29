@@ -4,8 +4,7 @@ const { generatedImageModel } = require("../models/all.models");
 
 async function getAllGeneratedImagesDataInsideThePage(service, pageNumber, pageSize) {
     try {
-        const generatedImagesData = await generatedImageModel.find({ service }).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ imageGenerationDate: -1 });
-        return generatedImagesData;
+        return await generatedImageModel.find({ service }).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ imageGenerationDate: -1 });
     }
     catch (err) {
         throw Error(err);
@@ -14,8 +13,7 @@ async function getAllGeneratedImagesDataInsideThePage(service, pageNumber, pageS
 
 async function getGeneratedImagesDataCount(filters) {
     try {
-        const generatedImagesCount = await generatedImageModel.countDocuments(filters);
-        return generatedImagesCount;
+        return await generatedImageModel.countDocuments(filters);
     } catch (err) {
         throw Error(err);
     }
@@ -25,7 +23,11 @@ async function saveNewGeneratedImageData(generatedImageData) {
     try {
         const newGeneratedImageData = new generatedImageModel(generatedImageData);
         const result = await newGeneratedImageData.save();
-        return result;
+        return {
+            msg: "Save New Generated Image Data Process Has Been Successfully !!",
+            error: false,
+            data: result,
+        };
     }
     catch (err) {
         throw Error(err);
@@ -34,8 +36,19 @@ async function saveNewGeneratedImageData(generatedImageData) {
 
 async function deleteGeneratedImageData(generatedImageDataId) {
     try {
-        await generatedImageModel.findOneAndDelete({ _id: generatedImageDataId });
-        return "Deleteting Generated Image Data Has Been Succesfuly !!";
+        const generatedImageData = await generatedImageModel.findOneAndDelete({ _id: generatedImageDataId });
+        if (generatedImageData) {
+            return {
+                msg: "Deleteting Generated Image Data Process Has Been Succesfuly !!",
+                error: false,
+                data: {},
+            }
+        }
+        return {
+            msg: "Sorry, This Generated Image Is Not Exist !!",
+            error: true,
+            data: {},
+        }
     }
     catch (err) {
         throw Error(err);

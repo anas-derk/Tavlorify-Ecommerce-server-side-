@@ -16,8 +16,7 @@ async function getAllGeneratedImagesDataInsideThePage(req, res) {
             return;
         }
         const { getAllGeneratedImagesDataInsideThePage } = require("../models/generatedImages.model");
-        const result = await getAllGeneratedImagesDataInsideThePage(filters.service, filters.pageNumber, filters.pageSize);
-        await res.json(result);
+        await res.json(await getAllGeneratedImagesDataInsideThePage(filters.service, filters.pageNumber, filters.pageSize));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -69,11 +68,11 @@ async function postNewGeneratedImageData(req, res) {
         }
         const { saveNewGeneratedImage } = require("../global/functions");
         const result = await saveNewGeneratedImage(generatedImageData.generatedImageURL);
-        if (result.msg && result.msg === "success file downloaded !!") {
+        if (!result.error) {
             const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
             const result1 = await saveNewGeneratedImageData({
                 ...generatedImageData,
-                generatedImageURL: result.imagePath,
+                generatedImageURL: result.data.imagePath,
             });
             await res.json(result1);
         }
@@ -129,8 +128,7 @@ async function deleteGeneratedImageData(req, res) {
             return;
         }
         const { deleteGeneratedImageData } = require("../models/generatedImages.model");
-        const result = await deleteGeneratedImageData(generatedImageDataId);
-        await res.json(result);
+        await res.json(await deleteGeneratedImageData(generatedImageDataId));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

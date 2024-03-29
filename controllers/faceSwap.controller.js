@@ -57,8 +57,7 @@ async function getAllCategoryStylesData(req, res) {
             return;
         }
         const { getAllCategoryStylesData } = require("../models/faceSwapStyle.model");
-        const result = await getAllCategoryStylesData(categoryName);
-        await res.json(result);
+        await res.json(await getAllCategoryStylesData(categoryName));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -67,6 +66,11 @@ async function getAllCategoryStylesData(req, res) {
 
 async function addNewStyle(req, res) {
     try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            await res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
         const styleImageFiles = {...Object.assign({}, req.files)};
         const imagePaths = [
             styleImageFiles.verticalStyleImage[0].path,
@@ -75,8 +79,7 @@ async function addNewStyle(req, res) {
         ];
         const categoryName = req.query.categoryName;
         const { addNewStyle } = require("../models/faceSwapStyle.model");
-        const result = await addNewStyle(imagePaths, categoryName);
-        await res.json(result);
+        await res.json(await addNewStyle(imagePaths, categoryName));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

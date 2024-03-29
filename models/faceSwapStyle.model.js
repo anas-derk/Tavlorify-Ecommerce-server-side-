@@ -4,8 +4,7 @@ const { faceSwapStyleModel } = require("./all.models");
 
 async function getAllCategoryStylesData(categoryName){
     try {
-        const stylesData = await faceSwapStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
-        return stylesData;
+        return await faceSwapStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
     }
     catch (err) {
         throw Error(err);
@@ -21,7 +20,11 @@ async function addNewStyle(imagePaths, categoryName) {
             sortNumber: stylesCount + 1,
         });
         await newStyle.save();
-        return "Adding New Category Style For Face Swap Page Process Is Succesfuly !!";
+        return {
+            msg: "Adding New Category Style For Face Swap Page Process Has Been Succesfuly !!",
+            error: false,
+            data: {},
+        };
     }
     catch (err) {
         throw Error(err);

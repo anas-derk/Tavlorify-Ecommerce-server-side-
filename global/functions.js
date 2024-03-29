@@ -60,7 +60,14 @@ async function saveNewGeneratedImage(generatedImageURL) {
     const result = await res.data;
     const sharp = require("sharp");
     await sharp(result).toFile(destination);
-    return { msg: "success file downloaded !!", imagePath: `assets/images/generatedImages/${randomImageName}`, imageAsArrayBuffer: result };
+    return {
+        msg: "Success File Downloaded Process Has Been Successfully !!",
+        error: false,
+        data: {
+            imagePath: `assets/images/generatedImages/${randomImageName}`,
+            imageAsArrayBuffer: result,
+        }
+    };
 }
 
 async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
