@@ -63,14 +63,21 @@ async function updateCategoryData(categoryId, newCategoryInfo) {
         }, {
             sortNumber: theFirstCategory.sortNumber,
         });
-        if (newCategoryInfo.newCategoryName === theFirstCategory.name) return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
-        else {
-            await textToImageStyleModel.updateMany({
-                categoryName: theFirstCategory.name,
-            }, {
-                categoryName: newCategoryInfo.newCategoryName,
-            });
-            return "Category Updating Process Is Succesfuly !!"
+        if (newCategoryInfo.newCategoryName === theFirstCategory.name)
+            return {
+                msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
+                error: true,
+                data: {},
+            };
+        await textToImageStyleModel.updateMany({
+            categoryName: theFirstCategory.name,
+        }, {
+            categoryName: newCategoryInfo.newCategoryName,
+        });
+        return {
+            msg: "Updating Category Info Process Is Succesfuly !!",
+            error: false,
+            data: {},
         };
     }
     catch (err) {
@@ -83,26 +90,32 @@ async function deleteCategoryData(categoryId) {
         const categoryData = await textToImageCategoryModel.findById(categoryId);
         const categoryStylesData = await textToImageStyleModel.find({ categoryName: categoryData.name });
         if (!categoryData) {
-            return "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!";
+            return {
+                msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
+                error: true,
+                data: {},
+            };
         }
-        else {
-            const categoriesCount = await textToImageCategoryModel.countDocuments({});
-            await textToImageCategoryModel.deleteOne({
-                _id: categoryId,
+        const categoriesCount = await textToImageCategoryModel.countDocuments({});
+        await textToImageCategoryModel.deleteOne({
+            _id: categoryId,
+        });
+        if (categoriesCount !== categoryData.sortNumber) {
+            const allCategoies = await textToImageCategoryModel.find({});
+            let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
+                if (category.sortNumber > categoryData.sortNumber) {
+                    category.sortNumber = category.sortNumber - 1;
+                }
+                return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
             });
-            if (categoriesCount !== categoryData.sortNumber) {
-                const allCategoies = await textToImageCategoryModel.find({});
-                let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
-                    if (category.sortNumber > categoryData.sortNumber) {
-                        category.sortNumber = category.sortNumber - 1;
-                    }
-                    return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
-                });
-                await textToImageCategoryModel.deleteMany({});
-                await textToImageCategoryModel.insertMany(allCategoiesAfterChangeSortNumber);
-            }
-            await textToImageStyleModel.deleteMany({ categoryName: categoryData.name });
-            return { categoryData, categoryStylesData };
+            await textToImageCategoryModel.deleteMany({});
+            await textToImageCategoryModel.insertMany(allCategoiesAfterChangeSortNumber);
+        }
+        await textToImageStyleModel.deleteMany({ categoryName: categoryData.name });
+        return {
+            msg: "Deleting Category Process Has Been Successfully !!",
+            error: false,
+            data: { categoryData, categoryStylesData },
         };
     }
     catch (err) {

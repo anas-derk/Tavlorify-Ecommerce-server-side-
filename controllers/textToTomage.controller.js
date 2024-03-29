@@ -263,8 +263,7 @@ async function putCategoryData(req, res) {
             return;
         }
         const { updateCategoryData } = require("../models/textToImageCategories.model");
-        const result = await updateCategoryData(categoryId, bodyData);
-        await res.json(result);
+        await res.json(await updateCategoryData(categoryId, bodyData));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -291,8 +290,7 @@ async function putStyleData(req, res) {
             return;
         } 
         const { updateStyleData } = require("../models/textToImageStyles.model");
-        const result = await updateStyleData(styleId, categoryName, bodyData);
-        await res.json(result);
+        await res.json(await updateStyleData(styleId, categoryName, bodyData));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -312,14 +310,14 @@ async function deleteCategoryData(req, res) {
         }
         const { deleteCategoryData } = require("../models/textToImageCategories.model");
         const result = await deleteCategoryData(categoryId);
-        if (result !== "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!") {
+        if (!result.error) {
             const { unlinkSync } = require("fs");
             unlinkSync(result.categoryData.imgSrc);
             for(let i = 0; i < result.categoryStylesData.length; i++) {
                 unlinkSync(result.categoryStylesData[i].imgSrc);
             }
-            await res.json("Category Deleting Process Is Succesfuly !!");
         }
+        await res.json(result);
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -341,11 +339,11 @@ async function deleteStyleData(req, res) {
         }
         const { deleteStyleData } = require("../models/textToImageStyles.model");
         const result = await deleteStyleData(styleId, categoryName);
-        if (result) {
+        if (!result.error) {
             const { unlinkSync } = require("fs");
-            unlinkSync(result);
-            await res.json("Category Style Deleting Process Is Succesfuly !!");
+            unlinkSync(result.data);
         }
+        await res.json(result);
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

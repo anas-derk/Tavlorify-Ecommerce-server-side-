@@ -72,12 +72,12 @@ textToImageRouter.post("/styles/add-new-style", validateJWT, multer({
     }
 }).single("styleImgFile"), textToImageController.addNewStyle);
 
-textToImageRouter.put("/categories/update-category-data/:categoryId", textToImageController.putCategoryData);
+textToImageRouter.put("/categories/update-category-data/:categoryId", validateJWT, textToImageController.putCategoryData);
 
-textToImageRouter.put("/styles/update-style-data/:styleId", textToImageController.putStyleData);
+textToImageRouter.put("/styles/update-style-data/:styleId", validateJWT, textToImageController.putStyleData);
 
-textToImageRouter.delete("/categories/delete-category-data/:categoryId", textToImageController.deleteCategoryData);
+textToImageRouter.delete("/categories/delete-category-data/:categoryId", validateJWT, textToImageController.deleteCategoryData);
 
-textToImageRouter.delete("/styles/delete-style-data/:styleId", textToImageController.deleteStyleData);
+textToImageRouter.delete("/styles/delete-style-data/:styleId", validateJWT, textToImageController.deleteStyleData);
 
 module.exports = textToImageRouter;

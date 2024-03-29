@@ -54,6 +54,11 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleInfo) {
         }, {
             sortNumber: theFirstStyle.sortNumber,
         });
+        return {
+            msg: "Updating Style Info Process Has Been Successfully !!",
+            error: false,
+            data: {},
+        }
     }
     catch (err) {
         throw Error(err);
@@ -67,15 +72,22 @@ async function deleteStyleData(styleId, categoryName) {
             _id: styleId,
         });
         if (!styleData) {
-            return "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!";
-        } else {
-            if (stylesCount !== styleData.sortNumber) {
-                const allCategoryStyles = await textToImageStyleModel.find({ categoryName: styleData.categoryName });
-                let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
-                    if (style.sortNumber > styleData.sortNumber) {
-                        style.sortNumber = style.sortNumber - 1;
-                    }
-                    return {
+            return {
+                msg: "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!",
+                error: true,
+                data: {},
+            };
+        }
+        if (stylesCount !== styleData.sortNumber) {
+            const allCategoryStyles = await textToImageStyleModel.find({ categoryName: styleData.categoryName });
+            let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
+                if (style.sortNumber > styleData.sortNumber) {
+                    style.sortNumber = style.sortNumber - 1;
+                }
+                return {
+                    msg: "Deleting Style Data Process Has Been Successfully !!",
+                    error: false,
+                    data: {
                         imgSrc: style.imgSrc,
                         name: style.name,
                         prompt: style.prompt,
@@ -85,13 +97,17 @@ async function deleteStyleData(styleId, categoryName) {
                         modelName: style.modelName,
                         categoryName: style.categoryName,
                         sortNumber: style.sortNumber,
-                    };
-                });
-                await textToImageStyleModel.deleteMany({ categoryName: categoryName });
-                await textToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
-            }
-            return styleData.imgSrc;
+                    },
+                }
+            });
+            await textToImageStyleModel.deleteMany({ categoryName: categoryName });
+            await textToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
         }
+        return {
+            msg: "Deleting Style Data Process Has Been Successfully !!",
+            error: false,
+            data: styleData.imgSrc,
+        };
     }
     catch (err) {
         throw Error(err);
