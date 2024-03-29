@@ -21,7 +21,7 @@ adminRouter.get("/login", adminController.getAdminLogin);
 
 adminRouter.get("/user-info", validateJWT, adminController.getAdminUserInfo);
 
-adminRouter.put("/update-style-image", checkServiceNameAndStyleId, multer({
+adminRouter.put("/update-style-image", validateJWT, checkServiceNameAndStyleId, multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             if (req.query.service === "text-to-image") {

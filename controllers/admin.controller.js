@@ -1,5 +1,7 @@
 const { getResponseObject, checkIsExistValueForFieldsAndDataTypes, isEmail } = require("../global/functions");
 
+const { unlinkSync } = require("fs");
+
 async function getAdminLogin(req, res) {
     try{
         const   email = req.query.email,
@@ -56,7 +58,6 @@ async function putStyleImage(req, res) {
         }
         const { updateStyleImagePath } = require("../models/admin.model");
         const result = await updateStyleImagePath(req.query.service, req.query.styleId, req.file.path);
-        const { unlinkSync } = require("fs");
         if (result !== "sorry, this style is not found") {
             unlinkSync(result);
             await res.json("style image process is succesfuly !!");
