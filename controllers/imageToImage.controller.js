@@ -5,7 +5,7 @@ async function getAllCategoriesData(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -25,7 +25,7 @@ async function get_all_category_Styles_Data(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -37,7 +37,7 @@ async function uploadImageAndProcessing(req, res) {
         await res.json(filePath);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -95,7 +95,7 @@ async function generateImage(req, res) {
                             generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
                             await res.json(result.imagePath);
                         }
-                    } else await res.status(500).json(err);
+                    } else await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
                 }
                 break;
             }
@@ -104,7 +104,7 @@ async function generateImage(req, res) {
             }
         }
     } catch (err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
         const { saveNewGeneratedImageDataGlobalFunc } = require("../global/functions");
@@ -137,10 +137,7 @@ async function addNewCategory(req, res) {
         await res.json(result);
     }
     catch(err) {
-        const { unlinkSync } = require("fs");
-        unlinkSync(req.files["categoryImgFile"][0].path);
-        unlinkSync(req.files["styleImgFile"][0].path);
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -169,9 +166,7 @@ async function addNewStyle(req, res) {
         await res.json(result);
     }
     catch(err) {
-        const { unlinkSync } = require("fs");
-        unlinkSync(req.file.path);
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -194,8 +189,7 @@ async function putCategoryData(req, res) {
         await res.json(result);
     }
     catch(err) {
-        console.log(err)
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -224,7 +218,7 @@ async function putStyleData(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -251,7 +245,7 @@ async function deleteCategoryData(req, res) {
         }
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -277,7 +271,7 @@ async function deleteStyleData(req, res) {
         }
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 

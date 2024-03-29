@@ -20,7 +20,7 @@ async function getAllGeneratedImagesDataInsideThePage(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -41,7 +41,7 @@ async function getGeneratedImagesDataCount(req, res) {
         await res.json(await getGeneratedImagesDataCount(filters));
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -79,7 +79,7 @@ async function postNewGeneratedImageData(req, res) {
         }
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -113,7 +113,7 @@ async function postImageAfterCroping(req, res) {
         await res.json(imagePath);
     }
     catch (err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -133,7 +133,7 @@ async function deleteGeneratedImageData(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 

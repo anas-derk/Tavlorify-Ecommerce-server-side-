@@ -27,7 +27,7 @@ async function getAllOrdersInsideThePage(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -72,7 +72,7 @@ async function getOrdersCount(req, res) {
         await res.json(await getOrdersCount(getFiltersObject(filters)));
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -91,7 +91,7 @@ async function getOrderDetails(req, res) {
         await res.json(await getOrderDetails(orderId));
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -109,7 +109,7 @@ async function postNewOrderToGelato(req, res) {
         const result = await response.data;
         await res.json(result);
     } catch (err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -128,7 +128,7 @@ async function postNewOrderToKlarna(req, res) {
         await res.json(result);
     }
     catch (err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -139,7 +139,7 @@ async function postNewOrder(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -212,7 +212,7 @@ async function postKlarnaCheckoutComplete(req, res) {
         }
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -238,7 +238,7 @@ async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -265,7 +265,7 @@ async function putKlarnaOrder(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -286,7 +286,7 @@ async function putOrder(req, res) {
         await res.json("Updating Order Details Has Been Successfuly !!");
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -309,7 +309,7 @@ async function putOrderProduct(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -329,7 +329,7 @@ async function deleteOrder(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -351,7 +351,7 @@ async function deleteProductFromOrder(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 

@@ -36,12 +36,12 @@ async function generateImage(req, res) {
             const result = await saveNewGeneratedImage(output.image);
             if (result.msg && result.msg === "success file downloaded !!") {
                 await res.json(result.imagePath);
+                return;
             }
         }
-        else await res.status(500).json(err);
-    } catch (err) {
-        console.log(err);
         await res.status(500).json(err);
+    } catch (err) {
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -61,7 +61,7 @@ async function getAllCategoryStylesData(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -79,7 +79,7 @@ async function addNewStyle(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 

@@ -26,8 +26,7 @@ async function getAllReturnedOrdersInsideThePage(req, res) {
         await res.json(result);
     }
     catch(err) {
-        console.log(err);
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -70,7 +69,7 @@ async function getReturnedOrdersCount(req, res) {
         await res.json(await getReturnedOrdersCount(getFiltersObject(filters)));
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -89,7 +88,7 @@ async function getReturnedOrderDetails(req, res) {
         await res.json(await getReturnedOrderDetails(returnedOrderId));
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -109,7 +108,7 @@ async function postNewReturnedOrder(req, res) {
         await res.json(result);
     }
     catch(err) {
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -130,7 +129,7 @@ async function putReturnedOrder(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -153,7 +152,7 @@ async function putReturnedOrderProduct(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -173,7 +172,7 @@ async function deleteReturnedOrder(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -195,7 +194,7 @@ async function deleteProductFromReturnedOrder(req, res) {
         await res.json(result);
     }
     catch(err){
-        await res.status(500).json(err);
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
