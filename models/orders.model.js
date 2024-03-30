@@ -4,7 +4,11 @@ const { orderModel } = require("../models/all.models");
 
 async function getAllOrdersInsideThePage(pageNumber, pageSize, filters) {
     try {
-        return await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 });
+        return {
+            msg: `Get All Orders Inside The Page: ${pageNumber} Process Has Been Successfully !!`,
+            error: false,
+            data: await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
+        };
     } catch (err) {
         throw Error(err);
     }
@@ -12,7 +16,11 @@ async function getAllOrdersInsideThePage(pageNumber, pageSize, filters) {
 
 async function getOrdersCount(filters) {
     try {
-        return await orderModel.countDocuments(filters);
+        return {
+            msg: "Get Orders Count Process Has Been Successfully !!",
+            error: false,
+            data: await orderModel.countDocuments(filters),
+        };
     } catch (err) {
         throw Error(err);
     }
@@ -21,7 +29,18 @@ async function getOrdersCount(filters) {
 async function getOrderDetails(orderId) {
     try {
         const order = await orderModel.findById(orderId);
-        return order;
+        if (order) {
+            return {
+                msg: "Get Order Details Process Has Been Successfully !!",
+                error: false,
+                data: order,
+            };
+        }
+        return {
+            msg: "Sorry, This Order Is Not Found !!",
+            error: true,
+            data: {},
+        };
     } catch (err) {
         throw Error(err);
     }
@@ -124,7 +143,7 @@ async function deleteProductFromOrder(orderId, productId) {
         const order = await orderModel.findOne({ _id: orderId });
         if (order) {
             const newOrderLines = order.order_lines.filter((order_line) => order_line._id == productId);
-            if (newOrderLines.length < order.order_lines) {
+            if (newOrderLines.length < order.order_lines.length) {
                 await orderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines });
                 return {
                     msg: "Deleting Product From Order Process Has Been Successfuly !!",
@@ -133,7 +152,7 @@ async function deleteProductFromOrder(orderId, productId) {
                 };
             }
             return {
-                msg: "Sorry, This Product For This Product Is Not Found !!",
+                msg: "Sorry, This Product For This Order Is Not Found !!",
                 error: true,
                 data: {},
             };

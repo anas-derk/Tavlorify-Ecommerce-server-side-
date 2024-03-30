@@ -4,8 +4,7 @@ const { productPricesModel } = require("../models/all.models");
 
 async function getPricesByProductName(productName) {
     try{
-        const pricesListByProductName = await productPricesModel.find({ productName });
-        return pricesListByProductName;
+        return await productPricesModel.find({ productName });
     }
     catch(err) {
         throw Error(err);
@@ -72,7 +71,11 @@ async function getPriceByProductDetails(productName, position, dimentions) {
                 console.log("Invalid Product Name !!");
             }
         }
-        return productPrices;
+        return {
+            msg: "Get Prices By Product Details Process Has Been Successfully !!",
+            error: false,
+            data: productPrices,
+        };
     }
     catch(err) {
         throw Error(err);
@@ -81,14 +84,25 @@ async function getPriceByProductDetails(productName, position, dimentions) {
 
 async function updateProductPrice(productId, newProductPriceBeforeDiscount, newProductPriceAfterDiscount) {
     try{
-        await productPricesModel.updateOne(
+        const product = await productPricesModel.findOneAndUpdate(
             { _id: productId },
             {
                 priceBeforeDiscount: newProductPriceBeforeDiscount,
                 priceAfterDiscount: newProductPriceAfterDiscount
             }
         );
-        return "Updating Product Price Process Has Been Successfuly !!";
+        if (product) {
+            return {
+                msg: "Updating Product Price Process Has Been Successfuly !!",
+                error: false,
+                data: {},
+            };
+        }
+        return {
+            msg: "Sorry, This Product Is Not Found !!",
+            error: true,
+            data: {},
+        };
     }
     catch(err) {
         throw Error(err);
