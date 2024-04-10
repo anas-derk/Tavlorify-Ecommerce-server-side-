@@ -36,7 +36,29 @@ const PORT = process.env.PORT || 5300;
 app.listen(PORT, async () => {
     console.log(`The Server Is Running On: http://localhost:${PORT}`);
     try{
+
         await mongoose.connect(process.env.DB_URL);
+
+        /* Start Handle The Routes */
+
+        app.use("/admins", require("./routes/admins.router"));
+
+        app.use("/text-to-image", require("./routes/textToImage.router"));
+
+        app.use("/image-to-image", require("./routes/imageToImage.router"));
+
+        app.use("/orders", require("./routes/orders.router"));
+
+        app.use("/returned-orders",  require("./routes/returnedOrders.router"));
+
+        app.use("/generated-images", require("./routes/generatedImages.router"));
+
+        app.use("/prices", require("./routes/prices.router"));
+
+        app.use("/face-swap", require("./routes/faceSwap.router"));
+
+        /* End Handle The Routes */
+
     }
     catch(err) {
         console.log(err);
@@ -44,26 +66,6 @@ app.listen(PORT, async () => {
 });
 
 /* End Running The Server */
-
-/* Start Handle The Routes */
-
-app.use("/admin", require("./routes/admin.router"));
-
-app.use("/text-to-image", require("./routes/textToImage.router"));
-
-app.use("/image-to-image", require("./routes/imageToImage.router"));
-
-app.use("/orders", require("./routes/orders.router"));
-
-app.use("/returned-orders",  require("./routes/returnedOrders.router"));
-
-app.use("/generated-images", require("./routes/generatedImages.router"));
-
-app.use("/prices", require("./routes/prices.router"));
-
-app.use("/face-swap", require("./routes/faceSwap.router"));
-
-/* End Handle The Routes */
 
 /* Start Handling Events */
 
