@@ -1,8 +1,10 @@
 const adminRouter = require("express").Router();
 
-const adminController = require("../controllers/admin.controller");
+const adminController = require("../controllers/admins.controller");
 
-const { validateJWT } = require("../middlewares/global.middlewares");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
+const { validateJWT, validateEmail } = require("../middlewares/global.middlewares");
 
 const multer = require("multer");
 
@@ -17,9 +19,19 @@ function checkServiceNameAndStyleId(req, res, next) {
     next();
 }
 
-adminRouter.get("/login", adminController.getAdminLogin);
+adminRouter.get("/login",
+    async (req, res, next) => {
+        const emailAndPassword = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Email", fieldValue: emailAndPassword.email, dataType: "string", isRequiredValue: true },
+            { fieldName: "Password", fieldValue: emailAndPassword.password, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateEmail(req.query.email, res, next),
+    adminController.getAdminLogin
+);
 
-adminRouter.get("/user-info", validateJWT, adminController.getAdminUserInfo);
+adminRouter.get("/user-info",  validateJWT, adminController.getAdminUserInfo);
 
 adminRouter.put("/update-style-image", validateJWT, checkServiceNameAndStyleId, multer({
     storage: multer.diskStorage({
