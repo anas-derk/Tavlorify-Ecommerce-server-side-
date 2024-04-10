@@ -7,10 +7,22 @@ require("dotenv").config({
 // Create Text To Image Style Schema
 
 const textToImageStyleSchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-    prompt: String,
-    negative_prompt: String,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    prompt: {
+        type: String,
+        required: true,
+    },
+    negative_prompt: {
+        type: String,
+        required: true,
+    },
     num_inference_steps: {
         type: Number,
         default: 50,
@@ -19,8 +31,22 @@ const textToImageStyleSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-    modelName: String,
-    categoryName: String,
+    modelName: {
+        type: String,
+        required: true,
+        enum: [
+            "dreamshaper",
+            "stable-diffusion",
+            "midjourney-diffusion",
+            "deliberate-v2",
+            "sdxl",
+            "openjourney",
+        ]
+    },
+    categoryName: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 

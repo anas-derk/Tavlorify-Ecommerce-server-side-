@@ -4,41 +4,44 @@ require("dotenv").config({
     path: "../.env",
 });
 
-// create Admin User Schema For Admin User Model
+// Create Admin Schema
 
-const admin_user_schema = mongoose.Schema({
-    email: String,
-    password: String,
+const adminSchema = mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
 });
 
-// create Admin User Model In Database
+// Create Admin Model From Admin Schema
 
-const admin_user_model = mongoose.model("admin", admin_user_schema);
-
-// require bcryptjs module for password encrypting
+const adminModel = mongoose.model("admin", adminSchema);
 
 const { hash } = require("bcryptjs");
 
-let userInfo = {
+const userInfo = {
     email: process.env.MAIN_ADMIN_EMAIL,
     password: process.env.MAIN_ADMIN_PASSWORD,
 };
 
 async function create_admin_user_account() {
     try {
-        await mongoose.connect(DB_URL);
-        let user = await admin_user_model.findOne({ email: userInfo.email });
+        await mongoose.connect(process.env.DB_URL);
+        let user = await adminModel.findOne({ email: userInfo.email });
         if (user) {
-            await mongoose.disconnect();
-            return "Sorry, Can't Insert Admin Data To Database Because it is Exist !!!";
+            return "Sorry, Can't Insert Admin Data To Database Because it is Exist !!";
         } else {
             let password = userInfo.password;
             let encrypted_password = await hash(password, 10);
             userInfo.password = encrypted_password;
-            let new_admin_user = new admin_user_model(userInfo);
-            await new_admin_user.save();
+            const newAdmin = new adminModel(userInfo);
+            await newAdmin.save();
             await mongoose.disconnect();
-            return "Ok !!, Create Admin Account Is Successfuly !!";
+            return "Ok !!, Creating Admin Account Process Has Been Successfuly !!";
         }
     } catch(err) {
         await mongoose.disconnect();

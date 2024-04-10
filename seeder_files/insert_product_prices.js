@@ -14,6 +14,19 @@ const productPricesSchema = mongoose.Schema({
     dimentions: {
         type: String,
         required: true,
+        enum: [
+            "30x30",
+            "50x50",
+            "70x70",
+            "21x29,7",
+            "30x40",
+            "50x70",
+            "70x100",
+            "21x29,7",
+            "40x30",
+            "70x50",
+            "100x70",
+        ],
     },
     position: {
         type: String,

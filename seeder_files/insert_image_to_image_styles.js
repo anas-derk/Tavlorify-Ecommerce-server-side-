@@ -23,10 +23,6 @@ const imageToImageStyleSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    modelName: {
-        type: String,
-        required: true,
-    },
     ddim_steps: {
         type: Number,
         required: true,
@@ -34,6 +30,13 @@ const imageToImageStyleSchema = mongoose.Schema({
     strength: {
         type: Number,
         required: true,
+    },
+    modelName: {
+        type: String,
+        default: "controlnet-1.1-x-realistic-vision-v2.0",
+        enum: [
+            "controlnet-1.1-x-realistic-vision-v2.0"
+        ],
     },
     categoryName: {
         type: String,
