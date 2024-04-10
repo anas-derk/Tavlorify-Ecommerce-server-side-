@@ -1,6 +1,7 @@
 const { join } = require("path");
 const { readFileSync } = require("fs");
 const { compile } = require("ejs");
+const { createTransport } = require("nodemailer");
 
 function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
@@ -12,35 +13,6 @@ function getResponseObject(msg, isError, data) {
         error: isError,
         data,
     }
-}
-
-function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes) {
-    for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
-        if (fieldnameAndValueAndDataType.isRequiredValue) {
-            if (!fieldnameAndValueAndDataType.fieldValue) 
-                return getResponseObject(
-                    `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`,
-                    true,
-                    {}
-                );
-        }
-        if (fieldnameAndValueAndDataType.fieldValue) {
-            if (fieldnameAndValueAndDataType.dataType === "number" && isNaN(fieldnameAndValueAndDataType.fieldValue)) {
-                return getResponseObject(
-                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
-                    true,
-                    {}
-                );
-            } 
-            if (typeof fieldnameAndValueAndDataType.fieldValue !== fieldnameAndValueAndDataType.dataType)
-                return getResponseObject(
-                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
-                    true,
-                    {}
-                );
-        }
-    }
-    return getResponseObject("Success In Check Is Exist Value For Fields And Data Types !!", false, {});
 }
 
 function calcOrderAmount(order_lines) {
@@ -126,16 +98,14 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
 }
 
 function transporterObj() {
-    const nodemailer = require('nodemailer');
-    // إنشاء ناقل بيانات لسيرفر SMTP مع إعداده 
-    const transporter = nodemailer.createTransport({
-        host: "smtp.hostinger.com",
+    const transporter = createTransport({
+        host: process.env.SMTP_HOST,
         port: 465,
         secure: true,
         requireTLS: true,
         auth: {
-            user: "info@tavlorify.se",
-            pass: "Tavlorify-1571",
+            user: process.env.BUSSINESS_EMAIL,
+            pass: process.env.MAIN_ADMIN_PASSWORD,
         }
     });
     return transporter;
@@ -163,6 +133,44 @@ function sendPaymentConfirmationMessage(email, orderDetails) {
     });
 }
 
+function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes) {
+    for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
+        if (fieldnameAndValueAndDataType.isRequiredValue) {
+            if (!fieldnameAndValueAndDataType.fieldValue) 
+                return getResponseObject(
+                    `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`,
+                    true,
+                    {}
+                );
+        }
+        if (fieldnameAndValueAndDataType.fieldValue) {
+            if (fieldnameAndValueAndDataType.dataType === "number" && isNaN(fieldnameAndValueAndDataType.fieldValue)) {
+                return getResponseObject(
+                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
+                    true,
+                    {}
+                );
+            } 
+            if (typeof fieldnameAndValueAndDataType.fieldValue !== fieldnameAndValueAndDataType.dataType)
+                return getResponseObject(
+                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
+                    true,
+                    {}
+                );
+        }
+    }
+    return getResponseObject("Success In Check Is Exist Value For Fields And Data Types !!", false, {});
+}
+
+function validateIsExistValueForFieldsAndDataTypes(fieldsDetails, res, nextFunc) {
+    const checkResult = checkIsExistValueForFieldsAndDataTypes(fieldsDetails);
+    if (checkResult.error) {
+        res.status(400).json(checkResult);
+        return;
+    }
+    nextFunc();
+}
+
 module.exports = {
     isEmail,
     getResponseObject,
@@ -171,4 +179,5 @@ module.exports = {
     saveNewGeneratedImage,
     saveNewGeneratedImageDataGlobalFunc,
     sendPaymentConfirmationMessage,
+    validateIsExistValueForFieldsAndDataTypes,
 }

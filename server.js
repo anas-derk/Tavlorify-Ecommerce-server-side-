@@ -35,7 +35,12 @@ const PORT = process.env.PORT || 5300;
 
 app.listen(PORT, async () => {
     console.log(`The Server Is Running On: http://localhost:${PORT}`);
-    await mongoose.connect(process.env.DB_URL);
+    try{
+        await mongoose.connect(process.env.DB_URL);
+    }
+    catch(err) {
+        console.log(err);
+    }
 });
 
 /* End Running The Server */
@@ -69,7 +74,12 @@ mongoose.connection.on("disconnecting", () => console.log("disconnecting"));
 mongoose.connection.on("close", () => console.log("close"));
 
 process.on("SIGINT", async () => {
-    await mongoose.connection.close();
+    try{
+        await mongoose.connection.close();
+    }
+    catch(err) {
+        console.log(err);
+    }
 });
 
 /* End Handling Events */
