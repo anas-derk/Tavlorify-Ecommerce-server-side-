@@ -17,11 +17,11 @@ const admin_user_model = mongoose.model("admin", admin_user_schema);
 
 // require bcryptjs module for password encrypting
 
-const bcrypt = require("bcryptjs");
+const { hash } = require("bcryptjs");
 
 let userInfo = {
-    email: "admin@gmail.com",
-    password: "12345678",
+    email: process.env.MAIN_ADMIN_EMAIL,
+    password: process.env.MAIN_ADMIN_PASSWORD,
 };
 
 async function create_admin_user_account() {
@@ -33,7 +33,7 @@ async function create_admin_user_account() {
             return "Sorry, Can't Insert Admin Data To Database Because it is Exist !!!";
         } else {
             let password = userInfo.password;
-            let encrypted_password = await bcrypt.hash(password, 10);
+            let encrypted_password = await hash(password, 10);
             userInfo.password = encrypted_password;
             let new_admin_user = new admin_user_model(userInfo);
             await new_admin_user.save();
