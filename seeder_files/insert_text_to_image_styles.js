@@ -800,7 +800,7 @@ const textToImageStylesData = [
 
 async function insert_text_to_image_styles_data() {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await textToImageStyleModel.insertMany(textToImageStylesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Text To Image Styles Data Process Is Successfuly !!";

@@ -22,7 +22,7 @@ const productPricesSchema = mongoose.Schema({
             "30x40",
             "50x70",
             "70x100",
-            "21x29,7",
+            "29,7x21",
             "40x30",
             "70x50",
             "100x70",
@@ -338,7 +338,7 @@ const productPricesData = [
 
 async function insert_product_prices() {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await productPricesModel.insertMany(productPricesData);
         await mongoose.disconnect();
         return "Ok !!, Insert Product Prices Process Is Successfuly !!";

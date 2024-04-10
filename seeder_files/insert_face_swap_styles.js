@@ -717,7 +717,7 @@ const faceSwapStyleStylesData = [
 
 async function insert_face_swap_styles_data() {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await faceSwapStyleModel.insertMany(faceSwapStyleStylesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Face Swap Styles Data Process Is Successfuly !!";

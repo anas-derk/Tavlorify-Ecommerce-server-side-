@@ -67,7 +67,7 @@ const textToImageCategoriesData = [
 
 async function insert_text_to_image_categories_data() {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await textToImageCategoryModel.insertMany(textToImageCategoriesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Text To Image Categories Data Process Is Successfuly !!";

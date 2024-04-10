@@ -57,7 +57,7 @@ const imageToImageCategoriesData = [
 
 async function insert_image_to_image_categories_data() {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await imageToImageCategoryModel.insertMany(imageToImageCategoriesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Image To Image Categories Data Process Is Successfuly !!";

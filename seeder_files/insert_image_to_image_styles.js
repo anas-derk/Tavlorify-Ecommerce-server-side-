@@ -989,7 +989,7 @@ const imageToImageStylesData = [
 
 async function insert_image_to_image_styles_data() {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(process.env.DB_URL);
         await imageToImageStyleModel.insertMany(imageToImageStylesData);
         await mongoose.disconnect();
         return "Ok !!, Inserting Image To Image Styles Data Process Is Successfuly !!";

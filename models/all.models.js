@@ -411,7 +411,7 @@ const productPricesSchema = mongoose.Schema({
             "30x40",
             "50x70",
             "70x100",
-            "21x29,7",
+            "29,7x21",
             "40x30",
             "70x50",
             "100x70",
