@@ -7,7 +7,10 @@ require("dotenv").config({
 // Create Face Swap Style Schema
 
 const faceSwapStyleSchema = mongoose.Schema({
-    categoryName: String,
+    categoryName: {
+        type: String,
+        required: true,
+    },
     imgSrcList: Array,
     sortNumber: Number,
 });

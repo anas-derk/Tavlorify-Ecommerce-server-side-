@@ -7,8 +7,14 @@ require("dotenv").config({
 // Create Image To Image Category Schema
 
 const imageToImageCategorySchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 

@@ -7,11 +7,26 @@ require("dotenv").config({
 // Create Product Prices Schema
 
 const productPricesSchema = mongoose.Schema({
-    productName: String,
-    dimentions: String,
-    position: String,
-    priceBeforeDiscount: Number,
-    priceAfterDiscount: Number,
+    productName: {
+        type: String,
+        required: true,
+    },
+    dimentions: {
+        type: String,
+        required: true,
+    },
+    position: {
+        type: String,
+        required: true,
+    },
+    priceBeforeDiscount: {
+        type: Number,
+        required: true,
+    },
+    priceAfterDiscount: {
+        type: Number,
+        required: true,
+    },
 });
 
 // Create Product Prices Model From Product Prices Schema

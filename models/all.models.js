@@ -5,8 +5,14 @@ const { mongoose } = require("../server");
 // Create Admin Schema
 
 const adminSchema = mongoose.Schema({
-    email: String,
-    password: String,
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
 });
 
 // Create Admin Model From Admin Schema
@@ -16,10 +22,22 @@ const adminModel = mongoose.model("admin", adminSchema);
 // Create Text To Image Style Schema
 
 const textToImageStyleSchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-    prompt: String,
-    negative_prompt: String,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    prompt: {
+        type: String,
+        required: true,
+    },
+    negative_prompt: {
+        type: String,
+        required: true,
+    },
     num_inference_steps: {
         type: Number,
         default: 50,
@@ -28,8 +46,14 @@ const textToImageStyleSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-    modelName: String,
-    categoryName: String,
+    modelName: {
+        type: String,
+        required: true,
+    },
+    categoryName: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 
@@ -40,8 +64,14 @@ const textToImageStyleModel = mongoose.model("text_to_image_style", textToImageS
 // Create Text To Image Category Schema
 
 const textToImageCategorySchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 
@@ -52,17 +82,38 @@ const textToImageCategoryModel = mongoose.model("text_to_image_categorie", textT
 // Create Image To Image Style Schema
 
 const imageToImageStyleSchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-    prompt: String,
-    negative_prompt: String,
-    ddim_steps: Number,
-    strength: Number,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    prompt: {
+        type: String,
+        required: true,
+    },
+    negative_prompt: {
+        type: String,
+        required: true,
+    },
+    ddim_steps: {
+        type: Number,
+        required: true,
+    },
+    strength: {
+        type: Number,
+        required: true,
+    },
     modelName: {
         type: String,
         default: "controlnet-1.1-x-realistic-vision-v2.0",
     },
-    categoryName: String,
+    categoryName: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 
@@ -73,8 +124,14 @@ const imageToImageStyleModel = mongoose.model("image_to_image_style", imageToIma
 // Create Image To Image Category Schema
 
 const imageToImageCategorySchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 
@@ -213,7 +270,10 @@ const orderModel = mongoose.model("order", orderSchema);
 // Create generated Image Schema
 
 const generatedImageSchema = mongoose.Schema({
-    service: String,
+    service: {
+        type: String,
+        required: true,
+    },
     uploadedImageURL: {
         type: String,
         default: "",
@@ -222,22 +282,46 @@ const generatedImageSchema = mongoose.Schema({
         type: String,
         default: "",
     },
-    categoryName: String,
-    styleName: String,
-    paintingType: String,
-    position: String,
-    size: String,
+    categoryName: {
+        type: String,
+        required: true,
+    },
+    styleName: {
+        type: String,
+        required: true,
+    },
+    paintingType: {
+        type: String,
+        required: true,
+    },
+    position: {
+        type: String,
+        required: true,
+    },
+    size: {
+        type: String,
+        required: true,
+    },
     isExistWhiteBorder: {
         type: String,
         default: "without-border",
     },
-    width: Number,
-    height: Number,
+    width: {
+        type: Number,
+        required: true,
+    },
+    height: {
+        type: Number,
+        required: true,
+    },
     frameColor: {
         type: String,
         default: "none",
     },
-    generatedImagePath: String,
+    generatedImagePath: {
+        type: String,
+        required: true,
+    },
     imageGenerationDate: {
         type: Date,
         default: Date.now(),
@@ -251,11 +335,26 @@ const generatedImageModel = mongoose.model("generated_image", generatedImageSche
 // Create Product Prices Schema
 
 const productPricesSchema = mongoose.Schema({
-    productName: String,
-    dimentions: String,
-    position: String,
-    priceBeforeDiscount: Number,
-    priceAfterDiscount: Number,
+    productName: {
+        type: String,
+        required: true,
+    },
+    dimentions: {
+        type: String,
+        required: true,
+    },
+    position: {
+        type: String,
+        required: true,
+    },
+    priceBeforeDiscount: {
+        type: Number,
+        required: true,
+    },
+    priceAfterDiscount: {
+        type: Number,
+        required: true,
+    },
 });
 
 // Create Product Prices Model From Product Prices Schema
@@ -266,18 +365,39 @@ const productPricesModel = mongoose.model("prices", productPricesSchema);
 
 const returnedOrderSchema = mongoose.Schema({
     returnedOrderNumber: Number,
-    orderNumber: Number,
-    orderId: String,
+    orderNumber: {
+        type: Number,
+        required: true,
+    },
+    orderId: {
+        type: String,
+        required: true,
+    },
     status: {
         type: String,
         default: "awaiting products",
     },
-    order_amount: Number,
+    order_amount: {
+        type: Number,
+        required: true,
+    },
     customer: {
-        first_name: String,
-        last_name: String,
-        email: String,
-        phone: String,
+        first_name: {
+            type: String,
+            required: true,
+        },
+        last_name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
     },
     order_lines: [{
         reference: {
@@ -319,7 +439,10 @@ const returnedOrderModel = mongoose.model("returned_order", returnedOrderSchema)
 // Create Face Swap Style Schema
 
 const faceSwapStyleSchema = mongoose.Schema({
-    categoryName: String,
+    categoryName: {
+        type: String,
+        required: true,
+    },
     imgSrcList: Array,
     sortNumber: Number,
 });

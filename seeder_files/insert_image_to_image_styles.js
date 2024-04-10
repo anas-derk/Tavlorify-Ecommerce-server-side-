@@ -7,14 +7,38 @@ require("dotenv").config({
 // Create Image To Image Style Schema
 
 const imageToImageStyleSchema = mongoose.Schema({
-    imgSrc: String,
-    name: String,
-    prompt: String,
-    negative_prompt: String,
-    modelName: String,
-    ddim_steps: Number,
-    strength: Number,
-    categoryName: String,
+    imgSrc: {
+        type: String,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    prompt: {
+        type: String,
+        required: true,
+    },
+    negative_prompt: {
+        type: String,
+        required: true,
+    },
+    modelName: {
+        type: String,
+        required: true,
+    },
+    ddim_steps: {
+        type: Number,
+        required: true,
+    },
+    strength: {
+        type: Number,
+        required: true,
+    },
+    categoryName: {
+        type: String,
+        required: true,
+    },
     sortNumber: Number,
 });
 
