@@ -49,6 +49,14 @@ const textToImageStyleSchema = mongoose.Schema({
     modelName: {
         type: String,
         required: true,
+        enum: [
+            "dreamshaper",
+            "stable-diffusion",
+            "midjourney-diffusion",
+            "deliberate-v2",
+            "sdxl",
+            "openjourney",
+        ]
     },
     categoryName: {
         type: String,
@@ -109,6 +117,9 @@ const imageToImageStyleSchema = mongoose.Schema({
     modelName: {
         type: String,
         default: "controlnet-1.1-x-realistic-vision-v2.0",
+        enum: [
+            "controlnet-1.1-x-realistic-vision-v2.0"
+        ],
     },
     categoryName: {
         type: String,
@@ -157,10 +168,20 @@ const orderSchema = mongoose.Schema({
     checkout_status: {
         type: String,
         default: "checkout_incomplete",
+        enum: [
+            "checkout_incomplete",
+            "AUTHORIZED",
+            "CAPTURED"
+        ]
     },
     status: {
         type: String,
         default: "pending",
+        enum: [
+            "pending",
+            "shipping",
+            "completing"
+        ]
     },
     billing_address: {
         city: {
@@ -273,6 +294,11 @@ const generatedImageSchema = mongoose.Schema({
     service: {
         type: String,
         required: true,
+        enum: [
+            "text-to-image",
+            "image-to-image",
+            "face-swap"
+        ],
     },
     uploadedImageURL: {
         type: String,
@@ -293,18 +319,46 @@ const generatedImageSchema = mongoose.Schema({
     paintingType: {
         type: String,
         required: true,
+        enum: [
+            "canvas",
+            "poster",
+            "poster-with-wooden-frame",
+            "poster-with-hangers",
+        ]
     },
     position: {
         type: String,
         required: true,
+        enum: [
+            "vertical",
+            "horizontal",
+            "square"
+        ]
     },
     size: {
         type: String,
         required: true,
+        enum: [
+            "30x30",
+            "50x50",
+            "70x70",
+            "21x29,7",
+            "30x40",
+            "50x70",
+            "70x100",
+            "21x29,7",
+            "40x30",
+            "70x50",
+            "100x70",
+        ],
     },
     isExistWhiteBorder: {
         type: String,
         default: "without-border",
+        enum: [
+            "without-border",
+            "with-border",
+        ],
     },
     width: {
         type: Number,
@@ -317,6 +371,13 @@ const generatedImageSchema = mongoose.Schema({
     frameColor: {
         type: String,
         default: "none",
+        enum: [
+            "none",
+            "black",
+            "white",
+            "natural-wood",
+            "dark-wood",
+        ],
     },
     generatedImagePath: {
         type: String,
@@ -342,6 +403,19 @@ const productPricesSchema = mongoose.Schema({
     dimentions: {
         type: String,
         required: true,
+        enum: [
+            "30x30",
+            "50x50",
+            "70x70",
+            "21x29,7",
+            "30x40",
+            "50x70",
+            "70x100",
+            "21x29,7",
+            "40x30",
+            "70x50",
+            "100x70",
+        ],
     },
     position: {
         type: String,
@@ -376,6 +450,12 @@ const returnedOrderSchema = mongoose.Schema({
     status: {
         type: String,
         default: "awaiting products",
+        enum: [
+            "awaiting products",
+            "received products",
+            "checking products",
+            "returned products"
+        ],
     },
     order_amount: {
         type: Number,
