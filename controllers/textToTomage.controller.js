@@ -193,6 +193,7 @@ async function addNewStyle(req, res) {
         await res.json(await textToImageStylesManagmentFunctions.addNewStyle(styleData));
     }
     catch(err){
+        console.log(err)
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }

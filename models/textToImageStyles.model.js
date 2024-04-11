@@ -31,7 +31,7 @@ async function addNewStyle(styleData) {
         return {
             msg: "Adding New Category Style For Text To Image Page Process Is Succesfuly !!",
             error: false,
-            data: await textToImageStyleModel.find({ categoryName }).sort({ sortNumber: 1 }),
+            data: {},
         }
     }
     catch (err) {

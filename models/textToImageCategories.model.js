@@ -4,7 +4,11 @@ const { textToImageCategoryModel, textToImageStyleModel } = require("../models/a
 
 async function getAllCategoriesData() {
     try {
-        return await textToImageCategoryModel.find({}).sort({ sortNumber: 1 });
+        return {
+            msg: "Get All Categories Data For Text To Image Process Has Been Successfully !!",
+            error: false,
+            data: await textToImageCategoryModel.find({}).sort({ sortNumber: 1 }),
+        };
     }
     catch (err) {
         throw Error(err);
