@@ -2,9 +2,9 @@ const generatedImagesRouter = require("express").Router();
 
 const generatedImagesController = require("../controllers/generatedImages.controller");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-
 const { validateJWT } = require("../middlewares/global.middlewares");
+
+const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 generatedImagesRouter.get("/all-generated-images-inside-the-page",
     async (req, res, next) => {

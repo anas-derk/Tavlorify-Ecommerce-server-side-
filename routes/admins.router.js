@@ -2,9 +2,9 @@ const adminRouter = require("express").Router();
 
 const adminController = require("../controllers/admins.controller");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-
 const { validateJWT, validateEmail } = require("../middlewares/global.middlewares");
+
+const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 const multer = require("multer");
 

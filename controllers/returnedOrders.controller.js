@@ -1,4 +1,6 @@
-const { getResponseObject, checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+const { getResponseObject } = require("../global/functions");
+
+const returnedOrdersManagmentFunctions = require("../models/returnedOrders.model");
 
 function getFiltersObject(filters) {
     let filtersObject = {};
@@ -12,49 +14,19 @@ function getFiltersObject(filters) {
     return filtersObject;
 }
 
-async function getAllReturnedOrdersInsideThePage(req, res) {
+async function getReturnedOrdersCount(req, res) {
     try{
-        const filters = req.query;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { getAllReturnedOrdersInsideThePage } = require("../models/returnedOrders.model");
-        await res.json(await getAllReturnedOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters)));
+        await res.json(await returnedOrdersManagmentFunctions.getReturnedOrdersCount(getFiltersObject(req.query)));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
-async function getReturnedOrdersCount(req, res) {
+async function getAllReturnedOrdersInsideThePage(req, res) {
     try{
         const filters = req.query;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
-            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: false },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        for (let objectKey in filters) {
-            if (
-                objectKey !== "pageNumber" &&
-                objectKey !== "pageSize" &&
-                objectKey !== "orderNumber" &&
-                objectKey !== "_id" &&
-                objectKey !== "status" &&
-                objectKey !== "customerName" &&
-                objectKey !== "email"
-            ) { await res.status(400).json("Invalid Request, Please Send Valid Keys !!"); return; }
-        }
-        const { getReturnedOrdersCount } = require("../models/returnedOrders.model");
-        await res.json(await getReturnedOrdersCount(getFiltersObject(filters)));
+        await res.json(await returnedOrdersManagmentFunctions.getAllReturnedOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters)));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -63,16 +35,7 @@ async function getReturnedOrdersCount(req, res) {
 
 async function getReturnedOrderDetails(req, res) {
     try{
-        const returnedOrderId = req.params.orderId;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Returned Order Id", fieldValue: returnedOrderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { getReturnedOrderDetails } = require("../models/returnedOrders.model");
-        await res.json(await getReturnedOrderDetails(returnedOrderId));
+        await res.json(await returnedOrdersManagmentFunctions.getReturnedOrderDetails(req.params.orderId));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -81,16 +44,7 @@ async function getReturnedOrderDetails(req, res) {
 
 async function postNewReturnedOrder(req, res) {
     try{
-        const orderId = req.params.orderId;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { postNewReturnedOrder } = require("../models/returnedOrders.model");
-        await res.json(await postNewReturnedOrder(orderId));
+        await res.json(await returnedOrdersManagmentFunctions.postNewReturnedOrder(req.params.orderId));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -99,17 +53,7 @@ async function postNewReturnedOrder(req, res) {
 
 async function putReturnedOrder(req, res) {
     try{
-        const returnedOrderId = req.params.orderId;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Returned Order Id", fieldValue: returnedOrderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const newReturnedOrderDetails = req.body;
-        const { updateReturnedOrder } = require("../models/returnedOrders.model");
-        await res.json(await updateReturnedOrder(returnedOrderId, newReturnedOrderDetails));
+        await res.json(await returnedOrdersManagmentFunctions.returnedOrdersManagmentFunctionsupdateReturnedOrder(req.params.orderId, req.body));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -118,19 +62,8 @@ async function putReturnedOrder(req, res) {
 
 async function putReturnedOrderProduct(req, res) {
     try{
-        const   returnedOrderId = req.params.orderId,
-                returnedProductId = req.params.productId;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Returned Order Id", fieldValue: returnedOrderId, dataType: "string", isRequiredValue: true },
-            { fieldName: "Returned Product Id", fieldValue: returnedProductId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const newReturnedOrderProductDetails = req.body;
-        const { updateReturnedOrderProduct } = require("../models/returnedOrders.model");
-        await res.json(await updateReturnedOrderProduct(returnedOrderId, returnedProductId, newReturnedOrderProductDetails));
+        const returnedOrderAndProductIds = req.params;
+        await res.json(await returnedOrdersManagmentFunctions.updateReturnedOrderProduct(returnedOrderAndProductIds.orderId, returnedOrderAndProductIds.productId, req.body));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -139,17 +72,7 @@ async function putReturnedOrderProduct(req, res) {
 
 async function deleteReturnedOrder(req, res) {
     try{
-        const returnedOrderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Returned Order Id", fieldValue: returnedOrderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { deleteReturnedOrder } = require("../models/returnedOrders.model");
-        await res.json(await deleteReturnedOrder(returnedOrderId));
+        await res.json(await returnedOrdersManagmentFunctions.deleteReturnedOrder(req.params.orderId));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -158,18 +81,8 @@ async function deleteReturnedOrder(req, res) {
 
 async function deleteProductFromReturnedOrder(req, res) {
     try{
-        const   returnedOrderId = req.params.orderId,
-                productId = req.params.productId;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Returned Order Id", fieldValue: returnedOrderId, dataType: "string", isRequiredValue: true },
-            { fieldName: "Product Id", fieldValue: productId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { deleteProductFromReturnedOrder } = require("../models/returnedOrders.model");
-        await res.json(await deleteProductFromReturnedOrder(returnedOrderId, productId));
+        const returnedOrderAndProductIds = req.params;
+        await res.json(await returnedOrdersManagmentFunctions.deleteProductFromReturnedOrder(returnedOrderAndProductIds.orderId, returnedOrderAndProductIds.productId));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

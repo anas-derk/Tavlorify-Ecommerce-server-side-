@@ -2,9 +2,9 @@ const imageToImageRouter = require("express").Router();
 
 const imageToImageController = require("../controllers/imageToImage.controller");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-
 const { validateJWT } = require("../middlewares/global.middlewares");
+
+const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 const multer = require("multer");
 

@@ -31,7 +31,7 @@ ordersRouter.get("/all-orders-inside-the-page",
 ordersRouter.get("/order-details/:orderId",
     async (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     ordersController.getOrderDetails

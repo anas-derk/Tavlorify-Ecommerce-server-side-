@@ -4,9 +4,9 @@ const faceSwapController = require("../controllers/faceSwap.controller");
 
 const multer = require("multer");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-
 const { validateJWT } = require("../middlewares/global.middlewares");
+
+const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 faceSwapRouter.get("/generate-image",
     async (req, res, next) => {
