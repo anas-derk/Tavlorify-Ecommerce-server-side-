@@ -25,6 +25,7 @@ async function getAdminLogin(req, res) {
         await res.json(result);
     }
     catch(err) {
+        console.log(err)
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
