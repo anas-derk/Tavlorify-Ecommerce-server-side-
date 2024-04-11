@@ -1,23 +1,8 @@
-const { getResponseObject, checkIsExistValueForFieldsAndDataTypes, sendPaymentConfirmationMessage } = require("../global/functions");
+const { getResponseObject, sendPaymentConfirmationMessage } = require("../global/functions");
 
-async function getAllOrdersInsideThePage(req, res) {
-    try{
-        const filters = req.query;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { getAllOrdersInsideThePage } = require("../models/orders.model");
-        await res.json(await getAllOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters)));
-    }
-    catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
-    }
-}
+const { get, post } = require("axios");
+
+const ordersManagmentFunctions = require("../models/orders.model");
 
 function getFiltersObject(filters) {
     let filtersObject = {};
@@ -34,29 +19,17 @@ function getFiltersObject(filters) {
 
 async function getOrdersCount(req, res) {
     try{
+        await res.json(await ordersManagmentFunctions.getOrdersCount(getFiltersObject(req.query)));
+    }
+    catch(err) {
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
+async function getAllOrdersInsideThePage(req, res) {
+    try{
         const filters = req.query;
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
-            { fieldName: "Page Size", fieldValue: Number(filters.pageSize), dataType: "number", isRequiredValue: false },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        for (let objectKey in filters) {
-            if (
-                objectKey !== "pageNumber" &&
-                objectKey !== "pageSize" &&
-                objectKey !== "orderNumber" &&
-                objectKey !== "_id" &&
-                objectKey !== "klarnaReference" &&
-                objectKey !== "status" &&
-                objectKey !== "customerName" &&
-                objectKey !== "email"
-            ) { await res.status(400).json("Invalid Request, Please Send Valid Keys !!"); return; }
-        }
-        const { getOrdersCount } = require("../models/orders.model");
-        await res.json(await getOrdersCount(getFiltersObject(filters)));
+        await res.json(await ordersManagmentFunctions.getAllOrdersInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters)));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -65,17 +38,7 @@ async function getOrdersCount(req, res) {
 
 async function getOrderDetails(req, res) {
     try{
-        const orderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { getOrderDetails } = require("../models/orders.model");
-        await res.json(await getOrderDetails(orderId));
+        await res.json(await ordersManagmentFunctions.getOrderDetails(req.params.orderId));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -84,23 +47,13 @@ async function getOrderDetails(req, res) {
 
 async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
     try{
-        const orderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { get } = require("axios");
-        const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, {
+        const response = await get(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${req.params.orderId}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        await res.json(await response.data);
+        await res.json(response.data);
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -109,14 +62,13 @@ async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
 
 async function postNewOrderToGelato(req, res) {
     try {
-        const axios = require("axios");
-        const response = await axios.post(`${process.env.GELATO_BASE_API_URL}/v4/orders`, req.body, {
+        const response = await post(`${process.env.GELATO_BASE_API_URL}/v4/orders`, req.body, {
             headers: {
                 "Content-Type": "application/json",
                 "x-api-key": process.env.GELATO_API_KEY,
             }
         });
-        await res.json(await response.data);
+        await res.json(response.data);
     } catch (err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
@@ -124,16 +76,14 @@ async function postNewOrderToGelato(req, res) {
 
 async function postNewOrderToKlarna(req, res) {
     try {
-        const orderDetails = req.body;
-        const { post } = require("axios");
-        const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders`, orderDetails, {
+        const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders`, req.body, {
             headers: {
                 "Content-Type": "application/json",
                 "Klarna-Partner": "string",
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        await res.json(await response.data);
+        await res.json(response.data);
     }
     catch (err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -142,8 +92,7 @@ async function postNewOrderToKlarna(req, res) {
 
 async function postNewOrder(req, res) {
     try{
-        const { postNewOrder } = require("../models/orders.model");
-        await res.json(await postNewOrder());
+        await res.json(await ordersManagmentFunctions.postNewOrder());
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -153,15 +102,6 @@ async function postNewOrder(req, res) {
 async function postKlarnaCheckoutComplete(req, res) {
     try{
         const orderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { get, post } = require("axios");
         let response = await get(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}`, {
             headers: {
                 "Content-Type": "application/json",
@@ -226,24 +166,13 @@ async function postKlarnaCheckoutComplete(req, res) {
 
 async function putKlarnaOrder(req, res) {
     try{
-        const orderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const newOrderDetails = req.body;
-        const { post } = require("axios");
-        const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${orderId}`, newOrderDetails, {
+        const response = await post(`${process.env.KLARNA_BASE_API_URL}/checkout/v3/orders/${req.params.orderId}`, req.body, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        await res.json(await response.data);
+        await res.json(response.data);
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -252,18 +181,7 @@ async function putKlarnaOrder(req, res) {
 
 async function putOrder(req, res) {
     try{
-        const orderId = req.params.orderId;
-        const newOrderDetails = req.body;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { updateOrder } = require("../models/orders.model");
-        await res.json(await updateOrder(orderId, newOrderDetails));
+        await res.json(await ordersManagmentFunctions.updateOrder(req.params.orderId, req.body));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -272,20 +190,7 @@ async function putOrder(req, res) {
 
 async function putOrderProduct(req, res) {
     try{
-        const   orderId = req.params.orderId,
-                productId = req.params.productId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-            { fieldName: "Product Id", fieldValue: productId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const newOrderProductDetails = req.body;
-        const { updateOrderProduct } = require("../models/orders.model");
-        await res.json(await updateOrderProduct(orderId, productId, newOrderProductDetails));
+        await res.json(await ordersManagmentFunctions.updateOrderProduct(orderAndProductIds.orderId, orderAndProductIds.productId, req.body));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -294,17 +199,7 @@ async function putOrderProduct(req, res) {
 
 async function deleteOrder(req, res) {
     try{
-        const orderId = req.params.orderId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { deleteOrder } = require("../models/orders.model");
-        await res.json(await deleteOrder(orderId));
+        await res.json(await ordersManagmentFunctions.deleteOrder(req.params.orderId));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -313,19 +208,7 @@ async function deleteOrder(req, res) {
 
 async function deleteProductFromOrder(req, res) {
     try{
-        const   orderId = req.params.orderId,
-                productId = req.params.productId;
-        const { checkIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-        const checkResult = checkIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true },
-            { fieldName: "Product Id", fieldValue: productId, dataType: "string", isRequiredValue: true },
-        ]);
-        if (checkResult) {
-            await res.status(400).json(checkResult);
-            return;
-        }
-        const { deleteProductFromOrder } = require("../models/orders.model");
-        await res.json(await deleteProductFromOrder(orderId, productId));
+        await res.json(await ordersManagmentFunctions.deleteProductFromOrder(orderAndProductIds.orderId, orderAndProductIds.productId));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
