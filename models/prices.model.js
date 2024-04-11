@@ -4,7 +4,11 @@ const { productPricesModel } = require("../models/all.models");
 
 async function getPricesByProductName(productName) {
     try{
-        return await productPricesModel.find({ productName });
+        return {
+            msg: "Get Prices By Product Name Process Has Been Successfully !!",
+            error: false,
+            data: await productPricesModel.find({ productName })
+        };
     }
     catch(err) {
         throw Error(err);
@@ -68,7 +72,11 @@ async function getPriceByProductDetails(productName, position, dimentions) {
                 break;
             }
             default: {
-                console.log("Invalid Product Name !!");
+                return {
+                    msg: "Invalid Product Name !!",
+                    error: true,
+                    data: [],
+                };
             }
         }
         return {
