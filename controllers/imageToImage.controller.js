@@ -141,7 +141,7 @@ async function addNewStyle(req, res) {
 
 async function putCategoryData(req, res) {
     try{
-        await res.json(await imageToImageManagmentFunctions.updateCategoryData(req.params.categoryId, req.body));
+        await res.json(await imageToImageCategoriesManagmentFunctions.updateCategoryData(req.params.categoryId, req.body));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

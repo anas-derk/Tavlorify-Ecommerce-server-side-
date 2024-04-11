@@ -182,7 +182,7 @@ imageToImageRouter.delete("/categories/delete-category-data/:categoryId",
     validateJWT,
     async (req, res, next) => {;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     imageToImageController.deleteCategoryData,
