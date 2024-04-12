@@ -190,6 +190,7 @@ async function putOrder(req, res) {
 
 async function putOrderProduct(req, res) {
     try{
+        const orderAndProductIds = req.params;
         await res.json(await ordersManagmentFunctions.updateOrderProduct(orderAndProductIds.orderId, orderAndProductIds.productId, req.body));
     }
     catch(err){
@@ -208,6 +209,7 @@ async function deleteOrder(req, res) {
 
 async function deleteProductFromOrder(req, res) {
     try{
+        const orderAndProductIds = req.params;
         await res.json(await ordersManagmentFunctions.deleteProductFromOrder(orderAndProductIds.orderId, orderAndProductIds.productId));
     }
     catch(err){

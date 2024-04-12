@@ -2,6 +2,10 @@
 
 const { orderModel } = require("../models/all.models");
 
+const { mongoose } = require("../server");
+
+const { calcOrderAmount } = require("../global/functions");
+
 async function getAllOrdersInsideThePage(pageNumber, pageSize, filters) {
     try {
         return {
@@ -100,8 +104,7 @@ async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
                 order.order_lines[productIndex].name = newOrderProductDetails.name;
                 order.order_lines[productIndex].unit_price = newOrderProductDetails.unit_price;
                 order.order_lines[productIndex].total_amount = newOrderProductDetails.total_amount;
-                const { calcOrderAmount } = require("../global/functions");
-                await orderModel.updateOne({ _id: orderId }, { order_lines, order_amount: calcOrderAmount(order_lines) });
+                await orderModel.updateOne({ _id: orderId }, { order_lines: order.order_lines, order_amount: calcOrderAmount(order.order_lines) });
                 return {
                     msg: "Updating Order Details Has Been Successfuly !!",
                     error: false,
@@ -142,7 +145,7 @@ async function deleteProductFromOrder(orderId, productId) {
     try {
         const order = await orderModel.findOne({ _id: orderId });
         if (order) {
-            const newOrderLines = order.order_lines.filter((order_line) => order_line._id == productId);
+            const newOrderLines = order.order_lines.filter((order_line) => !(new mongoose.Types.ObjectId(productId)).equals(order_line._id));
             if (newOrderLines.length < order.order_lines.length) {
                 await orderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines });
                 return {
