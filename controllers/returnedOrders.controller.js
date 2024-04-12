@@ -53,7 +53,7 @@ async function postNewReturnedOrder(req, res) {
 
 async function putReturnedOrder(req, res) {
     try{
-        await res.json(await returnedOrdersManagmentFunctions.returnedOrdersManagmentFunctionsupdateReturnedOrder(req.params.orderId, req.body));
+        await res.json(await returnedOrdersManagmentFunctions.updateReturnedOrder(req.params.orderId, req.body));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
