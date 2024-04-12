@@ -2,6 +2,10 @@
 
 const { orderModel, returnedOrderModel } = require("../models/all.models");
 
+const { mongoose } = require("../server");
+
+const { calcOrderAmount } = require("../global/functions");
+
 async function getAllReturnedOrdersInsideThePage(pageNumber, pageSize, filters) {
     try {
         return {
@@ -106,15 +110,14 @@ async function updateReturnedOrderProduct(returnedOrderId, productId, newReturne
     try {
         const order = await returnedOrderModel.findOne({ _id: returnedOrderId });
         if (order) {
-            const productIndex = order_lines.findIndex((order_line) => order_line._id == productId);
+            const productIndex = order.order_lines.findIndex((order_line) => order_line._id == productId);
             if (productIndex !== -1) {
                 order.order_lines[productIndex].quantity = newReturnedOrderDetails.quantity;
                 order.order_lines[productIndex].name = newReturnedOrderDetails.name;
                 order.order_lines[productIndex].unit_price = newReturnedOrderDetails.unit_price;
                 order.order_lines[productIndex].total_amount = newReturnedOrderDetails.total_amount;
                 order.order_lines[productIndex].return_reason = newReturnedOrderDetails.return_reason;
-                const { calcOrderAmount } = require("../global/functions");
-                await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines, order_amount: calcOrderAmount(order_lines) });
+                await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines: order.order_lines, order_amount: calcOrderAmount(order.order_lines) });
                 return {
                     msg: "Updating Returned Order Details Process Has Been Successfuly !!",
                     error: false,
@@ -162,7 +165,7 @@ async function deleteProductFromReturnedOrder(returnedOrderId, productId) {
     try {
         const returnedOrder = await returnedOrderModel.findOne({ _id: returnedOrderId });
         if (returnedOrder) {
-            const newOrderLines = returnedOrder.order_lines.filter((order_line) => order_line._id == productId);
+            const newOrderLines = returnedOrder.order_lines.filter((order_line) => order_line._id != productId);
             if (newOrderLines.length < returnedOrder.order_lines.length) {
                 await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines: newOrderLines });
                 return {
