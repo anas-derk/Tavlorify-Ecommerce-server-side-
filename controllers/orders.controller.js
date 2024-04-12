@@ -4,6 +4,8 @@ const { get, post } = require("axios");
 
 const ordersManagmentFunctions = require("../models/orders.model");
 
+const { v4 } = require("uuid");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -110,12 +112,11 @@ async function postKlarnaCheckoutComplete(req, res) {
         });
         let result = await response.data;
         // ----------------------------------------------
-        if (result.status == "AUTHORIZED" || result.status == "CAPTURED") {
-            const { updateOrder } = require("../models/orders.model");
+        if (result.status == "AUTHORIZED" || result.status == "CAPTURED" || result.status === "EXPIRED") {
             const order_lines_after_modify_unit_price_and_total_amount = result.order_lines.map((order_line) => {
                 return { ...order_line, unit_price: order_line.unit_price / 100, total_amount: order_line.total_amount / 100 };
             });
-            const result1 = await updateOrder(undefined, {
+            const result1 = await ordersManagmentFunctions.updateOrder(undefined, {
                 klarnaOrderId: orderId,
                 klarnaReference: result.klarna_reference,
                 checkout_status: result.status,
@@ -141,7 +142,6 @@ async function postKlarnaCheckoutComplete(req, res) {
                 order_lines: order_lines_after_modify_unit_price_and_total_amount,
             });
             if (!result1.error) {
-                const { v4 } = require("uuid");
                 response = await post(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}/acknowledge`, undefined , {
                     headers: {
                         "Content-Type": "application/json",

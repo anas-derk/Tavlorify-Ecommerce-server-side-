@@ -110,7 +110,7 @@ function transporterObj() {
         requireTLS: true,
         auth: {
             user: process.env.BUSSINESS_EMAIL,
-            pass: process.env.MAIN_ADMIN_PASSWORD,
+            pass: process.env.BUSSINESS_PASSWORD,
         }
     });
     return transporter;
