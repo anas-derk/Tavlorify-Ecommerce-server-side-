@@ -70,7 +70,7 @@ async function updateStyleData(styleId, categoryName, newCategoryStyleInfo){
 
 async function deleteStyleData(styleId, categoryName) {
     try {
-        const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName: categoryName });
+        const stylesCount = await imageToImageStyleModel.countDocuments({ categoryName });
         const styleData = await imageToImageStyleModel.findOneAndDelete({
             _id: styleId,
         });
@@ -88,24 +88,21 @@ async function deleteStyleData(styleId, categoryName) {
                     style.sortNumber = style.sortNumber - 1;
                 }
                 return {
-                    msg: "Deleting Style Data Process Has Been Successfully !!",
-                    error: false,
-                    data: {
-                        imgSrc: style.imgSrc,
-                        name: style.name,
-                        prompt: style.prompt,
-                        negative_prompt: style.negative_prompt,
-                        num_inference_steps: style.num_inference_steps,
-                        refine: style.refine,
-                        modelName: style.modelName,
-                        ddim_steps: style.ddim_steps,
-                        strength: style.strength,
-                        categoryName: style.categoryName,
-                        sortNumber: style.sortNumber,
-                    }
+                    imgSrc: style.imgSrc,
+                    name: style.name,
+                    prompt: style.prompt,
+                    negative_prompt: style.negative_prompt,
+                    num_inference_steps: style.num_inference_steps,
+                    refine: style.refine,
+                    modelName: style.modelName,
+                    ddim_steps: style.ddim_steps,
+                    strength: style.strength,
+                    categoryName: style.categoryName,
+                    sortNumber: style.sortNumber,
                 };
             });
-            await imageToImageStyleModel.deleteMany({ categoryName: categoryName });
+            await imageToImageStyleModel.deleteMany({ categoryName });
+            console.log(allCategoryStylesAfterChangeSortNumber)
             await imageToImageStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
         }
         return {

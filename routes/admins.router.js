@@ -33,7 +33,10 @@ adminRouter.get("/login",
 
 adminRouter.get("/user-info",  validateJWT, adminController.getAdminUserInfo);
 
-adminRouter.put("/update-style-image", validateJWT, checkServiceNameAndStyleId, multer({
+adminRouter.put("/update-style-image",
+    validateJWT,
+    checkServiceNameAndStyleId,
+    multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             if (req.query.service === "text-to-image") {
@@ -62,6 +65,8 @@ adminRouter.put("/update-style-image", validateJWT, checkServiceNameAndStyleId, 
         }
         cb(null, true);
     }
-}).single("styleImage"), adminController.putStyleImage);
+    }).single("styleImage"),
+    adminController.putStyleImage
+);
 
 module.exports = adminRouter;

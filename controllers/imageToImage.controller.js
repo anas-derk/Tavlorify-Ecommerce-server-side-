@@ -176,13 +176,14 @@ async function deleteCategoryData(req, res) {
 async function deleteStyleData(req, res) {
     try{
         const result = await imageToImageStylesManagmentFunctions.deleteStyleData(req.params.styleId, req.query.categoryName);
+        console.log(result.data);
         if (!result.error) {
-            const { unlinkSync } = require("fs");
             unlinkSync(result.data);
         }
         await res.json(result);
     }
     catch(err) {
+        console.log(err);
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
