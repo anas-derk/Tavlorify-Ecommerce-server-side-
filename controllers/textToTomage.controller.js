@@ -96,7 +96,7 @@ async function generateImage(req, res) {
                     height: parseInt(Number(textToImageInfo.height)),
                     num_inference_steps: textToImageInfo.num_inference_steps,
                     refine: textToImageInfo.expert_ensemble_refiner,
-                    width: parseInt(Number(textToImageInfowidth)),
+                    width: parseInt(Number(textToImageInfo.width)),
                     height: parseInt(Number(textToImageInfo.height)),
                 });
                 tempOutput = output;
@@ -134,7 +134,6 @@ async function generateImage(req, res) {
         }
     }
     catch(err) {
-        console.log(err);
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
