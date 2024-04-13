@@ -29,7 +29,7 @@ async function generateImage(req, res) {
         );
         if (output.status === "succeed") {
             const result = await saveNewGeneratedImage(output.image);
-            if (result.msg && result.msg === "success file downloaded !!") {
+            if (!result.error) {
                 await res.json({
                     msg: "Generating Image From Image For Face Swap Service Process Has Been Successfully !!",
                     error: false,

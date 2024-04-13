@@ -119,7 +119,7 @@ async function generateImage(req, res) {
         if (tempOutput && Array.isArray(tempOutput)) {
             if (tempOutput.length === 1) {
                 const result = await saveNewGeneratedImage(tempOutput[0]);
-                if (result.msg && result.msg === "success file downloaded !!") {
+                if (!result.error) {
                     generatedImagePathInServer = result.data.imagePath;
                     generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
                     res.json({
