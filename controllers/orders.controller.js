@@ -85,7 +85,11 @@ async function postNewOrderToKlarna(req, res) {
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        await res.json(response.data);
+        await res.json({
+            msg: "Creating New Order In Klarna Process Has Been Successfully !!",
+            error: false,
+            data: response.data
+        });
     }
     catch (err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -172,7 +176,11 @@ async function putKlarnaOrder(req, res) {
                 "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
             },
         });
-        await res.json(response.data);
+        await res.json({
+            msg: "Updating Klarna Order Process Has Been Successfully !!",
+            error: false,
+            data: response.data
+        });
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
