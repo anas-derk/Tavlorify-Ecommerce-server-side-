@@ -46,13 +46,18 @@ async function generateImage(req, res) {
                         if (!result.error) {
                             generatedImagePathInServer = result.data.imagePath;
                             generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
-                            await res.json({
+                            console.log({
+                                msg: "Generating Image From Image Process Has Been Successfully !!",
+                                error: false,
+                                data: result.data.imagePath,
+                            })
+                            res.json({
                                 msg: "Generating Image From Image Process Has Been Successfully !!",
                                 error: false,
                                 data: result.data.imagePath,
                             });
                         }
-                    } else await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+                    } else res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
                 }
                 break;
             }
