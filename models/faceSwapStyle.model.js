@@ -4,7 +4,11 @@ const { faceSwapStyleModel } = require("./all.models");
 
 async function getAllCategoryStylesData(categoryName){
     try {
-        return await faceSwapStyleModel.find({ categoryName }).sort({ sortNumber: 1 });
+        return {
+            msg: "Get All Category Styles For ${categoryName} In Face Swap Service Process Has Been Successfully !!",
+            error: false,
+            data: await faceSwapStyleModel.find({ categoryName }).sort({ sortNumber: 1 })
+        };
     }
     catch (err) {
         throw Error(err);
