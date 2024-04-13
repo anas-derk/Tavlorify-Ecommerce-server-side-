@@ -1,4 +1,4 @@
-const { getResponseObject, saveNewGeneratedImageDataGlobalFunc } = require("../global/functions");
+const { getResponseObject, saveNewGeneratedImageDataGlobalFunc, saveNewGeneratedImage } = require("../global/functions");
 
 const imageToImageCategoriesManagmentFunctions = require("../models/imageToImageCategories.model");
 
@@ -42,11 +42,10 @@ async function generateImage(req, res) {
                     });
                 if (Array.isArray(output)) {
                     if (output.length === 2) {
-                        const { saveNewGeneratedImage } = require("../global/functions");
                         const result = await saveNewGeneratedImage(output[1]);
                         if (!result.error) {
-                            generatedImagePathInServer = result.imagePath;
-                            generatedImageAsArrayBuffer = result.imageAsArrayBuffer;
+                            generatedImagePathInServer = result.data.imagePath;
+                            generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
                             await res.json(result.imagePath);
                         }
                     } else await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

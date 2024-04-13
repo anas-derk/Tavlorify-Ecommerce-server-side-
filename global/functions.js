@@ -8,6 +8,12 @@ const { createTransport } = require("nodemailer");
 
 const { Types } = require("mongoose");
 
+const { get } = require("axios");
+
+const sharp = require("sharp");
+
+const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
+
 function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
 }
@@ -29,13 +35,10 @@ function calcOrderAmount(order_lines) {
 }
 
 async function saveNewGeneratedImage(generatedImageURL) {
-    const { get } = require('axios');
     const randomImageName = `${Math.random()}_${Date.now()}__generatedImage.png`;
-    const path = require("path");
-    const destination = path.join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
+    const destination = join(__dirname, "..", "assets", "images", "generatedImages", randomImageName);
     const res = await get(generatedImageURL, { responseType: 'arraybuffer' });
-    const result = await res.data;
-    const sharp = require("sharp");
+    const result = res.data;
     await sharp(result).toFile(destination);
     return {
         msg: "Success File Downloaded Process Has Been Successfully !!",
@@ -49,9 +52,7 @@ async function saveNewGeneratedImage(generatedImageURL) {
 
 async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
     try{
-        const sharp = require("sharp");
         const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
-        const { saveNewGeneratedImageData } = require("../models/generatedImages.model");
         if (generatingInfo.service === "image-to-image") {
             let imageOrientation = "", size = "";
             if (width < height) {
