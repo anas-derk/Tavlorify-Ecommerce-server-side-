@@ -123,7 +123,7 @@ async function generateImage(req, res) {
                     generatedImagePathInServer = result.data.imagePath;
                     generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
                     await res.json({
-                        msg: "Generating Image Process Has Been Successfully !!",
+                        msg: "Generating Image From Text Process Has Been Successfully !!",
                         error: false,
                         data: result.data.imagePath,
                     });

@@ -40,13 +40,19 @@ async function generateImage(req, res) {
                         ddim_steps: parseInt(imageToImageInfo.ddim_steps),
                         strength: Number(imageToImageInfo.strength),
                     });
+                console.log(output)
                 if (Array.isArray(output)) {
                     if (output.length === 2) {
                         const result = await saveNewGeneratedImage(output[1]);
+                        console.log(result);
                         if (!result.error) {
                             generatedImagePathInServer = result.data.imagePath;
                             generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
-                            await res.json(result.imagePath);
+                            await res.json({
+                                msg: "Generating Image From Image Process Has Been Successfully !!",
+                                error: false,
+                                data: result.imagePath,
+                            });
                         }
                     } else await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
                 }
@@ -57,6 +63,7 @@ async function generateImage(req, res) {
             }
         }
     } catch (err) {
+        console.log(err);
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
