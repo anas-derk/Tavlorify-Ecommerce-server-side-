@@ -113,7 +113,7 @@ async function generateImage(req, res) {
                 break;
             }
             default: {
-                await res.status(400).json("Invalid Model Name !!");
+                res.status(400).json("Invalid Model Name !!");
             }
         }
         if (tempOutput && Array.isArray(tempOutput)) {
@@ -122,19 +122,19 @@ async function generateImage(req, res) {
                 if (result.msg && result.msg === "success file downloaded !!") {
                     generatedImagePathInServer = result.data.imagePath;
                     generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
-                    await res.json({
+                    res.json({
                         msg: "Generating Image From Text Process Has Been Successfully !!",
                         error: false,
                         data: result.data.imagePath,
                     });
                 }
             } else {
-                await res.status(500).json(getResponseObject("Error In Generating", true, {}));
+                res.status(500).json(getResponseObject("Error In Generating", true, {}));
             }
         }
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
         await saveNewGeneratedImageDataGlobalFunc({ ...req.query, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
