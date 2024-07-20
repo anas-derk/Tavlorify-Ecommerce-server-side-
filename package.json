@@ -1,5 +1,6 @@
 {
   "main": "server.js",
+  "name": "tavlorify-server-side-app",
   "dependencies": {
     "@google-cloud/translate": "^8.0.2",
     "axios": "^1.4.0",
@@ -21,7 +22,7 @@
     "start": "node server.js"
   },
   "engines": {
-    "node": "18.16.0",
-    "npm": "9.5.1"
+    "node": "v20.11.0",
+    "npm": "10.2.4"
   }
 }
