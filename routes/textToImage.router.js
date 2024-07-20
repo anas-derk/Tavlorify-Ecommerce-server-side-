@@ -9,15 +9,15 @@ const { validateJWT } = require("../middlewares/global.middlewares");
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 textToImageRouter.get("/generate-image",
-    async (req, res, next) => {
-        const textToImageInfo = req.query;
+    (req, res, next) => {
+        const { textPrompt, prompt, category, model_name, width, height } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Text Prompt", fieldValue: textToImageInfo.textPrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Prompt", fieldValue: textToImageInfo.prompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: textToImageInfo.category, dataType: "string", isRequiredValue: false },
-            { fieldName: "Model Name", fieldValue: textToImageInfo.model_name, dataType: "string", isRequiredValue: true },
-            { fieldName: "Width", fieldValue: Number(textToImageInfo.width), dataType: "number", isRequiredValue: true },
-            { fieldName: "Height", fieldValue: Number(textToImageInfo.height), dataType: "number", isRequiredValue: true },
+            { fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: category, dataType: "string", isRequiredValue: false },
+            { fieldName: "Model Name", fieldValue: model_name, dataType: "string", isRequiredValue: true },
+            { fieldName: "Width", fieldValue: Number(width), dataType: "number", isRequiredValue: true },
+            { fieldName: "Height", fieldValue: Number(height), dataType: "number", isRequiredValue: true },
         ], res, next);
     },
     textToImageController.generateImage
@@ -26,7 +26,7 @@ textToImageRouter.get("/generate-image",
 textToImageRouter.get("/categories/all-categories-data", textToImageController.getAllCategoriesData);
 
 textToImageRouter.get("/styles/category-styles-data",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
@@ -69,14 +69,14 @@ textToImageRouter.post("/categories/add-new-category",
         name: "categoryImgFile",
         maxCount: 1,
     }, { name: "styleImgFile", maxCount: 1 }]),
-    async (req, res, next) => {
-        const categoryData = req.body;
+    (req, res, next) => {
+        const { categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Name", fieldValue: categoryData.categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Name", fieldValue: categoryData.styleName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Prompt", fieldValue: categoryData.stylePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Negative Prompt", fieldValue: categoryData.styleNegativePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Model Name", fieldValue: categoryData.modelName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Prompt", fieldValue: stylePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Negative Prompt", fieldValue: styleNegativePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     textToImageController.addNewCategory
@@ -109,14 +109,14 @@ textToImageRouter.post("/styles/add-new-style",
         cb(null, true);
     }
     }).single("styleImgFile"),
-    async (req, res, next) => {
-        const styleData = req.body;
+    (req, res, next) => {
+        const { categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Name", fieldValue: styleData.categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Name", fieldValue: styleData.styleName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Prompt", fieldValue: styleData.stylePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Negative Prompt", fieldValue: styleData.styleNegativePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Model Name", fieldValue: styleData.modelName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Prompt", fieldValue: stylePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Negative Prompt", fieldValue: styleNegativePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     textToImageController.addNewStyle
@@ -125,11 +125,11 @@ textToImageRouter.post("/styles/add-new-style",
 textToImageRouter.put("/categories/update-category-data/:categoryId",
     validateJWT,
     async (req, res, next) => {
-        const categoryData = req.body;
+        const { newCategorySortNumber, newCategoryName } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Category Sort Number", fieldValue: Number(categoryData.newCategorySortNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "New Category Name", fieldValue: categoryData.newCategoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "New Category Sort Number", fieldValue: Number(newCategorySortNumber), dataType: "number", isRequiredValue: true },
+            { fieldName: "New Category Name", fieldValue: newCategoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     textToImageController.putCategoryData
@@ -137,16 +137,16 @@ textToImageRouter.put("/categories/update-category-data/:categoryId",
 
 textToImageRouter.put("/styles/update-style-data/:styleId",
     validateJWT,
-    async (req, res, next) => {
-        const newStyleData = req.body;
+    (req, res, next) => {
+        const { newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newModelName } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "ObjectId", isRequiredValue: true },
             { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Category Style Sort Number", fieldValue: Number(newStyleData.newCategoryStyleSortNumber), dataType: "number", isRequiredValue: false },
-            { fieldName: "New Name", fieldValue: newStyleData.newName, dataType: "string", isRequiredValue: false },
-            { fieldName: "New Prompt", fieldValue: newStyleData.newPrompt, dataType: "string", isRequiredValue: false },
-            { fieldName: "New Negative Prompt", fieldValue: newStyleData.newNegativePrompt, dataType: "string", isRequiredValue: false },
-            { fieldName: "New Model Name", fieldValue: newStyleData.newModelName, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Category Style Sort Number", fieldValue: Number(newCategoryStyleSortNumber), dataType: "number", isRequiredValue: false },
+            { fieldName: "New Name", fieldValue: newName, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Prompt", fieldValue: newPrompt, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Negative Prompt", fieldValue: newNegativePrompt, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Model Name", fieldValue: newModelName, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
     textToImageController.putStyleData
@@ -154,9 +154,9 @@ textToImageRouter.put("/styles/update-style-data/:styleId",
 
 textToImageRouter.delete("/categories/delete-category-data/:categoryId",
     validateJWT,
-    async (req, res, next) => {;
+    (req, res, next) => {;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     textToImageController.deleteCategoryData
@@ -164,9 +164,9 @@ textToImageRouter.delete("/categories/delete-category-data/:categoryId",
 
 textToImageRouter.delete("/styles/delete-style-data/:styleId",
     validateJWT,
-    async (req, res, next) => {;
+    (req, res, next) => {;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "ObjectId", isRequiredValue: true },
             { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },

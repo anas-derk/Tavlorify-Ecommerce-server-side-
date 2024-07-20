@@ -7,7 +7,7 @@ const { validateJWT } = require("../middlewares/global.middlewares");
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 ordersRouter.get("/orders-count",
-    async (req, res, next) => {
+    (req, res, next) => {
         const filters = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: false },
@@ -18,7 +18,7 @@ ordersRouter.get("/orders-count",
 );
 
 ordersRouter.get("/all-orders-inside-the-page",
-    async (req, res, next) => {
+    (req, res, next) => {
         const filters = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Page Number", fieldValue: Number(filters.pageNumber), dataType: "number", isRequiredValue: true },
@@ -29,7 +29,7 @@ ordersRouter.get("/all-orders-inside-the-page",
 );
 
 ordersRouter.get("/order-details/:orderId",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
@@ -38,7 +38,7 @@ ordersRouter.get("/order-details/:orderId",
 );
 
 ordersRouter.get("/order-details-from-klarna/:orderId",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "string", isRequiredValue: true },
         ], res, next);
@@ -51,7 +51,7 @@ ordersRouter.post("/send-order-to-gelato", ordersController.postNewOrderToGelato
 ordersRouter.post("/send-order-to-klarna", ordersController.postNewOrderToKlarna);
 
 ordersRouter.post("/handle-klarna-checkout-complete/:orderId",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "string", isRequiredValue: true },
         ], res, next);
@@ -62,7 +62,7 @@ ordersRouter.post("/handle-klarna-checkout-complete/:orderId",
 ordersRouter.post("/create-new-order", ordersController.postNewOrder);
 
 ordersRouter.put("/update-klarna-order/:orderId",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "string", isRequiredValue: true },
         ], res, next);
@@ -71,7 +71,7 @@ ordersRouter.put("/update-klarna-order/:orderId",
 );
 
 ordersRouter.put("/update-order/:orderId",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
@@ -81,7 +81,7 @@ ordersRouter.put("/update-order/:orderId",
 
 ordersRouter.put("/products/update-product/:orderId/:productId",
     validateJWT,
-    async (req, res, next) => {
+    (req, res, next) => {
         const orderAndProductIds = req.params;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: orderAndProductIds.orderId, dataType: "ObjectId", isRequiredValue: true },
@@ -93,7 +93,7 @@ ordersRouter.put("/products/update-product/:orderId/:productId",
 
 ordersRouter.delete("/delete-order/:orderId",
     validateJWT,
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
@@ -103,7 +103,7 @@ ordersRouter.delete("/delete-order/:orderId",
 
 ordersRouter.delete("/products/delete-product/:orderId/:productId",
     validateJWT,
-    async (req, res, next) => {
+    (req, res, next) => {
         const orderAndProductIds = req.params;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: orderAndProductIds.orderId, dataType: "ObjectId", isRequiredValue: true },

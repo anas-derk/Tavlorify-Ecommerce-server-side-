@@ -20,11 +20,11 @@ function checkServiceNameAndStyleId(req, res, next) {
 }
 
 adminRouter.get("/login",
-    async (req, res, next) => {
-        const emailAndPassword = req.query;
+    (req, res, next) => {
+        const { email, password } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: emailAndPassword.email, dataType: "string", isRequiredValue: true },
-            { fieldName: "Password", fieldValue: emailAndPassword.password, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
+            { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateEmail(req.query.email, res, next),

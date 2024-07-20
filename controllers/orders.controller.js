@@ -111,7 +111,7 @@ async function postKlarnaCheckoutComplete(req, res) {
         let response = await get(`${process.env.KLARNA_BASE_API_URL}/ordermanagement/v1/orders/${orderId}`, {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString('base64')}`
+                "Authorization": `Basic ${Buffer.from(`${process.env.KLARNA_API_USER_NAME}:${process.env.KLARNA_API_PASSWORD}`).toString("base64")}`
             },
         });
         let result = await response.data;

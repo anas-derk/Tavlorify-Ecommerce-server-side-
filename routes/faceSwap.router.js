@@ -9,18 +9,18 @@ const { validateJWT } = require("../middlewares/global.middlewares");
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 faceSwapRouter.get("/generate-image",
-    async (req, res, next) => {
-        const faceSwapInfo = req.query;
+    (req, res, next) => {
+        const { imageLink, styleImageLink } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Image Link", fieldValue: faceSwapInfo.imageLink, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Image Link", fieldValue: faceSwapInfo.styleImageLink, dataType: "string", isRequiredValue: true },
+            { fieldName: "Image Link", fieldValue: imageLink, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Image Link", fieldValue: styleImageLink, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     faceSwapController.generateImage
 );
 
 faceSwapRouter.get("/styles/category-styles-data",
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
@@ -68,7 +68,7 @@ faceSwapRouter.post("/styles/add-new-style",
             maxCount: 1
         },
     ]),
-    async (req, res, next) => {
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
