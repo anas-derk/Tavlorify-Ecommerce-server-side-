@@ -2,22 +2,11 @@ const adminRouter = require("express").Router();
 
 const adminController = require("../controllers/admins.controller");
 
-const { validateJWT, validateEmail } = require("../middlewares/global.middlewares");
+const { validateJWT, validateEmail, validatePassword, validateServiceName } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 const multer = require("multer");
-
-function checkServiceNameAndStyleId(req, res, next) {
-    const serviceNameAndStyleId = req.query;
-    if (serviceNameAndStyleId.service !== "text-to-image" && serviceNameAndStyleId.service !== "image-to-image") {
-        return res.status(400).json(getResponseObject("Sorry, Service Name Uncorrect Or Not Found !!", true, {}));
-    }
-    if (!serviceNameAndStyleId.styleId) {
-        return res.status(400).json(getResponseObject("Sorry, Style Id Uncorrect Or Not Found !!", true, {}));
-    }
-    next();
-}
 
 adminRouter.get("/login",
     (req, res, next) => {
@@ -28,6 +17,7 @@ adminRouter.get("/login",
         ], res, next);
     },
     (req, res, next) => validateEmail(req.query.email, res, next),
+    (req, res, next) => validatePassword(req.query.email, res, next),
     adminController.getAdminLogin
 );
 
@@ -35,7 +25,12 @@ adminRouter.get("/user-info",  validateJWT, adminController.getAdminUserInfo);
 
 adminRouter.put("/update-style-image",
     validateJWT,
-    checkServiceNameAndStyleId,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Style Id", fieldValue: req.query.styleId, dataType: "ObjectId", isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {

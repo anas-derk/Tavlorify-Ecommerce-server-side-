@@ -18,6 +18,14 @@ function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
 }
 
+function isValidPassword(password) {
+    return password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+}
+
+function isValidName(name) {
+    return name.match(/^([\u0600-\u06FF\s]+|[a-zA-Z\s]+)$/);
+}
+
 function getResponseObject(msg, isError, data) {
     return {
         msg,
@@ -186,6 +194,8 @@ function validateIsExistValueForFieldsAndDataTypes(fieldsDetails, res, nextFunc)
 
 module.exports = {
     isEmail,
+    isValidPassword,
+    isValidName,
     getResponseObject,
     checkIsExistValueForFieldsAndDataTypes,
     calcOrderAmount,

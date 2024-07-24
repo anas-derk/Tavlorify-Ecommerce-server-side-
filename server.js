@@ -23,8 +23,6 @@ require("dotenv").config();
 
 const path = require("path");
 
-app.use("/assets", express.static(path.join(__dirname, "assets")));
-
 /* End direct the browser to statics files path */
 
 /* Start Running The Server */
@@ -35,34 +33,34 @@ const PORT = process.env.PORT || 5300;
 
 app.listen(PORT, async () => {
     console.log(`The Server Is Running On: http://localhost:${PORT}`);
-    try{
-
+    try {
         await mongoose.connect(process.env.DB_URL);
-
-        /* Start Handle The Routes */
-
-        app.use("/admins", require("./routes/admins.router"));
-
-        app.use("/text-to-image", require("./routes/textToImage.router"));
-
-        app.use("/image-to-image", require("./routes/imageToImage.router"));
-
-        app.use("/orders", require("./routes/orders.router"));
-
-        app.use("/returned-orders",  require("./routes/returnedOrders.router"));
-
-        app.use("/generated-images", require("./routes/generatedImages.router"));
-
-        app.use("/prices", require("./routes/prices.router"));
-
-        app.use("/face-swap", require("./routes/faceSwap.router"));
-
-        /* End Handle The Routes */
-
     }
-    catch(err) {
+    catch (err) {
         console.log(err);
     }
+
+    app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+    /* Start Handle The Routes */
+
+    app.use("/admins", require("./routes/admins.router"));
+
+    app.use("/text-to-image", require("./routes/textToImage.router"));
+
+    app.use("/image-to-image", require("./routes/imageToImage.router"));
+
+    app.use("/orders", require("./routes/orders.router"));
+
+    app.use("/returned-orders",  require("./routes/returnedOrders.router"));
+
+    app.use("/generated-images", require("./routes/generatedImages.router"));
+
+    app.use("/prices", require("./routes/prices.router"));
+
+    app.use("/face-swap", require("./routes/faceSwap.router"));
+
+    /* End Handle The Routes */
 });
 
 /* End Running The Server */

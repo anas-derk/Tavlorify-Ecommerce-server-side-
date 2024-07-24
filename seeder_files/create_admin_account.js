@@ -38,8 +38,7 @@ async function create_admin_user_account() {
             let password = userInfo.password;
             let encrypted_password = await hash(password, 10);
             userInfo.password = encrypted_password;
-            const newAdmin = new adminModel(userInfo);
-            await newAdmin.save();
+            await (new adminModel(userInfo)).save();
             await mongoose.disconnect();
             return "Ok !!, Creating Admin Account Process Has Been Successfuly !!";
         }

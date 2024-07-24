@@ -1,4 +1,4 @@
-const { getResponseObject, isEmail } = require("../global/functions");
+const { getResponseObject, isEmail, isValidPassword } = require("../global/functions");
 const { verify } = require("jsonwebtoken");
 
 function validateJWT(req, res, next) {
@@ -21,7 +21,24 @@ function validateEmail(email, res, nextFunc) {
     nextFunc();
 }
 
+function validateServiceName(service, res, nextFunc) {
+    if (service !== "text-to-image" && service !== "image-to-image") {
+        return res.status(400).json(getResponseObject("Sorry, Service Name Uncorrect Or Not Found !!", true, {}));
+    }
+    nextFunc();
+}
+
+function validatePassword(password, res, nextFunc, errorMsg = "Sorry, Please Send Valid Password !!") {
+    if (!isValidPassword(password)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
 module.exports = {
     validateJWT,
     validateEmail,
+    validatePassword,
+    validateServiceName
 }
