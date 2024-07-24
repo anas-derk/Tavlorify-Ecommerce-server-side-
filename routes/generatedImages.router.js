@@ -2,9 +2,10 @@ const generatedImagesRouter = require("express").Router();
 
 const generatedImagesController = require("../controllers/generatedImages.controller");
 
-const { validateJWT, validateServiceName } = require("../middlewares/global.middlewares");
+const { validateJWT, validateServiceName, validateNumbersIsPositive, validateNumbersIsNotFloat } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+const { validatePaintingType, validateIsExistWhiteBorder, validatePosition } = require("../middlewares/generatedImages.middlewares");
 
 generatedImagesRouter.get("/all-generated-images-inside-the-page",
     (req, res, next) => {
@@ -16,6 +17,8 @@ generatedImagesRouter.get("/all-generated-images-inside-the-page",
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.query.service, res, next),
+    (req, res, next) => validateNumbersIsPositive([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     generatedImagesController.getAllGeneratedImagesDataInsideThePage
 );
 
@@ -29,6 +32,8 @@ generatedImagesRouter.get("/generated-images-count",
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.query.service, res, next),
+    (req, res, next) => validateNumbersIsPositive([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     generatedImagesController.getGeneratedImagesDataCount
 );
 
@@ -50,7 +55,10 @@ generatedImagesRouter.post("/save-new-generated-image-data",
             { fieldName: "Frame Color", fieldValue: frameColor, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
-    (req, res, next) => validateServiceName(req.query.service, res, next),
+    (req, res, next) => validateServiceName(req.body.service, res, next),
+    (req, res, next) => validatePaintingType(req.body.paintingType, res, next),
+    (req, res, next) => validatePosition(req.body.position, res, next),
+    (req, res, next) => validateIsExistWhiteBorder(req.body.isExistWhiteBorder, res, next),
     generatedImagesController.postNewGeneratedImageData
 );
 
