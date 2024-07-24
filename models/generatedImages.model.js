@@ -2,7 +2,7 @@
 
 const { generatedImageModel } = require("../models/all.models");
 
-async function getAllGeneratedImagesDataInsideThePage(service, pageNumber, pageSize) {
+async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service) {
     try {
         return await generatedImageModel.find({ service }).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ imageGenerationDate: -1 });
     }

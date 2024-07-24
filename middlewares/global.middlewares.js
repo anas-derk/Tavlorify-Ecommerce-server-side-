@@ -21,13 +21,6 @@ function validateEmail(email, res, nextFunc) {
     nextFunc();
 }
 
-function validateServiceName(service, res, nextFunc) {
-    if (service !== "text-to-image" && service !== "image-to-image") {
-        return res.status(400).json(getResponseObject("Sorry, Service Name Uncorrect Or Not Found !!", true, {}));
-    }
-    nextFunc();
-}
-
 function validatePassword(password, res, nextFunc, errorMsg = "Sorry, Please Send Valid Password !!") {
     if (!isValidPassword(password)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
@@ -36,9 +29,38 @@ function validatePassword(password, res, nextFunc, errorMsg = "Sorry, Please Sen
     nextFunc();
 }
 
+function validateServiceName(service, res, nextFunc) {
+    if (!["text-to-image", "image-to-image", "face-swap"].includes(service)) {
+        return res.status(400).json(getResponseObject("Sorry, Service Name Uncorrect Or Not Found !!", true, {}));
+    }
+    nextFunc();
+}
+
+function validateNumbersIsPositive(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Greater Than Zero ) !!") {
+    for(let i = 0; i < numbers.length; i++) {
+        if (numbers[i] < 0) {
+            res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
+            return;
+        }
+    }
+    nextFunc();
+}
+
+function validateNumbersIsNotFloat(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Not Float ) !!") {
+    for(let i = 0; i < numbers.length; i++) {
+        if (numbers[i] % 1 !== 0) {
+            res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
+            return;
+        }
+    }
+    nextFunc();
+}
+
 module.exports = {
     validateJWT,
     validateEmail,
     validatePassword,
-    validateServiceName
+    validateServiceName,
+    validateNumbersIsPositive,
+    validateNumbersIsNotFloat
 }

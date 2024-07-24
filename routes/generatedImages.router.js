@@ -2,7 +2,7 @@ const generatedImagesRouter = require("express").Router();
 
 const generatedImagesController = require("../controllers/generatedImages.controller");
 
-const { validateJWT } = require("../middlewares/global.middlewares");
+const { validateJWT, validateServiceName } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -11,10 +11,11 @@ generatedImagesRouter.get("/all-generated-images-inside-the-page",
         const { service, pageNumber, pageSize } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
-            { fieldName: "Page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: false },
-            { fieldName: "Page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: false },
+            { fieldName: "Page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
+            { fieldName: "Page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     generatedImagesController.getAllGeneratedImagesDataInsideThePage
 );
 
@@ -27,6 +28,7 @@ generatedImagesRouter.get("/generated-images-count",
             { fieldName: "Page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: false },
         ], res, next);
     },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     generatedImagesController.getGeneratedImagesDataCount
 );
 
@@ -48,6 +50,7 @@ generatedImagesRouter.post("/save-new-generated-image-data",
             { fieldName: "Frame Color", fieldValue: frameColor, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     generatedImagesController.postNewGeneratedImageData
 );
 

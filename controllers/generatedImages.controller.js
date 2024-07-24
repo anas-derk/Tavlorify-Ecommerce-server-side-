@@ -6,12 +6,8 @@ const sharp = require("sharp");
 
 async function getAllGeneratedImagesDataInsideThePage(req, res) {
     try{
-        const filters = req.query;
-        if (filters.service !== "text-to-image" && filters.service !== "image-to-image") {
-            await res.status(400).json(getResponseObject("Invalid Service Name !!", true, {}));
-            return;
-        }
-        await res.json(await generatedImagesManagmentFunctions.getAllGeneratedImagesDataInsideThePage(filters.service, filters.pageNumber, filters.pageSize));
+        const { pageNumber, pageSize, service } = req.query;
+        await res.json(await generatedImagesManagmentFunctions.getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service));
     }
     catch(err){
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
