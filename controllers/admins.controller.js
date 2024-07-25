@@ -8,8 +8,7 @@ const { unlinkSync } = require("fs");
 
 async function getAdminLogin(req, res) {
     try{
-        const   email = req.query.email,
-                password = req.query.password;
+        const { email, password } = req.query;
         const result = await adminsOPerationsManagmentFunctions.adminLogin(email.toLowerCase(), password);
         if (!result.error) {
             await res.json({
@@ -25,7 +24,6 @@ async function getAdminLogin(req, res) {
         await res.json(result);
     }
     catch(err) {
-        console.log(err)
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }

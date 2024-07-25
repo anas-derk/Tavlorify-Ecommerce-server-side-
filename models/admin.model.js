@@ -9,10 +9,8 @@ async function adminLogin(email, password) {
         // Check If Email Is Exist
         const user = await adminModel.findOne({ email });
         if (user) {
-            // require bcryptjs module for password encrypting
             // Check From Password
-            const isTruePassword = await compare(password, user.password);
-            if (isTruePassword)
+            if (await compare(password, user.password))
                 return {
                     msg: "Admin Logining Process Has Been Successfully !!",
                     error: false,
