@@ -5,7 +5,7 @@ const generatedImagesController = require("../controllers/generatedImages.contro
 const { validateJWT, validateServiceName, validateNumbersIsPositive, validateNumbersIsNotFloat } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
-const { validatePaintingType, validateIsExistWhiteBorder, validatePosition } = require("../middlewares/generatedImages.middlewares");
+const { validatePaintingType, validateIsExistWhiteBorder, validatePosition, validateSize } = require("../middlewares/generatedImages.middlewares");
 
 generatedImagesRouter.get("/all-generated-images-inside-the-page",
     (req, res, next) => {
@@ -58,6 +58,7 @@ generatedImagesRouter.post("/save-new-generated-image-data",
     (req, res, next) => validateServiceName(req.body.service, res, next),
     (req, res, next) => validatePaintingType(req.body.paintingType, res, next),
     (req, res, next) => validatePosition(req.body.position, res, next),
+    (req, res, next) => validateSize(req.body.size, res, next),
     (req, res, next) => validateIsExistWhiteBorder(req.body.isExistWhiteBorder, res, next),
     generatedImagesController.postNewGeneratedImageData
 );
