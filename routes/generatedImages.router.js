@@ -24,16 +24,11 @@ generatedImagesRouter.get("/all-generated-images-inside-the-page",
 
 generatedImagesRouter.get("/generated-images-count",
     (req, res, next) => {
-        const { service, pageNumber, pageSize } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
-            { fieldName: "Page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: false },
-            { fieldName: "Page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: false },
+            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.query.service, res, next),
-    (req, res, next) => validateNumbersIsPositive([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
-    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     generatedImagesController.getGeneratedImagesDataCount
 );
 
