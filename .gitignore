@@ -3,6 +3,6 @@
 /assets/images/uploadedImages
 /assets/images/cropedImages
 /assets/images/styles/faceSwap
-# /assets/images/categories
-# /assets/images/styles
+/assets/images/categories
+/assets/images/styles
 .env
