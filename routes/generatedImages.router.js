@@ -5,7 +5,50 @@ const generatedImagesController = require("../controllers/generatedImages.contro
 const { validateJWT, validateServiceName, validateNumbersIsPositive, validateNumbersIsNotFloat } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
 const { validatePaintingType, validateIsExistWhiteBorder, validatePosition, validateSize } = require("../middlewares/generatedImages.middlewares");
+
+generatedImagesRouter.get("/generate-image-using-text-to-image-service",
+    (req, res, next) => {
+        const { textPrompt, prompt, category, model_name, width, height } = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: category, dataType: "string", isRequiredValue: false },
+            { fieldName: "Model Name", fieldValue: model_name, dataType: "string", isRequiredValue: true },
+            { fieldName: "Width", fieldValue: Number(width), dataType: "number", isRequiredValue: true },
+            { fieldName: "Height", fieldValue: Number(height), dataType: "number", isRequiredValue: true },
+        ], res, next);
+    },
+    generatedImagesController.generateImageUsingTextToImageService
+);
+
+generatedImagesRouter.get("/generate-image-using-image-to-image-service",
+    (req, res, next) => {
+        const { imageLink, prompt, n_prompt, image_resolution, preprocessor_resolution, ddim_steps, strength } = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Image Link", fieldValue: imageLink, dataType: "string", isRequiredValue: true },
+            { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Negative Prompt", fieldValue:n_prompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Image Resolution", fieldValue: Number(image_resolution), dataType: "number", isRequiredValue: false },
+            { fieldName: "Preprocessor Resolution", fieldValue: Number(preprocessor_resolution), dataType: "number", isRequiredValue: true },
+            { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
+            { fieldName: "Strength", fieldValue: Number(strength), dataType: "number", isRequiredValue: true },
+        ], res, next);
+    },
+    generatedImagesController.generateImageUsingImageToImageService
+);
+
+generatedImagesRouter.get("/generate-image-using-face-swap-service",
+    (req, res, next) => {
+        const { imageLink, styleImageLink } = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Image Link", fieldValue: imageLink, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Image Link", fieldValue: styleImageLink, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
+    generatedImagesController.generateImageUsingFaceSwapService
+);
 
 generatedImagesRouter.get("/all-generated-images-inside-the-page",
     (req, res, next) => {
