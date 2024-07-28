@@ -4,7 +4,11 @@ const { generatedImageModel } = require("../models/all.models");
 
 async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service) {
     try {
-        return await generatedImageModel.find({ service }).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ imageGenerationDate: -1 });
+        return {
+            msg: `Get All Generated Images Data For ${service} Service Process Has Been Successfully !!`,
+            error: false,
+            data: await generatedImageModel.find({ service }).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ imageGenerationDate: -1 })
+        }
     }
     catch (err) {
         throw Error(err);
@@ -13,7 +17,11 @@ async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, serv
 
 async function getGeneratedImagesDataCount(filters) {
     try {
-        return await generatedImageModel.countDocuments(filters);
+        return {
+            msg: `Get Generated Images Count For ${filters.service} Service Has Been Successfully !!`,
+            error: false,
+            data: await generatedImageModel.countDocuments(filters)
+        }
     } catch (err) {
         throw Error(err);
     }
