@@ -80,6 +80,8 @@ const imageToImageStyleSchema = mongoose.Schema({
     },
 });
 
+// Create Style Schema
+
 const styleSchema = mongoose.Schema({
     service: {
         type: String,
@@ -105,27 +107,32 @@ const styleSchema = mongoose.Schema({
     modelName: {
         type: String,
         required: true,
-        enum: this.service === "text-to-image" ? [
-            "dreamshaper",
-            "stable-diffusion",
-            "midjourney-diffusion",
-            "deliberate-v2",
-            "sdxl",
-            "openjourney",
-        ] : ["controlnet-1.1-x-realistic-vision-v2.0"]
+        validate: {
+            validator: function (value) {
+                const validModelNames = this.service === "text-to-image" ? [
+                    "dreamshaper",
+                    "stable-diffusion",
+                    "midjourney-diffusion",
+                    "deliberate-v2",
+                    "sdxl",
+                    "openjourney",
+                ] : ["controlnet-1.1-x-realistic-vision-v2.0"];
+                return validModelNames.includes(value);
+            }
+        },
     },
-    textToImageFields: {
-        type: textToImagestyleSchema,
-        required: function () {
-            return this.service === "text-to-image";
-        }
-    },
-    imageToImageFields: {
-        type: imageToImageStyleSchema,
-        required: function () {
-            return this.service === "image-to-image";
-        }
-    },
+    // textToImageFields: {
+    //     type: textToImagestyleSchema,
+    //     required: function () {
+    //         return this.service === "text-to-image";
+    //     }
+    // },
+    // imageToImageFields: {
+    //     type: imageToImageStyleSchema,
+    //     required: function () {
+    //         return this.service === "image-to-image";
+    //     }
+    // },
     categoryName: {
         type: String,
         required: true,
@@ -133,7 +140,7 @@ const styleSchema = mongoose.Schema({
     sortNumber: Number,
 });
 
-// Create Text To Image Style Model From Style Schema
+// Create Style Model From Style Schema
 
 const styleModel = mongoose.model("style", styleSchema);
 
