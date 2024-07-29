@@ -89,7 +89,7 @@ categoriesRouter.put("/update-category-data/:categoryId",
     categoriesController.putCategoryData
 );
 
-categoriesRouter.delete("/delete-category-data/:categoryId",
+categoriesRouter.delete("/:categoryId",
     validateJWT,
     (req, res, next) => {;
         validateIsExistValueForFieldsAndDataTypes([
