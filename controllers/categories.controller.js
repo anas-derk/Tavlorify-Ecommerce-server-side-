@@ -27,6 +27,7 @@ async function addNewCategory(req, res) {
         res.json(await categoriesManagmentFunctions.addNewCategory(categoryInfo));
     }
     catch(err) {
+        console.log(err);
         unlinkSync(req.files["categoryImgFile"][0].path);
         unlinkSync(req.files["styleImgFile"][0].path);
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

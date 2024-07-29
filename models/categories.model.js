@@ -17,7 +17,7 @@ async function getAllCategoriesData(service) {
 
 async function addNewCategory(categoryInfo) {
     try {
-        const categoriesCount = await categoryModel.countDocuments({});
+        const categoriesCount = await categoryModel.countDocuments({ service: categoryInfo.service });
         await (new categoryModel({
             service: categoryInfo.service,
             imgSrc: categoryInfo["categoryImgFile"][0].path,
@@ -25,6 +25,7 @@ async function addNewCategory(categoryInfo) {
             sortNumber: categoriesCount + 1,
         })).save();
         await (new styleModel({
+            service: categoryInfo.service,
             imgSrc: categoryInfo["styleImgFile"][0].path,
             name: categoryInfo.styleName,
             prompt: categoryInfo.stylePrompt,
