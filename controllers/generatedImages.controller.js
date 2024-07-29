@@ -21,6 +21,18 @@ async function runModel(model, input) {
     }
 }
 
+async function translateText(text){
+    const { Translate } = require("@google-cloud/translate").v2;
+    const credentials = JSON.parse(process.env.GOOGLE_CLOUD_TRANSLATE_API_CREDENTIALS);
+    const translate = new Translate({
+        credentials: credentials,
+        projectId: credentials.projectId
+    });
+    let [ result ] = await translate.detect(text);
+    const [ translation ] = await translate.translate(text, { to: "en" });
+    return translation;
+}
+
 async function generateImageUsingTextToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     try{

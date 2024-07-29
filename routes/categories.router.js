@@ -42,10 +42,10 @@ categoriesRouter.post("/add-new-category",
         storage: multer.diskStorage({
             destination: (req, file, cb) => {
                 if (file.fieldname === "categoryImgFile") {
-                    cb(null, "./assets/images/categories/textToImage");
+                    cb(null, `./assets/images/categories/${ req.body.service === "text-to-image" ? "textToImage" : "imageToImage" }`);
                 }
                 else if (file.fieldname === "styleImgFile") {
-                    cb(null, "./assets/images/styles/textToImage");
+                    cb(null, `./assets/images/styles/${ req.body.service === "text-to-image" ? "textToImage" : "imageToImage" }`);
                 }
             },
             filename: (req, file, cb) => {
