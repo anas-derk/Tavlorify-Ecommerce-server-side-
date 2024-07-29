@@ -2,6 +2,8 @@ const { getResponseObject } = require("../global/functions");
 
 const categoriesManagmentFunctions = require("../models/categories.model");
 
+const { unlinkSync } = require("fs");
+
 async function getAllCategoriesData(req, res) {
     try{
         await res.json(await categoriesManagmentFunctions.getAllCategoriesData(req.query.service));
@@ -22,7 +24,7 @@ async function addNewCategory(req, res) {
             ...Object.assign({}, req.body),
             ...Object.assign({}, req.files),
         };
-        res.json(await categoriesManagmentFunctions.addNewCategory(req.query.service, categoryInfo));
+        res.json(await categoriesManagmentFunctions.addNewCategory(categoryInfo));
     }
     catch(err) {
         unlinkSync(req.files["categoryImgFile"][0].path);
@@ -33,7 +35,7 @@ async function addNewCategory(req, res) {
 
 async function putCategoryData(req, res) {
     try{
-        await res.json(await textToImageCategoriesManagmentFunctions.updateCategoryData(req.query.service, req.params.categoryId, req.body));
+        await res.json(await textToImageCategoriesManagmentFunctions.updateCategoryData(req.params.categoryId, req.body));
     }
     catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -42,7 +44,7 @@ async function putCategoryData(req, res) {
 
 async function deleteCategoryData(req, res) {
     try{
-        const result = await textToImageCategoriesManagmentFunctions.deleteCategoryData(req.query.service, req.params.categoryId);
+        const result = await textToImageCategoriesManagmentFunctions.deleteCategoryData(req.params.categoryId);
         if (!result.error) {
             unlinkSync(result.data.categoryData.imgSrc);
             for(let i = 0; i < result.data.categoryStylesData.length; i++) {
