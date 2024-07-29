@@ -2,6 +2,18 @@
 
 const { generatedImageModel } = require("../models/all.models");
 
+async function getGeneratedImagesCount(filters) {
+    try {
+        return {
+            msg: `Get Generated Images Count For ${filters.service} Service Has Been Successfully !!`,
+            error: false,
+            data: await generatedImageModel.countDocuments(filters)
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service) {
     try {
         return {
@@ -15,26 +27,12 @@ async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, serv
     }
 }
 
-async function getGeneratedImagesDataCount(filters) {
-    try {
-        return {
-            msg: `Get Generated Images Count For ${filters.service} Service Has Been Successfully !!`,
-            error: false,
-            data: await generatedImageModel.countDocuments(filters)
-        }
-    } catch (err) {
-        throw Error(err);
-    }
-}
-
 async function saveNewGeneratedImageData(generatedImageData) {
     try {
-        const newGeneratedImageData = new generatedImageModel(generatedImageData);
-        const result = await newGeneratedImageData.save();
         return {
             msg: "Save New Generated Image Data Process Has Been Successfully !!",
             error: false,
-            data: result,
+            data: await (new generatedImageModel(generatedImageData)).save(),
         };
     }
     catch (err) {
@@ -64,8 +62,8 @@ async function deleteGeneratedImageData(generatedImageDataId) {
 }
 
 module.exports = {
+    getGeneratedImagesCount,
     getAllGeneratedImagesDataInsideThePage,
-    getGeneratedImagesDataCount,
     saveNewGeneratedImageData,
     deleteGeneratedImageData,
 }

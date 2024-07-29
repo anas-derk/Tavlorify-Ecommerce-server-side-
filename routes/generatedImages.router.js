@@ -50,6 +50,38 @@ generatedImagesRouter.get("/generate-image-using-face-swap-service",
     generatedImagesController.generateImageUsingFaceSwapService
 );
 
+generatedImagesRouter.post("/upload-image-and-processing",
+    multer({
+        storage: multer.memoryStorage(),
+        fileFilter: (req, file, cb) => {
+            if (!file) {
+                req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
+                return cb(null, false);
+            }
+            if (
+                file.mimetype !== "image/jpeg" &&
+                file.mimetype !== "image/png" &&
+                file.mimetype !== "image/webp"
+            ){
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                return cb(null, false);
+            }
+            cb(null, true);
+        }
+    }).single("imageFile"),
+    generatedImagesController.uploadImageAndProcessing
+);
+
+generatedImagesRouter.get("/generated-images-count",
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
+    generatedImagesController.getGeneratedImagesDataCount
+);
+
 generatedImagesRouter.get("/all-generated-images-inside-the-page",
     (req, res, next) => {
         const { service, pageNumber, pageSize } = req.query;
@@ -63,16 +95,6 @@ generatedImagesRouter.get("/all-generated-images-inside-the-page",
     (req, res, next) => validateNumbersIsPositive([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     generatedImagesController.getAllGeneratedImagesDataInsideThePage
-);
-
-generatedImagesRouter.get("/generated-images-count",
-    (req, res, next) => {
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
-        ], res, next);
-    },
-    (req, res, next) => validateServiceName(req.query.service, res, next),
-    generatedImagesController.getGeneratedImagesDataCount
 );
 
 generatedImagesRouter.post("/save-new-generated-image-data",

@@ -31,8 +31,8 @@ categoriesRouter.post("/add-new-category",
         const { service } = req.body;
         if (service === "image-to-image") {
             validateIsExistValueForFieldsAndDataTypes([
-                { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
                 { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
+                { fieldName: "Strength", fieldValue: Number(strength), dataType: "number", isRequiredValue: true },
             ], res, next);
             return;
         }

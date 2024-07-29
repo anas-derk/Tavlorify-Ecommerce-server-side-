@@ -208,21 +208,41 @@ async function generateImageUsingFaceSwapService(req, res) {
     }
 }
 
+async function uploadImageAndProcessing(req, res) {
+    const uploadError = req.uploadError;
+    if (uploadError) {
+        res.status(400).json(getResponseObject(uploadError, true, {}));
+        return;
+    }
+    const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
+    try {
+        await sharp(req.file.buffer, { failOn: "error" }).withMetadata().rotate().toFile(filePath);
+        res.json({
+            msg: "Uploading Image Process Has Been Successfully !!",
+            error: false,
+            data: filePath,
+        });
+    }
+    catch(err) {
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
+async function getGeneratedImagesCount(req, res) {
+    try{
+        await res.json(await generatedImagesManagmentFunctions.getGeneratedImagesCount(req.query));
+    }
+    catch(err) {
+        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
 async function getAllGeneratedImagesDataInsideThePage(req, res) {
     try{
         const { pageNumber, pageSize, service } = req.query;
         await res.json(await generatedImagesManagmentFunctions.getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service));
     }
     catch(err){
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
-    }
-}
-
-async function getGeneratedImagesDataCount(req, res) {
-    try{
-        await res.json(await generatedImagesManagmentFunctions.getGeneratedImagesDataCount(req.query));
-    }
-    catch(err) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
@@ -279,8 +299,9 @@ module.exports = {
     generateImageUsingTextToImageService,
     generateImageUsingImageToImageService,
     generateImageUsingFaceSwapService,
+    uploadImageAndProcessing,
+    getGeneratedImagesCount,
     getAllGeneratedImagesDataInsideThePage,
-    getGeneratedImagesDataCount,
     postNewGeneratedImageData,
     postImageAfterCroping,
     deleteGeneratedImageData,

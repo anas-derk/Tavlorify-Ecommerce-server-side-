@@ -46,10 +46,6 @@ app.listen(PORT, async () => {
 
     app.use("/admins", require("./routes/admins.router"));
 
-    app.use("/text-to-image", require("./routes/textToImage.router"));
-
-    app.use("/image-to-image", require("./routes/imageToImage.router"));
-
     app.use("/orders", require("./routes/orders.router"));
 
     app.use("/returned-orders",  require("./routes/returnedOrders.router"));
