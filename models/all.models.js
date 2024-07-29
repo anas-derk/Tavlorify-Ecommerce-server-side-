@@ -19,56 +19,6 @@ const adminSchema = mongoose.Schema({
 
 const adminModel = mongoose.model("admin", adminSchema);
 
-// Create Text To Image Style Schema
-
-const textToImageStyleSchema = mongoose.Schema({
-    imgSrc: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    prompt: {
-        type: String,
-        required: true,
-    },
-    negative_prompt: {
-        type: String,
-        required: true,
-    },
-    num_inference_steps: {
-        type: Number,
-        default: 50,
-    },
-    refine: {
-        type: String,
-        default: "",
-    },
-    modelName: {
-        type: String,
-        required: true,
-        enum: [
-            "dreamshaper",
-            "stable-diffusion",
-            "midjourney-diffusion",
-            "deliberate-v2",
-            "sdxl",
-            "openjourney",
-        ]
-    },
-    categoryName: {
-        type: String,
-        required: true,
-    },
-    sortNumber: Number,
-});
-
-// Create Text To Image Style Model From Style Schema
-
-const textToImageStyleModel = mongoose.model("text_to_image_style", textToImageStyleSchema);
-
 // Create Category Schema
 
 const categorySchema = mongoose.Schema({
@@ -92,9 +42,50 @@ const categorySchema = mongoose.Schema({
 
 const categoryModel = mongoose.model("categorie", categorySchema);
 
+// Create Text To Image Style Schema
+
+const textToImagestyleSchema = mongoose.Schema({
+    num_inference_steps: {
+        type: Number,
+        default: 50,
+    },
+    refine: {
+        type: String,
+        default: "",
+    },
+    modelName: {
+        type: String,
+        required: true,
+        enum: [
+            "dreamshaper",
+            "stable-diffusion",
+            "midjourney-diffusion",
+            "deliberate-v2",
+            "sdxl",
+            "openjourney",
+        ]
+    },
+});
+
 // Create Image To Image Style Schema
 
 const imageToImageStyleSchema = mongoose.Schema({
+    ddim_steps: {
+        type: Number,
+        required: true,
+    },
+    strength: {
+        type: Number,
+        required: true,
+    },
+});
+
+const styleSchema = mongoose.Schema({
+    service: {
+        type: String,
+        required: true,
+        enum: ["text-to-image", "image-to-image"]
+    },
     imgSrc: {
         type: String,
         required: true,
@@ -111,20 +102,29 @@ const imageToImageStyleSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    ddim_steps: {
-        type: Number,
-        required: true,
-    },
-    strength: {
-        type: Number,
-        required: true,
-    },
     modelName: {
         type: String,
-        default: "controlnet-1.1-x-realistic-vision-v2.0",
-        enum: [
-            "controlnet-1.1-x-realistic-vision-v2.0"
-        ],
+        required: true,
+        enum: this.service === "text-to-image" ? [
+            "dreamshaper",
+            "stable-diffusion",
+            "midjourney-diffusion",
+            "deliberate-v2",
+            "sdxl",
+            "openjourney",
+        ] : ["controlnet-1.1-x-realistic-vision-v2.0"]
+    },
+    textToImageFields: {
+        type: textToImagestyleSchema,
+        required: function () {
+            return this.service === "text-to-image";
+        }
+    },
+    imageToImageFields: {
+        type: imageToImageStyleSchema,
+        required: function () {
+            return this.service === "image-to-image";
+        }
     },
     categoryName: {
         type: String,
@@ -133,9 +133,9 @@ const imageToImageStyleSchema = mongoose.Schema({
     sortNumber: Number,
 });
 
-// Create Image To Image Style Model From Style Schema
+// Create Text To Image Style Model From Style Schema
 
-const imageToImageStyleModel = mongoose.model("image_to_image_style", imageToImageStyleSchema);
+const styleModel = mongoose.model("style", styleSchema);
 
 // Create Order Schema
 
@@ -520,9 +520,8 @@ const faceSwapStyleModel = mongoose.model("face_swap_style", faceSwapStyleSchema
 
 module.exports = {
     adminModel,
-    textToImageStyleModel,
+    styleModel,
     categoryModel,
-    imageToImageStyleModel,
     orderModel,
     generatedImageModel,
     productPricesModel,

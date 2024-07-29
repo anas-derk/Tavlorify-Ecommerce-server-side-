@@ -6,10 +6,10 @@ const { unlinkSync } = require("fs");
 
 async function getAllCategoriesData(req, res) {
     try{
-        await res.json(await categoriesManagmentFunctions.getAllCategoriesData(req.query.service));
+        res.json(await categoriesManagmentFunctions.getAllCategoriesData(req.query.service));
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -35,26 +35,26 @@ async function addNewCategory(req, res) {
 
 async function putCategoryData(req, res) {
     try{
-        await res.json(await textToImageCategoriesManagmentFunctions.updateCategoryData(req.params.categoryId, req.body));
+        res.json(await categoriesManagmentFunctions.updateCategoryData(req.params.categoryId, req.body));
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
 async function deleteCategoryData(req, res) {
     try{
-        const result = await textToImageCategoriesManagmentFunctions.deleteCategoryData(req.params.categoryId);
+        const result = await categoriesManagmentFunctions.deleteCategoryData(req.params.categoryId);
         if (!result.error) {
             unlinkSync(result.data.categoryData.imgSrc);
             for(let i = 0; i < result.data.categoryStylesData.length; i++) {
                 unlinkSync(result.data.categoryStylesData[i].imgSrc);
             }
         }
-        await res.json(result);
+        res.json(result);
     }
     catch(err){
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 

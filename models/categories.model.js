@@ -1,6 +1,6 @@
 // Import Text To Image Category Model And Text To Image Style Model Object
 
-const { categoryModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
+const { categoryModel, styleModel } = require("../models/all.models");
 
 async function getAllCategoriesData(service) {
     try {
@@ -17,14 +17,14 @@ async function getAllCategoriesData(service) {
 
 async function addNewCategory(categoryInfo) {
     try {
-        const categoriesCount = await textToImageCategoryModel.countDocuments({});
-        const newCategory = new categoryModel({
+        const categoriesCount = await categoryModel.countDocuments({});
+        await (new categoryModel({
+            service: categoryInfo.service,
             imgSrc: categoryInfo["categoryImgFile"][0].path,
             name: categoryInfo.categoryName,
             sortNumber: categoriesCount + 1,
-        });
-        await newCategory.save();
-        const newStyle = new textToImageStyleModel({
+        })).save();
+        await (new styleModel({
             imgSrc: categoryInfo["styleImgFile"][0].path,
             name: categoryInfo.styleName,
             prompt: categoryInfo.stylePrompt,
@@ -32,26 +32,12 @@ async function addNewCategory(categoryInfo) {
             modelName: categoryInfo.modelName,
             categoryName: categoryInfo.categoryName,
             sortNumber: 1,
-        });
-        await newStyle.save();
+        })).save();
         return {
             msg: "Adding New Category And First Style For Text To Image Page Process Has Been Successfuly !!",
             error: false,
             data: {},
         };
-    }
-    catch (err) {
-        throw Error(err);
-    }
-}
-
-async function getCategoryData(service, categoryName) {
-    try {
-        return {
-            msg: "Get All Category Data Process Has Been Successfully !!",
-            error: false,
-            data: await categoryModel.findOne({ name: categoryName, service }),
-        }
     }
     catch (err) {
         throw Error(err);
@@ -76,7 +62,7 @@ async function updateCategoryData(categoryId, newCategoryInfo) {
                 error: true,
                 data: {},
             };
-        await textToImageStyleModel.updateMany({
+        await styleModel.updateMany({
             categoryName: theFirstCategory.name,
         }, {
             categoryName: newCategoryInfo.newCategoryName,
@@ -95,7 +81,7 @@ async function updateCategoryData(categoryId, newCategoryInfo) {
 async function deleteCategoryData(categoryId) {
     try {
         const categoryData = await categoryModel.findById(categoryId);
-        const categoryStylesData = await textToImageStyleModel.find({ categoryName: categoryData.name });
+        const categoryStylesData = await styleModel.find({ categoryName: categoryData.name });
         if (!categoryData) {
             return {
                 msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
@@ -118,7 +104,7 @@ async function deleteCategoryData(categoryId) {
             await categoryModel.deleteMany({});
             await categoryModel.insertMany(allCategoiesAfterChangeSortNumber);
         }
-        await textToImageStyleModel.deleteMany({ categoryName: categoryData.name });
+        await styleModel.deleteMany({ categoryName: categoryData.name });
         return {
             msg: "Deleting Category Process Has Been Successfully !!",
             error: false,
@@ -131,7 +117,6 @@ async function deleteCategoryData(categoryId) {
 }
 
 module.exports = {
-    getCategoryData,
     updateCategoryData,
     getAllCategoriesData,
     addNewCategory,
