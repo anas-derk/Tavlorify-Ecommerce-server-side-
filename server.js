@@ -56,6 +56,10 @@ app.listen(PORT, async () => {
 
     app.use("/face-swap", require("./routes/faceSwap.router"));
 
+    app.use("/categories", require("./routes/categories.router"));
+
+    app.use("/styles", require("./routes/styles.router"));
+
     /* End Handle The Routes */
 });
 
