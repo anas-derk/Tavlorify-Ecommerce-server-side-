@@ -42,44 +42,6 @@ const categorySchema = mongoose.Schema({
 
 const categoryModel = mongoose.model("categorie", categorySchema);
 
-// Create Text To Image Style Schema
-
-const textToImagestyleSchema = mongoose.Schema({
-    num_inference_steps: {
-        type: Number,
-        default: 50,
-    },
-    refine: {
-        type: String,
-        default: "",
-    },
-    modelName: {
-        type: String,
-        required: true,
-        enum: [
-            "dreamshaper",
-            "stable-diffusion",
-            "midjourney-diffusion",
-            "deliberate-v2",
-            "sdxl",
-            "openjourney",
-        ]
-    },
-});
-
-// Create Image To Image Style Schema
-
-const imageToImageStyleSchema = mongoose.Schema({
-    ddim_steps: {
-        type: Number,
-        required: true,
-    },
-    strength: {
-        type: Number,
-        required: true,
-    },
-});
-
 // Create Style Schema
 
 const styleSchema = mongoose.Schema({
@@ -121,18 +83,36 @@ const styleSchema = mongoose.Schema({
             }
         },
     },
-    // textToImageFields: {
-    //     type: textToImagestyleSchema,
-    //     required: function () {
-    //         return this.service === "text-to-image";
-    //     }
-    // },
-    // imageToImageFields: {
-    //     type: imageToImageStyleSchema,
-    //     required: function () {
-    //         return this.service === "image-to-image";
-    //     }
-    // },
+    num_inference_steps: {
+        type: Number,
+        default: function () {
+            if (this.service === "text-to-image") {
+                if (!this.num_inference_steps) return 50;
+            }
+            return;
+        },
+    },
+    refine: {
+        type: String,
+        default: function () {
+            if (this.service === "text-to-image") {
+                if (!this.num_inference_steps) return "";
+            }
+            return;
+        },
+    },
+    ddim_steps: {
+        type: Number,
+        required: function () {
+            return this.service === "image-to-image";
+        },
+    },
+    strength: {
+        type: Number,
+        required: function () {
+            return this.service === "image-to-image";
+        },
+    },
     categoryName: {
         type: String,
         required: true,
