@@ -69,9 +69,9 @@ const textToImageStyleSchema = mongoose.Schema({
 
 const textToImageStyleModel = mongoose.model("text_to_image_style", textToImageStyleSchema);
 
-// Create Text To Image Category Schema
+// Create Category Schema
 
-const textToImageCategorySchema = mongoose.Schema({
+const categorySchema = mongoose.Schema({
     imgSrc: {
         type: String,
         required: true,
@@ -81,11 +81,16 @@ const textToImageCategorySchema = mongoose.Schema({
         required: true,
     },
     sortNumber: Number,
+    service: {
+        type: String,
+        required: true,
+        enum: ["text-to-image", "image-to-image"]
+    }
 });
 
-// Create Text To Image Category Model From Category Schema
+// Create Category Model From Category Schema
 
-const textToImageCategoryModel = mongoose.model("text_to_image_categorie", textToImageCategorySchema);
+const categoryModel = mongoose.model("categorie", categorySchema);
 
 // Create Image To Image Style Schema
 
@@ -131,24 +136,6 @@ const imageToImageStyleSchema = mongoose.Schema({
 // Create Image To Image Style Model From Style Schema
 
 const imageToImageStyleModel = mongoose.model("image_to_image_style", imageToImageStyleSchema);
-
-// Create Image To Image Category Schema
-
-const imageToImageCategorySchema = mongoose.Schema({
-    imgSrc: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    sortNumber: Number,
-});
-
-// Create Image To Image Category Model From Category Schema
-
-const imageToImageCategoryModel = mongoose.model("image_to_image_categorie", imageToImageCategorySchema);
 
 // Create Order Schema
 
@@ -534,9 +521,8 @@ const faceSwapStyleModel = mongoose.model("face_swap_style", faceSwapStyleSchema
 module.exports = {
     adminModel,
     textToImageStyleModel,
-    textToImageCategoryModel,
+    categoryModel,
     imageToImageStyleModel,
-    imageToImageCategoryModel,
     orderModel,
     generatedImageModel,
     productPricesModel,
