@@ -27,6 +27,17 @@ categoriesRouter.post("/add-new-category",
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.body.service, res, next),
+    (req, res, next) => {
+        const { service } = req.body;
+        if (service === "image-to-image") {
+            validateIsExistValueForFieldsAndDataTypes([
+                { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
+                { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
+            ], res, next);
+            return;
+        }
+        next();
+    },
     multer({
         storage: multer.diskStorage({
             destination: (req, file, cb) => {
