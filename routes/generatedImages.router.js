@@ -8,6 +8,8 @@ const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functio
 
 const { validatePaintingType, validateIsExistWhiteBorder, validatePosition, validateSize } = require("../middlewares/generatedImages.middlewares");
 
+const multer = require("multer");
+
 generatedImagesRouter.get("/generate-image-using-text-to-image-service",
     (req, res, next) => {
         const { textPrompt, prompt, category, model_name, width, height } = req.query;
@@ -79,7 +81,7 @@ generatedImagesRouter.get("/generated-images-count",
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.query.service, res, next),
-    generatedImagesController.getGeneratedImagesDataCount
+    generatedImagesController.getGeneratedImagesCount
 );
 
 generatedImagesRouter.get("/all-generated-images-inside-the-page",
