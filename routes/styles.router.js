@@ -19,29 +19,6 @@ stylesRouter.get("/all-styles-data",
 
 stylesRouter.post("/add-new-style",
     validateJWT,
-    (req, res, next) => {
-        const { service, categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = req.body;
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Prompt", fieldValue: stylePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Negative Prompt", fieldValue: styleNegativePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
-        ], res, next);
-    },
-    (req, res, next) => validateServiceName(req.body.service, res, next),
-    (req, res, next) => {
-        const { service } = req.body;
-        if (service === "image-to-image") {
-            validateIsExistValueForFieldsAndDataTypes([
-                { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
-                { fieldName: "Strength", fieldValue: Number(strength), dataType: "number", isRequiredValue: true },
-            ], res, next);
-            return;
-        }
-        next();
-    },
     multer({
         storage: multer.diskStorage({
             destination: (req, file, cb) => {
@@ -66,7 +43,30 @@ stylesRouter.post("/add-new-style",
             }
             cb(null, true);
         }
-        }).single("styleImgFile"),
+    }).single("styleImgFile"),
+    (req, res, next) => {
+        const { service, categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = Object.assign({}, req.body);
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Prompt", fieldValue: stylePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Negative Prompt", fieldValue: styleNegativePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateServiceName(req.body.service, res, next),
+    (req, res, next) => {
+        const { service } = Object.assign({}, req.body);
+        if (service === "image-to-image") {
+            validateIsExistValueForFieldsAndDataTypes([
+                { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
+                { fieldName: "Strength", fieldValue: Number(strength), dataType: "number", isRequiredValue: true },
+            ], res, next);
+            return;
+        }
+        next();
+    },
     stylesController.addNewStyle
 );
 

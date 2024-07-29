@@ -49,9 +49,7 @@ categoriesRouter.post("/add-new-category",
         maxCount: 1,
     }, { name: "styleImgFile", maxCount: 1 }]),
     (req, res, next) => {
-        const { service, categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = {
-            ...Object.assign({}, req.body),
-        };
+        const { service, categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
             { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
@@ -63,7 +61,7 @@ categoriesRouter.post("/add-new-category",
     },
     (req, res, next) => validateServiceName(req.body.service, res, next),
     (req, res, next) => {
-        const { service } = req.body;
+        const { service } = Object.assign({}, req.body);
         if (service === "image-to-image") {
             validateIsExistValueForFieldsAndDataTypes([
                 { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },

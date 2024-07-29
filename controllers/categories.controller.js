@@ -24,12 +24,16 @@ async function addNewCategory(req, res) {
             ...Object.assign({}, req.body),
             ...Object.assign({}, req.files),
         };
-        res.json(await categoriesManagmentFunctions.addNewCategory(categoryInfo));
+        try{
+            res.json(await categoriesManagmentFunctions.addNewCategory(categoryInfo));
+        }
+        catch(err) {
+            unlinkSync(req.files["categoryImgFile"][0].path);
+            unlinkSync(req.files["styleImgFile"][0].path);
+            res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        }
     }
     catch(err) {
-        console.log(err);
-        unlinkSync(req.files["categoryImgFile"][0].path);
-        unlinkSync(req.files["styleImgFile"][0].path);
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
