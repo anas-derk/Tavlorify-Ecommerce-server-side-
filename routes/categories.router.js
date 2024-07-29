@@ -96,3 +96,5 @@ categoriesRouter.delete("/delete-category-data/:categoryId",
     },
     categoriesController.deleteCategoryData
 );
+
+module.exports = categoriesRouter;
