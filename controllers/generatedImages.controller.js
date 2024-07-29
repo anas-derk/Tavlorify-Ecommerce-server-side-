@@ -6,11 +6,12 @@ const sharp = require("sharp");
 
 const Replicate = require("replicate");
 
+const replicate = new Replicate({
+    auth: process.env.REPLICATE_API_TOKEN,
+});
+
 async function runModel(model, input) {
     try {
-        const replicate = new Replicate({
-            auth: process.env.REPLICATE_API_TOKEN,
-        });
         const output = await replicate.run(
             model, { input, },
         );
@@ -170,18 +171,18 @@ async function generateImageUsingImageToImageService(req, res) {
 }
 
 async function generateImageUsingFaceSwapService(req, res) {
-    const faceSwapInfo = req.query;
+    const { imageLink, styleImageLink } = req.query;
     try {
         const output = await runModel("yan-ops/face_swap:d5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab",
             {
-                local_source: faceSwapInfo.imageLink,
-                local_target: faceSwapInfo.styleImageLink,
+                local_source: imageLink,
+                local_target: styleImageLink,
             }
         );
         if (output.status === "succeed") {
             const result = await saveNewGeneratedImage(output.image);
             if (!result.error) {
-                await res.json({
+                res.json({
                     msg: "Generating Image From Image For Face Swap Service Process Has Been Successfully !!",
                     error: false,
                     data: result.data.imagePath,
@@ -189,9 +190,9 @@ async function generateImageUsingFaceSwapService(req, res) {
                 return;
             }
         }
-        await res.status(500).json(err);
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     } catch (err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
