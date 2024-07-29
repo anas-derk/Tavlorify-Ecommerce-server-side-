@@ -7,6 +7,11 @@ require("dotenv").config({
 // Create Category Schema
 
 const categorySchema = mongoose.Schema({
+    service: {
+        type: String,
+        required: true,
+        enum: ["text-to-image", "image-to-image"]
+    },
     imgSrc: {
         type: String,
         required: true,
@@ -16,11 +21,6 @@ const categorySchema = mongoose.Schema({
         required: true,
     },
     sortNumber: Number,
-    service: {
-        type: String,
-        required: true,
-        enum: ["text-to-image", "image-to-image"]
-    }
 });
 
 // Create Category Model From Category Schema
