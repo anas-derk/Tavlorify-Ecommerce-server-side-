@@ -35,7 +35,7 @@ async function addNewCategory(req, res) {
 
 async function putCategoryData(req, res) {
     try{
-        res.json(await categoriesManagmentFunctions.updateCategoryData(req.params.categoryId, req.body));
+        res.json(await categoriesManagmentFunctions.updateCategoryData(req.params.categoryId, req.query.service, req.body));
     }
     catch(err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

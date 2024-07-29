@@ -79,11 +79,13 @@ categoriesRouter.put("/update-category-data/:categoryId",
     async (req, res, next) => {
         const { newCategorySortNumber, newCategoryName } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
             { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "ObjectId", isRequiredValue: true },
             { fieldName: "New Category Sort Number", fieldValue: Number(newCategorySortNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "New Category Name", fieldValue: newCategoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     categoriesController.putCategoryData
 );
 

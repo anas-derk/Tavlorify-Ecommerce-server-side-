@@ -44,9 +44,9 @@ async function addNewCategory(categoryInfo) {
     }
 }
 
-async function updateCategoryData(categoryId, newCategoryInfo) {
+async function updateCategoryData(categoryId, service, newCategoryInfo) {
     try {
-        const theSecondCategory = await categoryModel.findOne({ sortNumber: newCategoryInfo.newCategorySortNumber });
+        const theSecondCategory = await categoryModel.findOne({ sortNumber: newCategoryInfo.newCategorySortNumber, service });
         const theFirstCategory = await categoryModel.findOneAndUpdate({ _id: categoryId }, {
             name: newCategoryInfo.newCategoryName,
             sortNumber: newCategoryInfo.newCategorySortNumber,
@@ -56,19 +56,22 @@ async function updateCategoryData(categoryId, newCategoryInfo) {
         }, {
             sortNumber: theFirstCategory.sortNumber,
         });
-        if (newCategoryInfo.newCategoryName === theFirstCategory.name)
-            return {
-                msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
-                error: true,
-                data: {},
-            };
+        // if (newCategoryInfo.newCategoryName === theFirstCategory.name) {
+        //     return {
+        //         msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
+        //         error: true,
+        //         data: {},
+        //     }
+        // }
         await styleModel.updateMany({
             categoryName: theFirstCategory.name,
+            service,
         }, {
             categoryName: newCategoryInfo.newCategoryName,
+            service,
         });
         return {
-            msg: "Updating Category Info Process Is Succesfuly !!",
+            msg: "Updating Category Info Process Has Been Succesfuly !!",
             error: false,
             data: {},
         };
