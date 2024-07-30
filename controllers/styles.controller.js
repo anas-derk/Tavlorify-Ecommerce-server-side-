@@ -34,7 +34,8 @@ async function addNewStyle(req, res) {
 
 async function putStyleData(req, res) {
     try{
-        res.json(await stylesManagmentFunctions.updateStyleData(req.params.styleId, req.query.categoryName, req.body));
+        const { service, categoryName } = req.query;
+        res.json(await stylesManagmentFunctions.updateStyleData(service, req.params.styleId, categoryName, req.body));
     }
     catch(err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

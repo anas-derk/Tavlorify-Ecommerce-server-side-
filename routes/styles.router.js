@@ -78,23 +78,23 @@ stylesRouter.put("/update-style-data/:styleId",
     (req, res, next) => {
         const { newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newModelName } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
             { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "ObjectId", isRequiredValue: true },
             { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Category Style Sort Number", fieldValue: Number(newCategoryStyleSortNumber), dataType: "number", isRequiredValue: false },
-            { fieldName: "New Name", fieldValue: newName, dataType: "string", isRequiredValue: false },
-            { fieldName: "New Prompt", fieldValue: newPrompt, dataType: "string", isRequiredValue: false },
-            { fieldName: "New Negative Prompt", fieldValue: newNegativePrompt, dataType: "string", isRequiredValue: false },
-            { fieldName: "New Model Name", fieldValue: newModelName, dataType: "string", isRequiredValue: false },
+            { fieldName: "New Category Style Sort Number", fieldValue: Number(newCategoryStyleSortNumber), dataType: "number", isRequiredValue: true },
+            { fieldName: "New Name", fieldValue: newName, dataType: "string", isRequiredValue: true },
+            { fieldName: "New Prompt", fieldValue: newPrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "New Negative Prompt", fieldValue: newNegativePrompt, dataType: "string", isRequiredValue: true },
+            { fieldName: "New Model Name", fieldValue: newModelName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateServiceName(req.body.service, res, next),
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     (req, res, next) => {
-        const { service } = req.body;
-        if (service === "image-to-image") {
+        const { newDdimSteps, newStrength } = req.body;
+        if (req.query.service === "image-to-image") {
             validateIsExistValueForFieldsAndDataTypes([
-                { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
-                { fieldName: "Strength", fieldValue: Number(strength), dataType: "number", isRequiredValue: true },
+                { fieldName: "New Ddim Steps", fieldValue: Number(newDdimSteps), dataType: "number", isRequiredValue: true },
+                { fieldName: "New Strength", fieldValue: Number(newStrength), dataType: "number", isRequiredValue: true },
             ], res, next);
             return;
         }

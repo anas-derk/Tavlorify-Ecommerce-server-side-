@@ -39,15 +39,16 @@ async function addNewStyle(styleData) {
     }
 }
 
-async function updateStyleData(styleId, categoryName, newCategoryStyleInfo) {
+async function updateStyleData(service, styleId, categoryName, newCategoryStyleInfo) {
     try {
-        const theSecondStyle = await styleModel.findOne({ sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber, categoryName });
+        const theSecondStyle = await styleModel.findOne({ sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber, categoryName, service });
         const theFirstStyle = await styleModel.findOneAndUpdate({ _id: styleId }, {
             name: newCategoryStyleInfo.newName,
             prompt: newCategoryStyleInfo.newPrompt,
             negative_prompt: newCategoryStyleInfo.newNegativePrompt,
             sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber,
             modelName: newCategoryStyleInfo.newModelName,
+            ...(newCategoryStyleInfo.service === "image-to-image" && { ddim_steps: newCategoryStyleInfo.newDdimSteps, newStrength: newCategoryStyleInfo.strength }),
         }, { returnOriginal: true });
         await styleModel.updateOne({
             _id: theSecondStyle._id,
