@@ -66,7 +66,7 @@ async function updateStyleData(service, styleId, categoryName, newCategoryStyleI
     }
 }
 
-async function deleteStyleData(styleId, categoryName) {
+async function deleteStyleData(styleId) {
     try {
         const styleData = await styleModel.findOneAndDelete({
             _id: styleId,
@@ -78,7 +78,7 @@ async function deleteStyleData(styleId, categoryName) {
                 data: {},
             };
         }
-        const stylesCount = await styleModel.countDocuments({ categoryName, service: styleData.service });
+        const stylesCount = await styleModel.countDocuments({ categoryName: styleData.categoryName, service: styleData.service });
         if (stylesCount !== styleData.sortNumber) {
             const allCategoryStyles = await styleModel.find({ categoryName: styleData.categoryName, service: styleData.service });
             let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
@@ -86,14 +86,19 @@ async function deleteStyleData(styleId, categoryName) {
                     style.sortNumber = style.sortNumber - 1;
                 }
                 return {
-                    msg: "Deleting Style Data Process Has Been Successfully !!",
-                    error: false,
-                    data: {
-                        imgSrc: style.imgSrc,
-                    },
+                    service: style.service,
+                    imgSrc: style.imgSrc,
+                    name: style.name,
+                    prompt: style.prompt,
+                    negative_prompt: style.negative_prompt,
+                    modelName: style.modelName,
+                    ...(style.service === "text-to-image" && { num_inference_steps: style.num_inference_steps, refine: style.refine }),
+                    ...(style.service === "image-to-image" && { ddim_steps: style.ddim_steps, strength: style.strength }),
+                    categoryName: style.categoryName,
+                    sortNumber: style.sortNumber
                 }
             });
-            await styleModel.deleteMany({ categoryName: categoryName, service: styleData.service });
+            await styleModel.deleteMany({ categoryName: styleData.categoryName, service: styleData.service });
             await styleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
         }
         return {
