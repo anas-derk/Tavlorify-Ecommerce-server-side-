@@ -91,9 +91,9 @@ async function postNewOrder(ordersType, orderId) {
     }
 }
 
-async function updateOrder(orderId, newOrderDetails) {
+async function updateOrder(ordersType, orderId, newOrderDetails) {
     try {
-        const order = await orderModel.findOneAndUpdate({
+        const order = ordersType === "normal" ? await orderModel.findOneAndUpdate({
             $or: [
                 {
                     _id: orderId,
@@ -102,7 +102,7 @@ async function updateOrder(orderId, newOrderDetails) {
                     klarnaOrderId: newOrderDetails.klarnaOrderId,
                 }
             ]
-        }, { ...newOrderDetails });
+        }, { ...newOrderDetails }) : await returnedOrderModel.findOneAndUpdate( { _id: returnedOrderId } , { ...newReturnedOrderDetails });
         if (order) {
             return {
                 msg: "Updating Order Process Has Been Successfully !!",
@@ -120,9 +120,9 @@ async function updateOrder(orderId, newOrderDetails) {
     }
 }
 
-async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
+async function updateOrderProduct(ordersType, orderId, productId, newOrderProductDetails) {
     try {
-        const order = await orderModel.findOne({ _id: orderId });
+        const order = ordersType === "normal" ? await orderModel.findOne({ _id: orderId }) : await returnedOrderModel.findOne({ _id: returnedOrderId });
         if (order) {
             const productIndex = order.order_lines.findIndex((order_line) => order_line._id == productId);
             if (productIndex !== -1) {
@@ -130,7 +130,7 @@ async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
                 order.order_lines[productIndex].name = newOrderProductDetails.name;
                 order.order_lines[productIndex].unit_price = newOrderProductDetails.unit_price;
                 order.order_lines[productIndex].total_amount = newOrderProductDetails.total_amount;
-                await orderModel.updateOne({ _id: orderId }, { order_lines: order.order_lines, order_amount: calcOrderAmount(order.order_lines) });
+                ordersType === "normal" ? await orderModel.updateOne({ _id: orderId }, { order_lines: order.order_lines, order_amount: calcOrderAmount(order.order_lines) }) : await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines: order.order_lines, order_amount: calcOrderAmount(order.order_lines) });
                 return {
                     msg: "Updating Order Details Has Been Successfuly !!",
                     error: false,
@@ -153,9 +153,9 @@ async function updateOrderProduct(orderId, productId, newOrderProductDetails) {
     }
 }
 
-async function deleteOrder(orderId){
+async function deleteOrder(ordersType, orderId){
     try{
-        await orderModel.updateOne({ _id: orderId }, { isDeleted: true });
+        ordersType === "normal" ? await orderModel.updateOne({ _id: orderId }, { isDeleted: true }) : await returnedOrderModel.findOneAndUpdate({ _id: returnedOrderId }, { isDeleted: true });
         return {
             msg: "Deleting This Order Process Has Been Successfuly !!",
             error: false,
@@ -167,13 +167,13 @@ async function deleteOrder(orderId){
     }
 }
 
-async function deleteProductFromOrder(orderId, productId) {
+async function deleteProductFromOrder(ordersType, orderId, productId) {
     try {
-        const order = await orderModel.findOne({ _id: orderId });
+        const order = ordersType === "normal" ? await orderModel.findOne({ _id: orderId }) : await returnedOrderModel.findOne({ _id: returnedOrderId });
         if (order) {
             const newOrderLines = order.order_lines.filter((order_line) => !(new mongoose.Types.ObjectId(productId)).equals(order_line._id));
             if (newOrderLines.length < order.order_lines.length) {
-                await orderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines });
+                ordersType === "normal" ? await orderModel.updateOne({ _id: orderId }, { order_lines: newOrderLines }) : await returnedOrderModel.updateOne({ _id: returnedOrderId }, { order_lines: newOrderLines });
                 return {
                     msg: "Deleting Product From Order Process Has Been Successfuly !!",
                     error: false,

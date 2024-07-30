@@ -48,8 +48,6 @@ app.listen(PORT, async () => {
 
     app.use("/orders", require("./routes/orders.router"));
 
-    app.use("/returned-orders",  require("./routes/returnedOrders.router"));
-
     app.use("/generated-images", require("./routes/generatedImages.router"));
 
     app.use("/prices", require("./routes/prices.router"));
