@@ -68,7 +68,6 @@ async function updateStyleData(service, styleId, categoryName, newCategoryStyleI
 
 async function updateStyleImagePath(styleId, newImagePath) {
     try {
-        console.log(styleId)
         const styleData = await styleModel.findOneAndUpdate({ _id: styleId }, { imgSrc: newImagePath });
         if (!styleData) {
             return {
