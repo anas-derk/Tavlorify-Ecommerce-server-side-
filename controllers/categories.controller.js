@@ -15,11 +15,6 @@ async function getAllCategoriesData(req, res) {
 
 async function addNewCategory(req, res) {
     try{
-        const uploadError = req.uploadError;
-        if (uploadError) {
-            res.status(400).json(getResponseObject(uploadError, true, {}));
-            return;
-        }
         const categoryInfo = {
             ...Object.assign({}, req.body),
             ...Object.assign({}, req.files),

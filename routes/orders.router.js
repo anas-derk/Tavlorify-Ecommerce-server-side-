@@ -82,10 +82,10 @@ ordersRouter.put("/update-order/:orderId",
 ordersRouter.put("/products/update-product/:orderId/:productId",
     validateJWT,
     (req, res, next) => {
-        const orderAndProductIds = req.params;
+        const { orderId, productId } = req.params;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderAndProductIds.orderId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Product Id", fieldValue: orderAndProductIds.productId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Order Id", fieldValue: orderId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Product Id", fieldValue: productId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     ordersController.putOrderProduct
@@ -104,10 +104,10 @@ ordersRouter.delete("/delete-order/:orderId",
 ordersRouter.delete("/products/delete-product/:orderId/:productId",
     validateJWT,
     (req, res, next) => {
-        const orderAndProductIds = req.params;
+        const { orderId, productId } = req.params;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: orderAndProductIds.orderId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Product Id", fieldValue: orderAndProductIds.productId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Order Id", fieldValue: orderId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Product Id", fieldValue: productId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     ordersController.deleteProductFromOrder

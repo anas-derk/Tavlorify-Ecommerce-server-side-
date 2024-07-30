@@ -4,7 +4,7 @@ const categoriesController = require("../controllers/categories.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateServiceName } = require("../middlewares/global.middlewares");
+const { validateJWT, validateServiceName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -48,6 +48,7 @@ categoriesRouter.post("/add-new-category",
         name: "categoryImgFile",
         maxCount: 1,
     }, { name: "styleImgFile", maxCount: 1 }]),
+    validateIsExistErrorInFiles,
     (req, res, next) => {
         const { service, categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([

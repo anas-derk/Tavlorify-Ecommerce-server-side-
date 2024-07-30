@@ -16,16 +16,10 @@ async function getAllCategoryStylesData(req, res) {
 
 async function addNewStyle(req, res) {
     try{
-        const uploadError = req.uploadError;
-        if (uploadError) {
-            res.status(400).json(getResponseObject(uploadError, true, {}));
-            return;
-        }
-        const styleData = {
+        res.json(await stylesManagmentFunctions.addNewStyle({
             ...Object.assign({}, req.body),
             imgSrc: req.file.path,
-        };
-        res.json(await stylesManagmentFunctions.addNewStyle(styleData));
+        }));
     }
     catch(err){
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
@@ -44,11 +38,6 @@ async function putStyleData(req, res) {
 
 async function putStyleImage(req, res) {
     try{
-        const uploadError = req.uploadError;
-        if (uploadError) {
-            res.status(400).json(getResponseObject(uploadError, true, {}));
-            return;
-        }
         const result = await stylesManagmentFunctions.updateStyleImagePath(req.query.styleId, req.file.path);
         if (!result.error) {
             unlinkSync(result.data.imgSrc);

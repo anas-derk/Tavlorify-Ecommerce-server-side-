@@ -4,7 +4,7 @@ const stylesController = require("../controllers/styles.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateServiceName } = require("../middlewares/global.middlewares");
+const { validateJWT, validateServiceName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -47,6 +47,7 @@ stylesRouter.post("/add-new-style",
             cb(null, true);
         }
     }).single("styleImgFile"),
+    validateIsExistErrorInFiles,
     (req, res, next) => {
         const { service, categoryName, styleName, stylePrompt, styleNegativePrompt, modelName } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
@@ -142,6 +143,7 @@ stylesRouter.put("/update-style-image",
             cb(null, true);
         }
     }).single("styleImage"),
+    validateIsExistErrorInFiles,
     stylesController.putStyleImage
 );
 

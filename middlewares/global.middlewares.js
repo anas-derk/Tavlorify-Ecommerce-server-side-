@@ -13,6 +13,15 @@ function validateJWT(req, res, next) {
     });
 }
 
+function validateIsExistErrorInFiles(req, res, next) {
+    const uploadError = req.uploadError;
+    if (uploadError) {
+        res.status(400).json(getResponseObject(uploadError, true, {}));
+        return;
+    }
+    next();
+}
+
 function validateEmail(email, res, nextFunc) {
     if (!isEmail(email)) {
         res.status(400).json(getResponseObject("Sorry, Please Send Valid Email !!", true, {}));
@@ -58,9 +67,10 @@ function validateNumbersIsNotFloat(numbers, res, nextFunc, errorMsgs, defaultMsg
 
 module.exports = {
     validateJWT,
+    validateIsExistErrorInFiles,
     validateEmail,
     validatePassword,
     validateServiceName,
     validateNumbersIsPositive,
-    validateNumbersIsNotFloat
+    validateNumbersIsNotFloat,
 }

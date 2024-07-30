@@ -2,7 +2,7 @@ const generatedImagesRouter = require("express").Router();
 
 const generatedImagesController = require("../controllers/generatedImages.controller");
 
-const { validateJWT, validateServiceName, validateNumbersIsPositive, validateNumbersIsNotFloat } = require("../middlewares/global.middlewares");
+const { validateJWT, validateServiceName, validateNumbersIsPositive, validateNumbersIsNotFloat, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -71,6 +71,7 @@ generatedImagesRouter.post("/upload-image-and-processing",
             cb(null, true);
         }
     }).single("imageFile"),
+    validateIsExistErrorInFiles,
     generatedImagesController.uploadImageAndProcessing
 );
 

@@ -209,11 +209,6 @@ async function generateImageUsingFaceSwapService(req, res) {
 }
 
 async function uploadImageAndProcessing(req, res) {
-    const uploadError = req.uploadError;
-    if (uploadError) {
-        res.status(400).json(getResponseObject(uploadError, true, {}));
-        return;
-    }
     const filePath = `assets/images/uploadedImages/image${Date.now()}_${Math.random()}.jpg`;
     try {
         await sharp(req.file.buffer, { failOn: "error" }).withMetadata().rotate().toFile(filePath);
