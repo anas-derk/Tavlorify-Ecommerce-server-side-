@@ -56,12 +56,12 @@ categoriesRouter.post("/add-new-category",
             { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
             { fieldName: "Style Prompt", fieldValue: stylePrompt, dataType: "string", isRequiredValue: true },
             { fieldName: "Style Negative Prompt", fieldValue: styleNegativePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateServiceName((Object.assign({}, req.body)).service, res, next),
     (req, res, next) => {
-        const { service } = Object.assign({}, req.body);
+        const { service, ddim_steps, strength } = Object.assign({}, req.body);
         if (service === "image-to-image") {
             validateIsExistValueForFieldsAndDataTypes([
                 { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },

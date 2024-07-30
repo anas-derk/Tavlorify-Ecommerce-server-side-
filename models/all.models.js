@@ -68,7 +68,9 @@ const styleSchema = mongoose.Schema({
     },
     modelName: {
         type: String,
-        required: true,
+        default: function () {
+            return this.service === "text-to-image" ? "dreamshaper" : "controlnet-1.1-x-realistic-vision-v2.0";
+        },
         validate: {
             validator: function (value) {
                 const validModelNames = this.service === "text-to-image" ? [
@@ -96,7 +98,7 @@ const styleSchema = mongoose.Schema({
         type: String,
         default: function () {
             if (this.service === "text-to-image") {
-                if (!this.num_inference_steps) return "";
+                if (!this.refine) return "";
             }
             return;
         },

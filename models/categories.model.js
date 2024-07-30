@@ -33,6 +33,7 @@ async function addNewCategory(categoryInfo) {
             modelName: categoryInfo.modelName,
             categoryName: categoryInfo.categoryName,
             sortNumber: 1,
+            ...(categoryInfo.service === "image-to-image" && { ddim_steps: categoryInfo.ddim_steps, strength: categoryInfo.strength }),
         })).save();
         return {
             msg: "Adding New Category And First Style For Text To Image Page Process Has Been Successfuly !!",
