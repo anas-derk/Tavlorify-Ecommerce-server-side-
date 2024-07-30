@@ -10,10 +10,13 @@ const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functio
 
 stylesRouter.get("/all-styles-data",
     (req, res, next) => {
+        const { service, categoryName } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
     stylesController.getAllCategoryStylesData
 );
 
@@ -55,7 +58,7 @@ stylesRouter.post("/add-new-style",
             { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateServiceName(req.body.service, res, next),
+    (req, res, next) => validateServiceName((Object.assign({}, req.body)).service, res, next),
     (req, res, next) => {
         const { service } = Object.assign({}, req.body);
         if (service === "image-to-image") {

@@ -6,7 +6,8 @@ const { unlinkSync } = require("fs");
 
 async function getAllCategoryStylesData(req, res) {
     try{
-        res.json(await stylesManagmentFunctions.getAllCategoryStylesData(req.query.categoryName));
+        const { service, categoryName } = req.query;
+        res.json(await stylesManagmentFunctions.getAllCategoryStylesData(service, categoryName));
     }
     catch(err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));

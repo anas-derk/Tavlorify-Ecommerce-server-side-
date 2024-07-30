@@ -2,12 +2,12 @@
 
 const { styleModel } = require("../models/all.models");
 
-async function getAllCategoryStylesData(categoryName) {
+async function getAllCategoryStylesData(service, categoryName) {
     try {
         return {
             msg: "Get All Category Styles Data Process Has Been Successfully !!",
             error: false,
-            data: await styleModel.find({ categoryName }).sort({ sortNumber: 1 }),
+            data: await styleModel.find({ service, categoryName }).sort({ sortNumber: 1 }),
         }
     }
     catch (err) {

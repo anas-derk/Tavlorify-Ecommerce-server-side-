@@ -59,7 +59,7 @@ categoriesRouter.post("/add-new-category",
             { fieldName: "Model Name", fieldValue: modelName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateServiceName(req.body.service, res, next),
+    (req, res, next) => validateServiceName((Object.assign({}, req.body)).service, res, next),
     (req, res, next) => {
         const { service } = Object.assign({}, req.body);
         if (service === "image-to-image") {
