@@ -106,7 +106,7 @@ async function deleteCategoryData(categoryId) {
                 }
                 return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber, service: category.service };
             });
-            await categoryModel.deleteMany({});
+            await categoryModel.deleteMany({ service: categoryData.service });
             await categoryModel.insertMany(allCategoiesAfterChangeSortNumber);
         }
         await styleModel.deleteMany({ categoryName: categoryData.name, service: categoryData.service  });
