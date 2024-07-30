@@ -8,7 +8,7 @@ function getFiltersObject(filters) {
         if (objectKey === "orderNumber") filtersObject[objectKey] = Number(filters[objectKey]);
         if (objectKey === "_id") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "status") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "customerName") filtersObject[`customer.first_name`] = filters[objectKey];;
+        if (objectKey === "customerName") filtersObject[`customer.first_name`] = filters[objectKey];
         if (objectKey === "email") filtersObject[`customer.email`] = filters[objectKey];
     }
     return filtersObject;

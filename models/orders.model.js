@@ -1,41 +1,41 @@
 // Import Order Model Object
 
-const { orderModel } = require("../models/all.models");
+const { orderModel, returnedOrderModel } = require("../models/all.models");
 
 const { mongoose } = require("../server");
 
 const { calcOrderAmount } = require("../global/functions");
 
-async function getAllOrdersInsideThePage(pageNumber, pageSize, filters) {
-    try {
-        return {
-            msg: `Get All Orders Inside The Page: ${pageNumber} Process Has Been Successfully !!`,
-            error: false,
-            data: await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
-        };
-    } catch (err) {
-        throw Error(err);
-    }
-}
-
-async function getOrdersCount(filters) {
+async function getOrdersCount(ordersType, filters) {
     try {
         return {
             msg: "Get Orders Count Process Has Been Successfully !!",
             error: false,
-            data: await orderModel.countDocuments(filters),
+            data: ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnedOrderModel.countDocuments(filters),
         };
     } catch (err) {
         throw Error(err);
     }
 }
 
-async function getOrderDetails(orderId) {
+async function getAllOrdersInsideThePage(ordersType, pageNumber, pageSize, filters) {
     try {
-        const order = await orderModel.findById(orderId);
+        return {
+            msg: `Get All Orders Inside The Page: ${pageNumber} Process Has Been Successfully !!`,
+            error: false,
+            data: ordersType === "normal" ? await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }) :  await returnedOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
+        };
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
+async function getOrderDetails(ordersType, orderId) {
+    try {
+        const order = ordersType === "normal" ? await orderModel.findById(orderId) : await returnedOrderModel.findById(orderId);
         if (order) {
             return {
-                msg: "Get Order Details Process Has Been Successfully !!",
+                msg: `Get ${ordersType} Order Details Process Has Been Successfully !!`,
                 error: false,
                 data: order,
             };
@@ -50,8 +50,34 @@ async function getOrderDetails(orderId) {
     }
 }
 
-async function postNewOrder() {
+async function postNewOrder(ordersType, orderId) {
     try {
+        if (ordersType === "returned") {
+            const orderDetails = await orderModel.findById(orderId);
+            if (orderDetails) {
+                const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
+                const newReturnedOrder = new returnedOrderModel({
+                    returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
+                    orderNumber: orderDetails.orderNumber,
+                    orderId,
+                    order_amount: orderDetails.order_amount,
+                    customer: {
+                        first_name: orderDetails.billing_address.given_name,
+                        last_name: orderDetails.billing_address.family_name,
+                        email: orderDetails.billing_address.email,
+                        phone: orderDetails.billing_address.phone,
+                    },
+                    order_lines: orderDetails.order_lines,
+                });
+                await newReturnedOrder.save();
+                await orderModel.updateOne({ _id: orderId }, { isReturned: true });
+                return {
+                    msg: "Creating New Returned Order Process Has Been Successfuly !!",
+                    error: false,
+                    data: {},
+                }
+            }
+        }
         const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
         const newOrder = new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 });
         const orderDetails = await newOrder.save();
@@ -59,7 +85,7 @@ async function postNewOrder() {
             msg: "Creating New Order Process Has Been Successfuly !!",
             error: false,
             data: orderDetails._id,
-        };
+        }
     } catch (err) {
         throw Error(err);
     }

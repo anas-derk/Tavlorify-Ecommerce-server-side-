@@ -23,7 +23,7 @@ async function getReturnedOrdersCount(filters) {
         return {
             msg: "Get Returned Orders Count Process Has Been Successfully !!",
             error: false,
-            data: await returnedOrderModel.countDocuments(filters),
+            data: filters.ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnedOrderModel.countDocuments(filters),
         };
     } catch (err) {
         throw Error(err);
@@ -74,7 +74,7 @@ async function postNewReturnedOrder(orderId) {
                 msg: "Creating New Returned Order Process Has Been Successfuly !!",
                 error: false,
                 data: {},
-            };
+            }
         }
         return {
             msg: "Sorry, This Order Is Not Found !!",

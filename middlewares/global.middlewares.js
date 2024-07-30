@@ -65,6 +65,13 @@ function validateNumbersIsNotFloat(numbers, res, nextFunc, errorMsgs, defaultMsg
     nextFunc();
 }
 
+function validateOrdersType(ordersType, res, nextFunc) {
+    if (!["normal", "returned"].includes(ordersType)) {
+        return res.status(400).json(getResponseObject("Sorry, Please Send Valid Order Type ( 'order' Or 'returned'  ) !!", true, {}));
+    }
+    nextFunc();
+}
+
 module.exports = {
     validateJWT,
     validateIsExistErrorInFiles,
@@ -73,4 +80,5 @@ module.exports = {
     validateServiceName,
     validateNumbersIsPositive,
     validateNumbersIsNotFloat,
+    validateOrdersType
 }
