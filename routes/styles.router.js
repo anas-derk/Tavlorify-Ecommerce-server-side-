@@ -60,7 +60,7 @@ stylesRouter.post("/add-new-style",
     },
     (req, res, next) => validateServiceName((Object.assign({}, req.body)).service, res, next),
     (req, res, next) => {
-        const { service } = Object.assign({}, req.body);
+        const { service, ddim_steps, strength } = Object.assign({}, req.body);
         if (service === "image-to-image") {
             validateIsExistValueForFieldsAndDataTypes([
                 { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },

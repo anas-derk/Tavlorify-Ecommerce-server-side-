@@ -17,17 +17,17 @@ async function getAllCategoryStylesData(service, categoryName) {
 
 async function addNewStyle(styleData) {
     try {
-        const stylesCount = await styleModel.countDocuments({ categoryName: styleData.categoryName });
-        const newStyleData = new styleModel({
+        await (new styleModel({
+            service: styleData.service,
             imgSrc: styleData.imgSrc,
             name: styleData.styleName,
             prompt: styleData.stylePrompt,
             negative_prompt: styleData.styleNegativePrompt,
             modelName: styleData.modelName,
             categoryName: styleData.categoryName,
-            sortNumber: stylesCount + 1,
-        });
-        await newStyleData.save();
+            sortNumber: await styleModel.countDocuments({ categoryName: styleData.categoryName, service: styleData.service }) + 1,
+            ...(categoryInfo.service === "image-to-image" && { ddim_steps: categoryInfo.ddim_steps, strength: categoryInfo.strength }),
+        })).save();
         return {
             msg: "Adding New Category Style For Text To Image Page Process Is Succesfuly !!",
             error: false,
