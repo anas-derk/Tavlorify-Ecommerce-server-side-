@@ -68,7 +68,6 @@ async function updateStyleData(service, styleId, categoryName, newCategoryStyleI
 
 async function deleteStyleData(styleId, categoryName) {
     try {
-        const stylesCount = await styleModel.countDocuments({ categoryName: categoryName });
         const styleData = await styleModel.findOneAndDelete({
             _id: styleId,
         });
@@ -79,8 +78,9 @@ async function deleteStyleData(styleId, categoryName) {
                 data: {},
             };
         }
+        const stylesCount = await styleModel.countDocuments({ categoryName, service: styleData.service });
         if (stylesCount !== styleData.sortNumber) {
-            const allCategoryStyles = await styleModel.find({ categoryName: styleData.categoryName });
+            const allCategoryStyles = await styleModel.find({ categoryName: styleData.categoryName, service: styleData.service });
             let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
                 if (style.sortNumber > styleData.sortNumber) {
                     style.sortNumber = style.sortNumber - 1;
@@ -101,7 +101,7 @@ async function deleteStyleData(styleId, categoryName) {
                     },
                 }
             });
-            await styleModel.deleteMany({ categoryName: categoryName });
+            await styleModel.deleteMany({ categoryName: categoryName, service: styleData.service });
             await styleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
         }
         return {

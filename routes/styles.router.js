@@ -108,7 +108,6 @@ stylesRouter.delete("/delete-style-data/:styleId",
     (req, res, next) => {;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     stylesController.deleteStyleData

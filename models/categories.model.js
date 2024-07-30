@@ -86,7 +86,7 @@ async function updateCategoryData(categoryId, service, newCategoryInfo) {
 async function deleteCategoryData(categoryId) {
     try {
         const categoryData = await categoryModel.findById(categoryId);
-        const categoryStylesData = await styleModel.find({ categoryName: categoryData.name });
+        const categoryStylesData = await styleModel.find({ categoryName: categoryData.name, service: categoryData.service });
         if (!categoryData) {
             return {
                 msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
@@ -109,7 +109,7 @@ async function deleteCategoryData(categoryId) {
             await categoryModel.deleteMany({});
             await categoryModel.insertMany(allCategoiesAfterChangeSortNumber);
         }
-        await styleModel.deleteMany({ categoryName: categoryData.name });
+        await styleModel.deleteMany({ categoryName: categoryData.name, service: categoryData.service  });
         return {
             msg: "Deleting Category Process Has Been Successfully !!",
             error: false,
