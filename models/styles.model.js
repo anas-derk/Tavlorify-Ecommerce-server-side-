@@ -90,14 +90,6 @@ async function deleteStyleData(styleId, categoryName) {
                     error: false,
                     data: {
                         imgSrc: style.imgSrc,
-                        name: style.name,
-                        prompt: style.prompt,
-                        negative_prompt: style.negative_prompt,
-                        num_inference_steps: style.num_inference_steps,
-                        refine: style.refine,
-                        modelName: style.modelName,
-                        categoryName: style.categoryName,
-                        sortNumber: style.sortNumber,
                     },
                 }
             });
@@ -107,7 +99,9 @@ async function deleteStyleData(styleId, categoryName) {
         return {
             msg: "Deleting Style Data Process Has Been Successfully !!",
             error: false,
-            data: styleData.imgSrc,
+            data: {
+                imgSrc: styleData.imgSrc,
+            },
         };
     }
     catch (err) {

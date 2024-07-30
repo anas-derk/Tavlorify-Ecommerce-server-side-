@@ -46,7 +46,7 @@ async function deleteStyleData(req, res) {
     try{
         const result = await stylesManagmentFunctions.deleteStyleData(req.params.styleId);
         if (!result.error) {
-            unlinkSync(result.data);
+            unlinkSync(result.data.imgSrc);
         }
         res.json(result);
     }
