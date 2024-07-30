@@ -66,6 +66,30 @@ async function updateStyleData(service, styleId, categoryName, newCategoryStyleI
     }
 }
 
+async function updateStyleImagePath(styleId, newImagePath) {
+    try {
+        console.log(styleId)
+        const styleData = await styleModel.findOneAndUpdate({ _id: styleId }, { imgSrc: newImagePath });
+        if (!styleData) {
+            return {
+                msg: "Sorry, This Style Is Not Found !!",
+                error: true,
+                data: {},
+            };
+        }
+        return {
+            msg: "Changing Style Image Process Has Been Successfully !!",
+            error: false,
+            data: {
+                imgSrc: styleData.imgSrc,
+                newImagePath,
+            }
+        };
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function deleteStyleData(styleId) {
     try {
         const styleData = await styleModel.findOneAndDelete({
@@ -117,6 +141,7 @@ async function deleteStyleData(styleId) {
 module.exports = {
     getAllCategoryStylesData,
     updateStyleData,
+    updateStyleImagePath,
     deleteStyleData,
     addNewStyle,
 }

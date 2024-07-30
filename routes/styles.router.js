@@ -103,6 +103,48 @@ stylesRouter.put("/update-style-data/:styleId",
     stylesController.putStyleData
 );
 
+stylesRouter.put("/update-style-image",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Id", fieldValue: req.query.styleId, dataType: "ObjectId", isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
+    multer({
+        storage: multer.diskStorage({
+            destination: (req, file, cb) => {
+                if (req.query.service === "text-to-image") {
+                    cb(null, "./assets/images/styles/textToImage");
+                }
+                else if (req.query.service === "image-to-image") {
+                    cb(null, "./assets/images/styles/imageToImage");
+                }
+            },
+            filename: (req, file, cb) => {
+                cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
+            },
+        }),
+        fileFilter: (req, file, cb) => {
+            if (!file) {
+                req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
+                return cb(null, false);
+            }
+            if (
+                file.mimetype !== "image/jpeg" &&
+                file.mimetype !== "image/png" &&
+                file.mimetype !== "image/webp"
+            ){
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                return cb(null, false);
+            }
+            cb(null, true);
+        }
+    }).single("styleImage"),
+    stylesController.putStyleImage
+);
+
 stylesRouter.delete("/delete-style-data/:styleId",
     validateJWT,
     (req, res, next) => {;

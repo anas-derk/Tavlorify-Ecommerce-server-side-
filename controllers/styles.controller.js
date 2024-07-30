@@ -42,6 +42,24 @@ async function putStyleData(req, res) {
     }
 }
 
+async function putStyleImage(req, res) {
+    try{
+        const uploadError = req.uploadError;
+        if (uploadError) {
+            res.status(400).json(getResponseObject(uploadError, true, {}));
+            return;
+        }
+        const result = await stylesManagmentFunctions.updateStyleImagePath(req.query.styleId, req.file.path);
+        if (!result.error) {
+            unlinkSync(result.data.imgSrc);
+        }
+        res.json(result);
+    }
+    catch(err) {
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
 async function deleteStyleData(req, res) {
     try{
         const result = await stylesManagmentFunctions.deleteStyleData(req.params.styleId);
@@ -59,5 +77,6 @@ module.exports = {
     getAllCategoryStylesData,
     addNewStyle,
     putStyleData,
+    putStyleImage,
     deleteStyleData
 }

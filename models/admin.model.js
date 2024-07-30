@@ -54,37 +54,7 @@ async function getAdminUserInfo(userId) {
     }
 }
 
-async function handleChangeStyleImagePath(model, styleId, newFilePath) {
-    const styleData = await model.findOneAndUpdate({ _id: styleId }, { imgSrc: newFilePath });
-    if (!styleData) {
-        return {
-            msg: "Sorry, This Style Is Not Found !!",
-            error: true,
-            data: {},
-        };
-    }
-    return {
-        msg: "Changing Style Image Process Has Been Successfully !!",
-        error: false,
-        data: {
-            imgSrc: styleData.imgSrc,
-        }
-    };
-}
-
-async function updateStyleImagePath(service, styleId, newFilePath) {
-    try {
-        if (service === "text-to-image") {
-            return handleChangeStyleImagePath(textToImageStyleModel, styleId, newFilePath);
-        }
-        return handleChangeStyleImagePath(imageToImageStyleModel, styleId, newFilePath);
-    } catch (err) {
-        throw Error(err);
-    }
-}
-
 module.exports = {
     adminLogin,
     getAdminUserInfo,
-    updateStyleImagePath,
 }
