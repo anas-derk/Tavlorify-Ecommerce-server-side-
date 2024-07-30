@@ -86,7 +86,6 @@ async function updateCategoryData(categoryId, service, newCategoryInfo) {
 async function deleteCategoryData(categoryId) {
     try {
         const categoryData = await categoryModel.findById(categoryId);
-        const categoryStylesData = await styleModel.find({ categoryName: categoryData.name, service: categoryData.service });
         if (!categoryData) {
             return {
                 msg: "Sorry, This Category Is Not Exist, Please Send Valid Category Id !!",
@@ -94,17 +93,18 @@ async function deleteCategoryData(categoryId) {
                 data: {},
             };
         }
-        const categoriesCount = await categoryModel.countDocuments({});
+        const categoryStylesData = await styleModel.find({ categoryName: categoryData.name, service: categoryData.service });
+        const categoriesCount = await categoryModel.countDocuments({ service: categoryData.service });
         await categoryModel.deleteOne({
             _id: categoryId,
         });
         if (categoriesCount !== categoryData.sortNumber) {
-            const allCategoies = await categoryModel.find({});
+            const allCategoies = await categoryModel.find({ service: categoryData.service });
             let allCategoiesAfterChangeSortNumber = allCategoies.map((category) => {
                 if (category.sortNumber > categoryData.sortNumber) {
                     category.sortNumber = category.sortNumber - 1;
                 }
-                return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber };
+                return { imgSrc: category.imgSrc, name: category.name, sortNumber: category.sortNumber, service: category.service };
             });
             await categoryModel.deleteMany({});
             await categoryModel.insertMany(allCategoiesAfterChangeSortNumber);
