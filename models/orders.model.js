@@ -30,12 +30,12 @@ async function getAllOrdersInsideThePage(ordersType, pageNumber, pageSize, filte
     }
 }
 
-async function getOrderDetails(ordersType, orderId) {
+async function getOrderDetails(orderType, orderId) {
     try {
-        const order = ordersType === "normal" ? await orderModel.findById(orderId) : await returnedOrderModel.findById(orderId);
+        const order = orderType === "normal" ? await orderModel.findById(orderId) : await returnedOrderModel.findById(orderId);
         if (order) {
             return {
-                msg: `Get ${ordersType} Order Details Process Has Been Successfully !!`,
+                msg: `Get ${orderType} Order Details Process Has Been Successfully !!`,
                 error: false,
                 data: order,
             };

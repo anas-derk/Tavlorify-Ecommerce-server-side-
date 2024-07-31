@@ -40,7 +40,7 @@ async function getAllOrdersInsideThePage(req, res) {
 
 async function getOrderDetails(req, res) {
     try{
-        res.json(await ordersManagmentFunctions.getOrderDetails(req.query.ordersType, req.params.orderId));
+        res.json(await ordersManagmentFunctions.getOrderDetails(req.query.orderType, req.params.orderId));
     }
     catch(err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
