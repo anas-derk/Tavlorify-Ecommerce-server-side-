@@ -70,7 +70,7 @@ ordersRouter.post("/create-new-order",
         const { ordersType, orderId } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Orders Type", fieldValue: ordersType, dataType: "string", isRequiredValue: true },
-            ...(ordersType === "returned" && { fieldName: "Order Id", fieldValue: orderId, dataType: "string", isRequiredValue: true })
+            ...(ordersType === "returned" && { fieldName: "Order Id", fieldValue: orderId, dataType: "ObjectId", isRequiredValue: true })
         ], res, next);
     },
     (req, res, next) => validateOrdersType(req.query.ordersType, res, next),
