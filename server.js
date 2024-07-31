@@ -52,8 +52,6 @@ app.listen(PORT, async () => {
 
     app.use("/prices", require("./routes/prices.router"));
 
-    app.use("/face-swap", require("./routes/faceSwap.router"));
-
     app.use("/categories", require("./routes/categories.router"));
 
     app.use("/styles", require("./routes/styles.router"));

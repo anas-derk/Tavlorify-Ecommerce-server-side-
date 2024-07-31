@@ -1,13 +1,13 @@
 // Import Text To Image Style Model Object
 
-const { styleModel } = require("../models/all.models");
+const { styleModel, faceSwapStyleModel } = require("../models/all.models");
 
 async function getAllCategoryStylesData(service, categoryName) {
     try {
         return {
             msg: "Get All Category Styles Data Process Has Been Successfully !!",
             error: false,
-            data: await styleModel.find({ service, categoryName }).sort({ sortNumber: 1 }),
+            data: service === "face-swap" ? await faceSwapStyleModel.find({ categoryName }).sort({ sortNumber: 1 }) : await styleModel.find({ service, categoryName }).sort({ sortNumber: 1 }),
         }
     }
     catch (err) {
@@ -17,19 +17,27 @@ async function getAllCategoryStylesData(service, categoryName) {
 
 async function addNewStyle(styleData) {
     try {
-        await (new styleModel({
-            service: styleData.service,
-            imgSrc: styleData.imgSrc,
-            name: styleData.styleName,
-            prompt: styleData.stylePrompt,
-            negative_prompt: styleData.styleNegativePrompt,
-            modelName: styleData.modelName,
-            categoryName: styleData.categoryName,
-            sortNumber: await styleModel.countDocuments({ categoryName: styleData.categoryName, service: styleData.service }) + 1,
-            ...(categoryInfo.service === "image-to-image" && { ddim_steps: categoryInfo.ddim_steps, strength: categoryInfo.strength }),
-        })).save();
+        if (styleData.service === "face-swap") {
+            await (new faceSwapStyleModel({
+                imgSrcList: styleData.imgSrcList,
+                categoryName: styleData.categoryName,
+                sortNumber: await faceSwapStyleModel.countDocuments({ categoryName: styleData.categoryName }) + 1,
+            })).save();
+        } else {
+            await (new styleModel({
+                service: styleData.service,
+                imgSrc: styleData.imgSrc,
+                name: styleData.styleName,
+                prompt: styleData.stylePrompt,
+                negative_prompt: styleData.styleNegativePrompt,
+                modelName: styleData.modelName,
+                categoryName: styleData.categoryName,
+                sortNumber: await styleModel.countDocuments({ categoryName: styleData.categoryName, service: styleData.service }) + 1,
+                ...(categoryInfo.service === "image-to-image" && { ddim_steps: categoryInfo.ddim_steps, strength: categoryInfo.strength }),
+            })).save();
+        }
         return {
-            msg: "Adding New Category Style For Text To Image Page Process Is Succesfuly !!",
+            msg: `Adding New Category Style For ${styleData.service} Page Process Is Succesfuly !!`,
             error: false,
             data: {},
         }

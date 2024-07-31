@@ -16,12 +16,26 @@ async function getAllCategoryStylesData(req, res) {
 
 async function addNewStyle(req, res) {
     try{
+        if (req.service === "face-swap") {
+            const styleImageFiles = {...Object.assign({}, req.files)};
+            res.json(await stylesManagmentFunctions.addNewStyle({
+                service: "face-swap",
+                ...Object.assign({}, req.body),
+                imgSrcList: [
+                    styleImageFiles.verticalStyleImage[0].path,
+                    styleImageFiles.horizontalStyleImage[0].path,
+                    styleImageFiles.squareStyleImage[0].path,
+                ],
+            }));
+            return;
+        }
         res.json(await stylesManagmentFunctions.addNewStyle({
             ...Object.assign({}, req.body),
             imgSrc: req.file.path,
         }));
     }
     catch(err){
+        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
