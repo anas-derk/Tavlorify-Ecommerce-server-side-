@@ -131,15 +131,18 @@ stylesRouter.put("/update-style-data/:styleId",
     validateJWT,
     (req, res, next) => {
         const { newCategoryStyleSortNumber, newName, newPrompt, newNegativePrompt, newModelName } = req.body;
+        const { service } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
+            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
             { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
             { fieldName: "New Category Style Sort Number", fieldValue: Number(newCategoryStyleSortNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "New Name", fieldValue: newName, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Prompt", fieldValue: newPrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Negative Prompt", fieldValue: newNegativePrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Model Name", fieldValue: newModelName, dataType: "string", isRequiredValue: true },
+            (service === "text-to-image" || service === "image-to-image") && (
+                { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
+                { fieldName: "New Name", fieldValue: newName, dataType: "string", isRequiredValue: true },
+                { fieldName: "New Prompt", fieldValue: newPrompt, dataType: "string", isRequiredValue: true },
+                { fieldName: "New Negative Prompt", fieldValue: newNegativePrompt, dataType: "string", isRequiredValue: true },
+                { fieldName: "New Model Name", fieldValue: newModelName, dataType: "string", isRequiredValue: true }
+            )
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.query.service, res, next),
