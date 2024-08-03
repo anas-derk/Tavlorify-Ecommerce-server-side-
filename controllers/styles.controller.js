@@ -54,9 +54,9 @@ async function putStyleImage(req, res) {
     try{
         const { service, imageIndex } = req.query;
         const result = service !== "face-swap" ? await stylesManagmentFunctions.updateStyleImagePath(service, req.params.styleId, req.file.path) : await stylesManagmentFunctions.updateFaceSwapStyleImagePath(req.params.styleId, req.file.path, imageIndex);
-        // if (!result.error) {
-        //     unlinkSync(result.data.imgSrc);
-        // }
+        if (!result.error) {
+            unlinkSync(result.data.imgSrc);
+        }
         res.json(result);
     }
     catch(err) {
