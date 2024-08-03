@@ -4,7 +4,7 @@ const stylesController = require("../controllers/styles.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateServiceName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validateServiceName, validateIsExistErrorInFiles, validateImageIndexForFaceSwap } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -160,23 +160,36 @@ stylesRouter.put("/update-style-data/:styleId",
     stylesController.putStyleData
 );
 
-stylesRouter.put("/update-style-image",
+stylesRouter.put("/update-style-image/:styleId",
     validateJWT,
     (req, res, next) => {
+        const { service, imageIndex } = req.query;
+        console.log(req.query)
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Service Name", fieldValue: req.query.service, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Id", fieldValue: req.query.styleId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
+            service === "face-swap" && { fieldName: "Image Index", fieldValue: Number(imageIndex), dataType: "number", isRequiredValue: true }
         ], res, next);
     },
     (req, res, next) => validateServiceName(req.query.service, res, next),
+    (req, res, next) => {
+        const { service, imageIndex } = req.query;
+        if (service === "face-swap") {
+            validateImageIndexForFaceSwap(imageIndex, res, next);
+            return;
+        }
+        next();
+    },
     multer({
         storage: multer.diskStorage({
             destination: (req, file, cb) => {
-                if (req.query.service === "text-to-image") {
+                const { service } = req.query;
+                if (service === "text-to-image") {
                     cb(null, "./assets/images/styles/textToImage");
                 }
-                else if (req.query.service === "image-to-image") {
+                else if (service === "image-to-image") {
                     cb(null, "./assets/images/styles/imageToImage");
+                } else {
+                    cb(null, "./assets/images/styles/faceSwap");
                 }
             },
             filename: (req, file, cb) => {

@@ -72,6 +72,13 @@ function validateOrdersType(ordersType, res, nextFunc) {
     nextFunc();
 }
 
+function validateImageIndexForFaceSwap(imageIndex, res, nextFunc) {
+    if (![0, 1, 2].includes(Number(imageIndex))) {
+        return res.status(400).json(getResponseObject("Sorry, Please Send Valid Image Index ( '0' For Vertical Image, '1' For Horizontal Image, '2' For Square Image ) !!", true, {}));
+    }
+    nextFunc();
+}
+
 module.exports = {
     validateJWT,
     validateIsExistErrorInFiles,
@@ -80,5 +87,6 @@ module.exports = {
     validateServiceName,
     validateNumbersIsPositive,
     validateNumbersIsNotFloat,
-    validateOrdersType
+    validateOrdersType,
+    validateImageIndexForFaceSwap
 }

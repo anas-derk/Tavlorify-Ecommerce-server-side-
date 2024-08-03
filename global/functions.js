@@ -150,7 +150,7 @@ function sendPaymentConfirmationMessage(email, orderDetails) {
 function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes) {
     for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
         if (fieldnameAndValueAndDataType.isRequiredValue) {
-            if (!fieldnameAndValueAndDataType.fieldValue) 
+            if (!fieldnameAndValueAndDataType.fieldValue && fieldnameAndValueAndDataType.dataType !== "number") 
                 return getResponseObject(
                     `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`,
                     true,

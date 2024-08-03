@@ -88,7 +88,7 @@ async function updateStyleImagePath(styleId, newImagePath) {
                 msg: "Sorry, This Style Is Not Found !!",
                 error: true,
                 data: {},
-            };
+            }
         }
         return {
             msg: "Changing Style Image Process Has Been Successfully !!",
@@ -97,7 +97,32 @@ async function updateStyleImagePath(styleId, newImagePath) {
                 imgSrc: styleData.imgSrc,
                 newImagePath,
             }
-        };
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
+async function updateFaceSwapStyleImagePath(styleId, newImagePath, imageIndex) {
+    try {
+        const styleData = await faceSwapStyleModel.findOne({ _id: styleId });
+        if (!styleData) {
+            return {
+                msg: "Sorry, This Style Is Not Found !!",
+                error: true,
+                data: {},
+            }
+        }
+        styleData.imgSrcList[imageIndex] = newImagePath;
+        await faceSwapStyleModel.updateOne({ _id: styleId }, { imgSrcList: styleData.imgSrcList });
+        return {
+            msg: "Changing Style Image Process Has Been Successfully !!",
+            error: false,
+            data: {
+                imgSrc: styleData.imgSrcList[imageIndex],
+                newImagePath,
+            }
+        }
     } catch (err) {
         throw Error(err);
     }
@@ -197,6 +222,7 @@ module.exports = {
     addNewStyle,
     updateStyleData,
     updateStyleImagePath,
+    updateFaceSwapStyleImagePath,
     deleteStyleData,
     deleteFaceSwapStyleData
 }
