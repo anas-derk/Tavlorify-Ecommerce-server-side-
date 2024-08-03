@@ -76,10 +76,26 @@ async function deleteStyleData(req, res) {
     }
 }
 
+async function deleteFaceSwapStyleData(req, res) {
+    try{
+        const result = await stylesManagmentFunctions.deleteFaceSwapStyleData(req.params.styleId);
+        if (!result.error) {
+            for(let imgSrc of result.data.imgSrcList) {
+                unlinkSync(imgSrc);
+            }
+        }
+        res.json(result);
+    }
+    catch(err) {
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
 module.exports = {
     getAllCategoryStylesData,
     addNewStyle,
     putStyleData,
     putStyleImage,
-    deleteStyleData
+    deleteStyleData,
+    deleteFaceSwapStyleData
 }

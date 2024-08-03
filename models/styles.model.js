@@ -145,10 +145,52 @@ async function deleteStyleData(styleId) {
     }
 }
 
+async function deleteFaceSwapStyleData(styleId) {
+    try {
+        const styleData = await faceSwapStyleModel.findOneAndDelete({
+            _id: styleId,
+        });
+        if (!styleData) {
+            return {
+                msg: "Sorry, This Category Style Is Not Exist, Please Send Valid Style Id !!",
+                error: true,
+                data: {},
+            };
+        }
+        const stylesCount = await faceSwapStyleModel.countDocuments({ categoryName: styleData.categoryName });
+        if (stylesCount !== styleData.sortNumber) {
+            const allCategoryStyles = await faceSwapStyleModel.find({ categoryName: styleData.categoryName });
+            let allCategoryStylesAfterChangeSortNumber = allCategoryStyles.map((style) => {
+                if (style.sortNumber > styleData.sortNumber) {
+                    style.sortNumber = style.sortNumber - 1;
+                }
+                return {
+                    imgSrcList: style.imgSrcList,
+                    categoryName: style.categoryName,
+                    sortNumber: style.sortNumber
+                }
+            });
+            await faceSwapStyleModel.deleteMany({ categoryName: styleData.categoryName });
+            await faceSwapStyleModel.insertMany(allCategoryStylesAfterChangeSortNumber);
+        }
+        return {
+            msg: "Deleting Style Data Process Has Been Successfully !!",
+            error: false,
+            data: {
+                imgSrcList: styleData.imgSrcList,
+            },
+        };
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getAllCategoryStylesData,
+    addNewStyle,
     updateStyleData,
     updateStyleImagePath,
     deleteStyleData,
-    addNewStyle,
+    deleteFaceSwapStyleData
 }

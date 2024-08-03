@@ -115,11 +115,11 @@ stylesRouter.post("/add-new-style-for-face-swap-service",
         },
     ]),
     validateIsExistErrorInFiles,
-    // (req, res, next) => {
-    //     validateIsExistValueForFieldsAndDataTypes([
-    //         { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
-    //     ], res, next);
-    // },
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Name", fieldValue: req.query.categoryName, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
     (req, res, next) => {
         req.service = "face-swap";
         next();
@@ -208,6 +208,16 @@ stylesRouter.delete("/delete-style-data/:styleId",
         ], res, next);
     },
     stylesController.deleteStyleData
+);
+
+stylesRouter.delete("/delete-face-swap-style-data/:styleId",
+    validateJWT,
+    (req, res, next) => {;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Style Id", fieldValue: req.params.styleId, dataType: "ObjectId", isRequiredValue: true },
+        ], res, next);
+    },
+    stylesController.deleteFaceSwapStyleData
 );
 
 module.exports = stylesRouter;
