@@ -60,7 +60,6 @@ async function saveNewGeneratedImage(generatedImageURL) {
 
 async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
     try{
-        console.log(generatingInfo)
         const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
         if (generatingInfo.service === "image-to-image") {
             let imageOrientation = "", size = "";
@@ -91,7 +90,6 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
                 generatedImagePath: generatingInfo.generatedImageURL,
             });
         } else if (generatingInfo.service === "text-to-image") {
-            console.log(generatingInfo)
             await saveNewGeneratedImageData({
                 service: generatingInfo.service,
                 textPrompt: generatingInfo.textPrompt,
@@ -109,7 +107,6 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
         }
     }
     catch(err) {
-        console.log(err)
         throw err;
     }
 }

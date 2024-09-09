@@ -36,10 +36,9 @@ async function translateText(text){
 
 async function generateImageUsingTextToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
+    const { textPrompt, model_name, categoryName, prompt, negative_prompt, width, height, num_inference_steps, expert_ensemble_refiner } = req.query;
     try{
-        const { textPrompt, model_name, categoryName, prompt, negative_prompt, width, height, num_inference_steps, expert_ensemble_refiner } = req.query;
         const textAfterTranslation = await translateText(textPrompt);
-        console.log("anas")
         let tempOutput;
         switch (model_name) {
             case "dreamshaper": {
@@ -93,7 +92,7 @@ async function generateImageUsingTextToImageService(req, res) {
                     negative_prompt: negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
-                    num_inference_steps: num_inference_steps,
+                    num_inference_steps,
                     refine: expert_ensemble_refiner,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
@@ -115,7 +114,6 @@ async function generateImageUsingTextToImageService(req, res) {
                 res.status(400).json("Invalid Model Name !!");
             }
         }
-        console.log(tempOutput);
         if (tempOutput && Array.isArray(tempOutput)) {
             if (tempOutput.length === 1) {
                 const result = await saveNewGeneratedImage(tempOutput[0]);
@@ -134,10 +132,8 @@ async function generateImageUsingTextToImageService(req, res) {
         }
     }
     catch(err) {
-        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
-    console.log(generatedImagePathInServer + " aaa");
     if (generatedImagePathInServer) {
         await saveNewGeneratedImageDataGlobalFunc({ service: "text-to-image", textPrompt, categoryName, styleName, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
