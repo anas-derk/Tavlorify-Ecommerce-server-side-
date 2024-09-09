@@ -29,6 +29,7 @@ async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, serv
 
 async function saveNewGeneratedImageData(generatedImageData) {
     try {
+        console.log("aa")
         return {
             msg: "Save New Generated Image Data Process Has Been Successfully !!",
             error: false,
