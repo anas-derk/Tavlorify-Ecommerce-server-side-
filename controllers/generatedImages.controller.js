@@ -36,7 +36,7 @@ async function translateText(text){
 
 async function generateImageUsingTextToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
-    const { textPrompt, model_name, categoryName, prompt, negative_prompt, width, height, num_inference_steps, expert_ensemble_refiner } = req.query;
+    const { textPrompt, model_name, categoryName, styleName, prompt, negative_prompt, width, height, num_inference_steps, expert_ensemble_refiner } = req.query;
     try{
         const textAfterTranslation = await translateText(textPrompt);
         let tempOutput;
