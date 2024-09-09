@@ -160,8 +160,8 @@ async function generateImageUsingImageToImageService(req, res) {
                         image: imageLink,
                         prompt: result.data.prompt,
                         n_prompt: result.data.negative_prompt,
-                        image_resolution: parseInt(result.data.image_resolution),
-                        preprocessor_resolution: parseInt(result.data.preprocessor_resolution),
+                        image_resolution: 896,
+                        preprocessor_resolution: 896,
                         ddim_steps: parseInt(result.data.ddim_steps),
                         strength: Number(result.data.strength),
                     });

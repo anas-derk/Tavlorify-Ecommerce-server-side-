@@ -36,17 +36,16 @@ generatedImagesRouter.get("/generate-image-using-text-to-image-service",
 
 generatedImagesRouter.get("/generate-image-using-image-to-image-service",
     (req, res, next) => {
-        const { imageLink, prompt, n_prompt, image_resolution, preprocessor_resolution, ddim_steps, strength } = req.query;
+        const { imageLink, categoryName, styleName } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Image Link", fieldValue: imageLink, dataType: "string", isRequiredValue: true },
-            { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Negative Prompt", fieldValue:n_prompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Image Resolution", fieldValue: Number(image_resolution), dataType: "number", isRequiredValue: false },
-            { fieldName: "Preprocessor Resolution", fieldValue: Number(preprocessor_resolution), dataType: "number", isRequiredValue: true },
-            { fieldName: "Ddim Steps", fieldValue: Number(ddim_steps), dataType: "number", isRequiredValue: true },
-            { fieldName: "Strength", fieldValue: Number(strength), dataType: "number", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validatePaintingType(req.query.paintingType, res, next),
+    (req, res, next) => validateIsExistWhiteBorder(req.query.isExistWhiteBorder, res, next),
+    (req, res, next) => validateFrameColor(req.query.frameColor, res, next),
     generatedImagesController.generateImageUsingImageToImageService
 );
 
