@@ -1,3 +1,5 @@
+const { getResponseObject } = require("../global/functions");
+
 function validatePaintingType(paintingType, res, nextFunc) {
     if (!["canvas", "poster", "poster-with-wooden-frame", "poster-with-hangers",].includes(paintingType)) {
         return res.status(400).json(getResponseObject("Sorry, Please Send Valid Painting Type !!", true, {}));
