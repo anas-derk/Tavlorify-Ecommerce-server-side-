@@ -6,7 +6,7 @@ require("dotenv").config({
 
 // Create Product Prices Schema
 
-const productPricesSchema = mongoose.Schema({
+const productPricesSchema = new mongoose.Schema({
     productName: {
         type: String,
         required: true,

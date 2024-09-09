@@ -4,7 +4,7 @@ const { mongoose } = require("../server");
 
 // Create Admin Schema
 
-const adminSchema = mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -21,7 +21,7 @@ const adminModel = mongoose.model("admin", adminSchema);
 
 // Create Category Schema
 
-const categorySchema = mongoose.Schema({
+const categorySchema = new mongoose.Schema({
     service: {
         type: String,
         required: true,
@@ -44,7 +44,7 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 
 // Create Style Schema
 
-const styleSchema = mongoose.Schema({
+const styleSchema = new mongoose.Schema({
     service: {
         type: String,
         required: true,
@@ -79,7 +79,7 @@ const styleSchema = mongoose.Schema({
                     "midjourney-diffusion",
                     "deliberate-v2",
                     "sdxl",
-                    "openjourney",
+                    "sdxl-lightning-4step",
                 ] : ["controlnet-1.1-x-realistic-vision-v2.0"];
                 return validModelNames.includes(value);
             }
@@ -128,7 +128,7 @@ const styleModel = mongoose.model("style", styleSchema);
 
 // Create Order Schema
 
-const orderSchema = mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     klarnaOrderId: {
         type: String,
         default: "none",
@@ -266,7 +266,7 @@ const orderModel = mongoose.model("order", orderSchema);
 
 // Create generated Image Schema
 
-const generatedImageSchema = mongoose.Schema({
+const generatedImageSchema = new mongoose.Schema({
     service: {
         type: String,
         required: true,
@@ -371,7 +371,7 @@ const generatedImageModel = mongoose.model("generated_image", generatedImageSche
 
 // Create Product Prices Schema
 
-const productPricesSchema = mongoose.Schema({
+const productPricesSchema = new mongoose.Schema({
     productName: {
         type: String,
         required: true,
@@ -413,7 +413,7 @@ const productPricesModel = mongoose.model("prices", productPricesSchema);
 
 // Create Returned Order Schema
 
-const returnedOrderSchema = mongoose.Schema({
+const returnedOrderSchema = new mongoose.Schema({
     returnedOrderNumber: Number,
     orderNumber: {
         type: Number,
@@ -494,7 +494,7 @@ const returnedOrderModel = mongoose.model("returned_order", returnedOrderSchema)
 
 // Create Face Swap Style Schema
 
-const faceSwapStyleSchema = mongoose.Schema({
+const faceSwapStyleSchema = new mongoose.Schema({
     categoryName: {
         type: String,
         required: true,

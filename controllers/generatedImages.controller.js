@@ -100,8 +100,8 @@ async function generateImageUsingTextToImageService(req, res) {
                 tempOutput = output;
                 break;
             }
-            case "openjourney": {
-                const output = await runModel("prompthero/openjourney:9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb",
+            case "sdxl-lightning-4step": {
+                const output = await runModel("bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f",
                 {
                     prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
                     width: parseInt(Number(textToImageInfo.width)),

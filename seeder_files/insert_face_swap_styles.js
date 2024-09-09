@@ -6,7 +6,7 @@ require("dotenv").config({
 
 // Create Face Swap Style Schema
 
-const faceSwapStyleSchema = mongoose.Schema({
+const faceSwapStyleSchema = new mongoose.Schema({
     categoryName: {
         type: String,
         required: true,

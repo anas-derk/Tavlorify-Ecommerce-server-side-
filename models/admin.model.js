@@ -1,6 +1,6 @@
-// Import Admin, Text To Image Style Model And Image To Image Style Model Object
+// Import Admin Model Object
 
-const { adminModel, textToImageStyleModel, imageToImageStyleModel } = require("../models/all.models");
+const { adminModel } = require("../models/all.models");
 
 const { compare } = require("bcryptjs");
 

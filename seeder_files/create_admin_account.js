@@ -6,7 +6,7 @@ require("dotenv").config({
 
 // Create Admin Schema
 
-const adminSchema = mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,

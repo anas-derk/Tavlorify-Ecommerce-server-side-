@@ -6,7 +6,7 @@ require("dotenv").config({
 
 // Create Category Schema
 
-const categorySchema = mongoose.Schema({
+const categorySchema = new mongoose.Schema({
     service: {
         type: String,
         required: true,
