@@ -147,19 +147,23 @@ async function generateImageUsingTextToImageService(req, res) {
 
 async function generateImageUsingImageToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
-    const { modelName, imageLink, prompt, negative_prompt, image_resolution, preprocessor_resolution, ddim_steps, strength } = req.query;
+    const { imageLink, categoryName, styleName, paintingType, isExistWhiteBorder, frameColor } = req.query;
+    const result = await getStyleData("image-to-image", categoryName, styleName);
+    if (result.error) {
+        return res.status(400).json(result);
+    }
     try {
-        switch (modelName) {
+        switch (result.data.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
                 const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                     {
                         image: imageLink,
-                        prompt: prompt,
-                        n_prompt: negative_prompt,
-                        image_resolution: parseInt(image_resolution),
-                        preprocessor_resolution: parseInt(preprocessor_resolution),
-                        ddim_steps: parseInt(ddim_steps),
-                        strength: Number(strength),
+                        prompt: result.data.prompt,
+                        n_prompt: result.data.negative_prompt,
+                        image_resolution: parseInt(result.data.image_resolution),
+                        preprocessor_resolution: parseInt(result.data.preprocessor_resolution),
+                        ddim_steps: parseInt(result.data.ddim_steps),
+                        strength: Number(result.data.strength),
                     });
                 if (Array.isArray(output)) {
                     if (output.length === 2) {
