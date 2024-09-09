@@ -1,4 +1,4 @@
-const { getResponseObject, saveNewGeneratedImage } = require("../global/functions");
+const { getResponseObject, saveNewGeneratedImage, saveNewGeneratedImageDataGlobalFunc } = require("../global/functions");
 
 const generatedImagesManagmentFunctions = require("../models/generatedImages.model");
 
@@ -9,6 +9,8 @@ const Replicate = require("replicate");
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN,
 });
+
+const { Translate } = require("@google-cloud/translate").v2;
 
 async function runModel(model, input) {
     try {
@@ -22,7 +24,6 @@ async function runModel(model, input) {
 }
 
 async function translateText(text){
-    const { Translate } = require("@google-cloud/translate").v2;
     const credentials = JSON.parse(process.env.GOOGLE_CLOUD_TRANSLATE_API_CREDENTIALS);
     const translate = new Translate({
         credentials: credentials,
@@ -235,10 +236,10 @@ async function getGeneratedImagesCount(req, res) {
 async function getAllGeneratedImagesDataInsideThePage(req, res) {
     try{
         const { pageNumber, pageSize, service } = req.query;
-        await res.json(await generatedImagesManagmentFunctions.getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service));
+        res.json(await generatedImagesManagmentFunctions.getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, service));
     }
     catch(err){
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -251,11 +252,11 @@ async function postNewGeneratedImageData(req, res) {
                 ...generatedImageData,
                 generatedImageURL: result.data.imagePath,
             });
-            await res.json(result1);
+            res.json(result1);
         }
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
