@@ -15,6 +15,27 @@ async function getAllCategoryStylesData(service, categoryName) {
     }
 }
 
+async function getStyleData(service, categoryName, name) {
+    try {
+        const styleData = await styleModel.findOne({ service, categoryName, name });
+        if (styleData) {
+            return {
+                msg: "Get Style Data Process Has Been Successfully !!",
+                error: false,
+                data: styleData,
+            }
+        }
+        return {
+            msg: "Sorry, This Style Is Not Exist !!",
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 async function addNewStyle(styleData) {
     try {
         if (styleData.service === "face-swap") {
@@ -219,6 +240,7 @@ async function deleteFaceSwapStyleData(styleId) {
 
 module.exports = {
     getAllCategoryStylesData,
+    getStyleData,
     addNewStyle,
     updateStyleData,
     updateStyleImagePath,

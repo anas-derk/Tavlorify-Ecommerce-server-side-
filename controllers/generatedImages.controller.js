@@ -5,6 +5,7 @@ const generatedImagesManagmentFunctions = require("../models/generatedImages.mod
 const sharp = require("sharp");
 
 const Replicate = require("replicate");
+const { getStyleData } = require("../models/styles.model");
 
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN,
@@ -36,7 +37,11 @@ async function translateText(text){
 
 async function generateImageUsingTextToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
-    const { textPrompt, model_name, categoryName, styleName, prompt, negative_prompt, width, height, num_inference_steps, expert_ensemble_refiner } = req.query;
+    const { textPrompt, categoryName, styleName, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor, width, height } = req.query;
+    const result = await getStyleData("text-to-image", categoryName, styleName);
+    if (result.error) {
+        return res.status(400).json(result);
+    }
     try{
         const textAfterTranslation = await translateText(textPrompt);
         let tempOutput;
@@ -44,8 +49,8 @@ async function generateImageUsingTextToImageService(req, res) {
             case "dreamshaper": {
                 const output = await runModel("cjwbw/dreamshaper:ed6d8bee9a278b0d7125872bddfb9dd3fc4c401426ad634d8246a660e387475b",
                 {
-                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
-                    negative_prompt: negative_prompt,
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${result.data.prompt}`,
+                    negative_prompt: result.data.negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
                 });
@@ -55,8 +60,8 @@ async function generateImageUsingTextToImageService(req, res) {
             case "stable-diffusion": {
                 const output = await runModel("stability-ai/stable-diffusion:27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
                 {
-                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
-                    negative_prompt: negative_prompt,
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${result.data.prompt}`,
+                    negative_prompt: result.data.negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
                 });
@@ -66,8 +71,8 @@ async function generateImageUsingTextToImageService(req, res) {
             case "midjourney-diffusion": {
                 const output = await runModel("tstramer/midjourney-diffusion:436b051ebd8f68d23e83d22de5e198e0995357afef113768c20f0b6fcef23c8b",
                 {
-                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
-                    negative_prompt: negative_prompt,
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${result.data.prompt}`,
+                    negative_prompt: result.data.negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
                 });
@@ -77,8 +82,8 @@ async function generateImageUsingTextToImageService(req, res) {
             case "deliberate-v2": {
                 const output = await runModel("mcai/deliberate-v2:8e6663822bbbc982648e3c34214cf42d29fe421b2620cc33d8bda767fc57fe5a",
                 {
-                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
-                    negative_prompt: negative_prompt,
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${result.data.prompt}`,
+                    negative_prompt: result.data.negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
                 });
@@ -88,12 +93,12 @@ async function generateImageUsingTextToImageService(req, res) {
             case "sdxl": {
                 const output = await runModel("stability-ai/sdxl:2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2", 
                 {
-                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
-                    negative_prompt: negative_prompt,
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${result.data.prompt}`,
+                    negative_prompt: result.data.negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
-                    num_inference_steps,
-                    refine: expert_ensemble_refiner,
+                    num_inference_steps: result.data.num_inference_steps,
+                    refine: result.data.refine,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
                 });
@@ -103,7 +108,8 @@ async function generateImageUsingTextToImageService(req, res) {
             case "sdxl-lightning-4step": {
                 const output = await runModel("bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f",
                 {
-                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${result.data.prompt}`,
+                    negative_prompt: result.data.negative_prompt,
                     width: parseInt(Number(width)),
                     height: parseInt(Number(height)),
                 });
@@ -111,7 +117,7 @@ async function generateImageUsingTextToImageService(req, res) {
                 break;
             }
             default: {
-                res.status(400).json("Invalid Model Name !!");
+                return res.status(400).json(getResponseObject("Invalid Model Name !!", true, {}));
             }
         }
         if (tempOutput && Array.isArray(tempOutput)) {
@@ -132,7 +138,6 @@ async function generateImageUsingTextToImageService(req, res) {
         }
     }
     catch(err) {
-        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {

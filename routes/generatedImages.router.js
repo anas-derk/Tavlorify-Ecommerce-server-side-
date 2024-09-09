@@ -6,22 +6,31 @@ const { validateJWT, validateServiceName, validateNumbersIsPositive, validateNum
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
-const { validatePaintingType, validateIsExistWhiteBorder, validatePosition, validateSize } = require("../middlewares/generatedImages.middlewares");
+const { validatePaintingType, validateIsExistWhiteBorder, validatePosition, validateSize, validateFrameColor } = require("../middlewares/generatedImages.middlewares");
 
 const multer = require("multer");
 
 generatedImagesRouter.get("/generate-image-using-text-to-image-service",
     (req, res, next) => {
-        const { textPrompt, prompt, category, model_name, width, height } = req.query;
+        const { textPrompt, categoryName, styleName, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor, width, height } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Prompt", fieldValue: prompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: category, dataType: "string", isRequiredValue: false },
-            { fieldName: "Model Name", fieldValue: model_name, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Position", fieldValue: position, dataType: "string", isRequiredValue: true },
+            { fieldName: "Dimentions In Cm", fieldValue: dimentionsInCm, dataType: "string", isRequiredValue: true },
+            { fieldName: "Painting Type", fieldValue: paintingType, dataType: "string", isRequiredValue: true },
+            { fieldName: "Is Exist White Border", fieldValue: isExistWhiteBorder, dataType: "string", isRequiredValue: true },
+            { fieldName: "Frame Color", fieldValue: frameColor, dataType: "string", isRequiredValue: true },
             { fieldName: "Width", fieldValue: Number(width), dataType: "number", isRequiredValue: true },
             { fieldName: "Height", fieldValue: Number(height), dataType: "number", isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validatePosition(req.query.position, res, next),
+    (req, res, next) => validateSize(req.query.position, req.query.dimentionsInCm, res, next),
+    (req, res, next) => validatePaintingType(req.query.paintingType, res, next),
+    (req, res, next) => validateIsExistWhiteBorder(req.query.isExistWhiteBorder, res, next),
+    (req, res, next) => validateFrameColor(req.query.frameColor, res, next),
     generatedImagesController.generateImageUsingTextToImageService
 );
 
@@ -121,8 +130,9 @@ generatedImagesRouter.post("/save-new-generated-image-data",
     (req, res, next) => validateServiceName(req.body.service, res, next),
     (req, res, next) => validatePaintingType(req.body.paintingType, res, next),
     (req, res, next) => validatePosition(req.body.position, res, next),
-    (req, res, next) => validateSize(req.body.size, res, next),
+    (req, res, next) => validateSize(req.query.position, req.query.dimentionsInCm, res, next),
     (req, res, next) => validateIsExistWhiteBorder(req.body.isExistWhiteBorder, res, next),
+    (req, res, next) => validateFrameColor(req.body.frameColor, res, next),
     generatedImagesController.postNewGeneratedImageData
 );
 
