@@ -172,11 +172,11 @@ async function generateImageUsingImageToImageService(req, res) {
                 break;
             }
             default: {
-                await res.status(400).json(getResponseObject("Invalid Model Name !!", true, {}));
+                res.status(400).json(getResponseObject("Invalid Model Name !!", true, {}));
             }
         }
     } catch (err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
         await saveNewGeneratedImageDataGlobalFunc({ service: "image-to-image", imageLink, categoryName, styleName, paintingType, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
