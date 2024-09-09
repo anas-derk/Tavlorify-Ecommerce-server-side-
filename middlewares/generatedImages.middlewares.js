@@ -34,7 +34,7 @@ function validateSize(position, size, res, nextFunc) {
 }
 
 function validateFrameColor(frameColor, res, nextFunc) {
-    if (!["white", "black", "natural-wood", "dark-wood"].includes(frameColor)) {
+    if (!["white", "black", "natural-wood", "dark-wood", "none"].includes(frameColor)) {
         return res.status(400).json(getResponseObject("Sorry, Please Send Valid Frame Color !!", true, {}));
     }
     nextFunc();
