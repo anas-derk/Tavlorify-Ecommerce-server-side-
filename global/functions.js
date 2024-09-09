@@ -107,6 +107,7 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
         }
     }
     catch(err) {
+        console.log(err)
         throw err;
     }
 }
