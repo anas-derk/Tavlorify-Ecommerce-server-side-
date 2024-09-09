@@ -23,8 +23,8 @@ function validatePosition(position, res, nextFunc) {
 
 function validateSize(position, size, res, nextFunc) {
     const sizesByPosition = {
-        "vertical": ["21x29,7", "40x30", "70x50", "100x70"],
-        "horizontal": ["29,7x21", "30x40", "50x70", "70x100",],
+        "vertical": ["21x29,7", "30x40", "50x70", "70x100"],
+        "horizontal": ["29,7x21", "40x30", "70x50", "100x70"],
         "square": ["30x30", "50x50", "70x70"],
     }
     if (!sizesByPosition[position].includes(size)) {
