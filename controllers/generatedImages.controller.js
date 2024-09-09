@@ -37,17 +37,17 @@ async function translateText(text){
 async function generateImageUsingTextToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     try{
-        const textToImageInfo = req.query;
-        const textAfterTranslation = await translateText(textToImageInfo.textPrompt);
+        const { textPrompt, model_name, categoryName, prompt, negative_prompt, width, height, num_inference_steps, expert_ensemble_refiner } = req.query;
+        const textAfterTranslation = await translateText(textPrompt);
         let tempOutput;
-        switch (textToImageInfo.model_name) {
+        switch (model_name) {
             case "dreamshaper": {
                 const output = await runModel("cjwbw/dreamshaper:ed6d8bee9a278b0d7125872bddfb9dd3fc4c401426ad634d8246a660e387475b",
                 {
-                    prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
-                    negative_prompt: textToImageInfo.negative_prompt,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    negative_prompt: negative_prompt,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
                 });
                 tempOutput = output;
                 break;
@@ -55,10 +55,10 @@ async function generateImageUsingTextToImageService(req, res) {
             case "stable-diffusion": {
                 const output = await runModel("stability-ai/stable-diffusion:27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478",
                 {
-                    prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
-                    negative_prompt: textToImageInfo.negative_prompt,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    negative_prompt: negative_prompt,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
                 });
                 tempOutput = output;
                 break;
@@ -66,10 +66,10 @@ async function generateImageUsingTextToImageService(req, res) {
             case "midjourney-diffusion": {
                 const output = await runModel("tstramer/midjourney-diffusion:436b051ebd8f68d23e83d22de5e198e0995357afef113768c20f0b6fcef23c8b",
                 {
-                    prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
-                    negative_prompt: textToImageInfo.negative_prompt,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    negative_prompt: negative_prompt,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
                 });
                 tempOutput = output;
                 break;
@@ -77,10 +77,10 @@ async function generateImageUsingTextToImageService(req, res) {
             case "deliberate-v2": {
                 const output = await runModel("mcai/deliberate-v2:8e6663822bbbc982648e3c34214cf42d29fe421b2620cc33d8bda767fc57fe5a",
                 {
-                    prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
-                    negative_prompt: textToImageInfo.negative_prompt,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    negative_prompt: negative_prompt,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
                 });
                 tempOutput = output;
                 break;
@@ -88,14 +88,14 @@ async function generateImageUsingTextToImageService(req, res) {
             case "sdxl": {
                 const output = await runModel("stability-ai/sdxl:2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2", 
                 {
-                    prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
-                    negative_prompt: textToImageInfo.negative_prompt,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
-                    num_inference_steps: textToImageInfo.num_inference_steps,
-                    refine: textToImageInfo.expert_ensemble_refiner,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    negative_prompt: negative_prompt,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
+                    num_inference_steps: num_inference_steps,
+                    refine: expert_ensemble_refiner,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
                 });
                 tempOutput = output;
                 break;
@@ -103,9 +103,9 @@ async function generateImageUsingTextToImageService(req, res) {
             case "sdxl-lightning-4step": {
                 const output = await runModel("bytedance/sdxl-lightning-4step:5f24084160c9089501c1b3545d9be3c27883ae2239b6f412990e82d4a6210f8f",
                 {
-                    prompt: `${textAfterTranslation}, ${textToImageInfo.category}, ${textToImageInfo.prompt}`,
-                    width: parseInt(Number(textToImageInfo.width)),
-                    height: parseInt(Number(textToImageInfo.height)),
+                    prompt: `${textAfterTranslation}, ${categoryName}, ${prompt}`,
+                    width: parseInt(Number(width)),
+                    height: parseInt(Number(height)),
                 });
                 tempOutput = output;
                 break;
@@ -135,25 +135,25 @@ async function generateImageUsingTextToImageService(req, res) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
-        await saveNewGeneratedImageDataGlobalFunc({ ...req.query, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+        await saveNewGeneratedImageDataGlobalFunc({ service: "text-to-image", textPrompt, categoryName, styleName, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
 }
 
 async function generateImageUsingImageToImageService(req, res) {
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
-    const imageToImageInfo = req.query;
+    const { modelName, imageLink, prompt, negative_prompt, image_resolution, preprocessor_resolution, ddim_steps, strength } = req.query;
     try {
-        switch (imageToImageInfo.modelName) {
+        switch (modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
                 const output = await runModel("usamaehsan/controlnet-1.1-x-realistic-vision-v2.0:542a2f6729906f610b5a0656b4061b6f792f3044f1b86eca7ce7dee3258f025b",
                     {
-                        image: imageToImageInfo.imageLink,
-                        prompt: imageToImageInfo.prompt,
-                        n_prompt: imageToImageInfo.negative_prompt,
-                        image_resolution: parseInt(imageToImageInfo.image_resolution),
-                        preprocessor_resolution: parseInt(imageToImageInfo.preprocessor_resolution),
-                        ddim_steps: parseInt(imageToImageInfo.ddim_steps),
-                        strength: Number(imageToImageInfo.strength),
+                        image: imageLink,
+                        prompt: prompt,
+                        n_prompt: negative_prompt,
+                        image_resolution: parseInt(image_resolution),
+                        preprocessor_resolution: parseInt(preprocessor_resolution),
+                        ddim_steps: parseInt(ddim_steps),
+                        strength: Number(strength),
                     });
                 if (Array.isArray(output)) {
                     if (output.length === 2) {
@@ -179,7 +179,7 @@ async function generateImageUsingImageToImageService(req, res) {
         await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
-        await saveNewGeneratedImageDataGlobalFunc({ ...imageToImageInfo, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+        await saveNewGeneratedImageDataGlobalFunc({ service: "image-to-image", imageLink, categoryName, styleName, paintingType, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
 }
 
