@@ -12,11 +12,10 @@ const multer = require("multer");
 
 generatedImagesRouter.get("/generate-image-using-text-to-image-service",
     (req, res, next) => {
-        const { textPrompt, categoryName, styleName, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor, width, height } = req.query;
+        const { textPrompt, styleId, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor, width, height } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Text Prompt", fieldValue: textPrompt, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Id", fieldValue: styleId, dataType: "ObjectId", isRequiredValue: true },
             { fieldName: "Position", fieldValue: position, dataType: "string", isRequiredValue: true },
             { fieldName: "Dimentions In Cm", fieldValue: dimentionsInCm, dataType: "string", isRequiredValue: true },
             { fieldName: "Painting Type", fieldValue: paintingType, dataType: "string", isRequiredValue: true },
@@ -36,11 +35,10 @@ generatedImagesRouter.get("/generate-image-using-text-to-image-service",
 
 generatedImagesRouter.get("/generate-image-using-image-to-image-service",
     (req, res, next) => {
-        const { imageLink, categoryName, styleName } = req.query;
+        const { imageLink, styleId } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Image Link", fieldValue: imageLink, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Name", fieldValue: categoryName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Name", fieldValue: styleName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Id", fieldValue: styleId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validatePaintingType(req.query.paintingType, res, next),
@@ -51,10 +49,15 @@ generatedImagesRouter.get("/generate-image-using-image-to-image-service",
 
 generatedImagesRouter.get("/generate-image-using-face-swap-service",
     (req, res, next) => {
-        const { imageLink, styleImageLink } = req.query;
+        const { imageLink, styleId, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Image Link", fieldValue: imageLink, dataType: "string", isRequiredValue: true },
-            { fieldName: "Style Image Link", fieldValue: styleImageLink, dataType: "string", isRequiredValue: true },
+            { fieldName: "Style Id", fieldValue: styleId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Position", fieldValue: position, dataType: "string", isRequiredValue: true },
+            { fieldName: "Dimentions In Cm", fieldValue: dimentionsInCm, dataType: "string", isRequiredValue: true },
+            { fieldName: "Painting Type", fieldValue: paintingType, dataType: "string", isRequiredValue: true },
+            { fieldName: "Is Exist White Border", fieldValue: isExistWhiteBorder, dataType: "string", isRequiredValue: true },
+            { fieldName: "Frame Color", fieldValue: frameColor, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     generatedImagesController.generateImageUsingFaceSwapService

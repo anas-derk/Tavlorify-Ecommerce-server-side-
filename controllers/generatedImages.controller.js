@@ -36,12 +36,12 @@ async function translateText(text){
 }
 
 async function generateImageUsingTextToImageService(req, res) {
-    let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
-    const { textPrompt, categoryName, styleName, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor, width, height } = req.query;
-    const result = await getStyleData("text-to-image", categoryName, styleName);
+    const { textPrompt, styleId, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor, width, height } = req.query;
+    const result = await getStyleData("text-to-image", styleId);
     if (result.error) {
         return res.status(400).json(result);
     }
+    let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     try{
         const textAfterTranslation = await translateText(textPrompt);
         let tempOutput;
@@ -141,17 +141,17 @@ async function generateImageUsingTextToImageService(req, res) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
-        await saveNewGeneratedImageDataGlobalFunc({ service: "text-to-image", textPrompt, categoryName, styleName, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+        await saveNewGeneratedImageDataGlobalFunc({ service: "text-to-image", textPrompt, categoryName: result.data.categoryName, styleName: result.data.name, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
 }
 
 async function generateImageUsingImageToImageService(req, res) {
-    let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
-    const { imageLink, categoryName, styleName, paintingType, isExistWhiteBorder, frameColor } = req.query;
-    const result = await getStyleData("image-to-image", categoryName, styleName);
+    const { imageLink, styleId, paintingType, isExistWhiteBorder, frameColor } = req.query;
+    const result = await getStyleData("image-to-image", styleId);
     if (result.error) {
         return res.status(400).json(result);
     }
+    let generatedImagePathInServer = "", generatedImageAsArrayBuffer;
     try {
         switch (result.data.modelName) {
             case "controlnet-1.1-x-realistic-vision-v2.0": {
@@ -189,12 +189,30 @@ async function generateImageUsingImageToImageService(req, res) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
-        await saveNewGeneratedImageDataGlobalFunc({ service: "image-to-image", imageLink, categoryName, styleName, paintingType, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+        await saveNewGeneratedImageDataGlobalFunc({ service: "image-to-image", imageLink, categoryName: result.data.categoryName, styleName: result.data.name, paintingType, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
 }
 
 async function generateImageUsingFaceSwapService(req, res) {
-    const { imageLink, styleImageLink } = req.query;
+    const { imageLink, styleId, position, dimentionsInCm, paintingType, isExistWhiteBorder, frameColor } = req.query;
+    const result = await getStyleData("face-swap", styleId);
+    if (result.error) {
+        return res.status(400).json(result);
+    }
+    let generatedImagePathInServer = "", generatedImageAsArrayBuffer, styleImageLink = "";
+    switch(position) {
+        case "vertical": {
+            styleImageLink = result.data.imgSrcList[0];
+            break;
+        }
+        case "horizontal": {
+            styleImageLink = result.data.imgSrcList[1];
+            break;
+        }
+        default: {
+            styleImageLink = result.data.imgSrcList[2];
+        }
+    }
     try {
         const output = await runModel("yan-ops/face_swap:d5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab",
             {
@@ -205,6 +223,8 @@ async function generateImageUsingFaceSwapService(req, res) {
         if (output.status === "succeed") {
             const result = await saveNewGeneratedImage(output.image);
             if (!result.error) {
+                generatedImagePathInServer = result.data.imagePath;
+                generatedImageAsArrayBuffer = result.data.imageAsArrayBuffer;
                 res.json({
                     msg: "Generating Image From Image For Face Swap Service Process Has Been Successfully !!",
                     error: false,
@@ -216,6 +236,9 @@ async function generateImageUsingFaceSwapService(req, res) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     } catch (err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+    if (generatedImagePathInServer) {
+        await saveNewGeneratedImageDataGlobalFunc({ service: "face-swap", categoryName: result.data.categoryName, styleName: result.data.name, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
 }
 
