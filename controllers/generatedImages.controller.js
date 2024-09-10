@@ -138,7 +138,6 @@ async function generateImageUsingTextToImageService(req, res) {
         }
     }
     catch(err) {
-        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
@@ -178,7 +177,7 @@ async function generateImageUsingImageToImageService(req, res) {
                                 data: result.data.imagePath,
                             });
                         }
-                    } else res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+                    } else res.status(500).json(getResponseObject("Error In Generating !!", true, {}));
                 }
                 break;
             }
@@ -231,14 +230,13 @@ async function generateImageUsingFaceSwapService(req, res) {
                     error: false,
                     data: result.data.imagePath,
                 });
-                return;
             }
+        } else {
+            res.status(500).json(getResponseObject("Error In Generating", true, {}));
         }
-        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     } catch (err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
-    console.log(generatedImagePathInServer);
     if (generatedImagePathInServer) {
         await saveNewGeneratedImageDataGlobalFunc({ service: "face-swap", categoryName: result.data.categoryName, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
