@@ -17,7 +17,7 @@ async function getAllCategoryStylesData(service, categoryName) {
 
 async function getStyleData(service, styleId) {
     try {
-        const styleData = service === "face-swap" ? await faceSwapStyleModel.findById(styleId) : styleModel.findById(styleId);
+        const styleData = service === "face-swap" ? await faceSwapStyleModel.findById(styleId) : await styleModel.findById(styleId);
         if (styleData) {
             return {
                 msg: "Get Style Data Process Has Been Successfully !!",
