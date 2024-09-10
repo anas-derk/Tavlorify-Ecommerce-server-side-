@@ -290,7 +290,9 @@ const generatedImageSchema = new mongoose.Schema({
     },
     styleName: {
         type: String,
-        required: true,
+        required: function () {
+            return this.service !== "face-swap";
+        },
     },
     paintingType: {
         type: String,
