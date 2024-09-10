@@ -238,6 +238,7 @@ async function generateImageUsingFaceSwapService(req, res) {
     } catch (err) {
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
+    console.log(generatedImagePathInServer);
     if (generatedImagePathInServer) {
         await saveNewGeneratedImageDataGlobalFunc({ service: "face-swap", categoryName: result.data.categoryName, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
