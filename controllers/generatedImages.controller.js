@@ -200,6 +200,7 @@ async function generateImageUsingFaceSwapService(req, res) {
         return res.status(400).json(result);
     }
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer, styleImageLink = "";
+    console.log(result)
     switch(position) {
         case "vertical": {
             styleImageLink = result.data.imgSrcList[0];
@@ -213,6 +214,7 @@ async function generateImageUsingFaceSwapService(req, res) {
             styleImageLink = result.data.imgSrcList[2];
         }
     }
+    console.log(styleImageLink)
     try {
         const output = await runModel("yan-ops/face_swap:d5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab",
             {
