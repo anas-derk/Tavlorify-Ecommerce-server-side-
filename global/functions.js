@@ -76,7 +76,6 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
                 size = "30x30";
             }
         }
-        console.log(generatingInfo)
         await saveNewGeneratedImageData({
             service: generatingInfo.service,
             ...( (generatingInfo.service === "image-to-image" || generatingInfo.service === "face-swap") && { uploadedImageURL: generatingInfo.imageLink } ),
