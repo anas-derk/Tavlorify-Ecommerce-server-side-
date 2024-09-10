@@ -236,11 +236,10 @@ async function generateImageUsingFaceSwapService(req, res) {
         }
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     } catch (err) {
-        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
-        await saveNewGeneratedImageDataGlobalFunc({ service: "face-swap", categoryName: result.data.categoryName, styleName: result.data.name, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
+        await saveNewGeneratedImageDataGlobalFunc({ service: "face-swap", categoryName: result.data.categoryName, paintingType, position, dimentionsInCm, isExistWhiteBorder, frameColor, generatedImageURL: generatedImagePathInServer }, generatedImageAsArrayBuffer);
     }
 }
 
