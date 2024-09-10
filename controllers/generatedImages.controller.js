@@ -45,7 +45,6 @@ async function generateImageUsingTextToImageService(req, res) {
     try{
         const textAfterTranslation = await translateText(textPrompt);
         let tempOutput;
-        console.log(result)
         switch (result.data.modelName) {
             case "dreamshaper": {
                 const output = await runModel("cjwbw/dreamshaper:ed6d8bee9a278b0d7125872bddfb9dd3fc4c401426ad634d8246a660e387475b",
@@ -139,6 +138,7 @@ async function generateImageUsingTextToImageService(req, res) {
         }
     }
     catch(err) {
+        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
     if (generatedImagePathInServer) {
