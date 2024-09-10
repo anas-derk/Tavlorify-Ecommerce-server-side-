@@ -200,21 +200,19 @@ async function generateImageUsingFaceSwapService(req, res) {
         return res.status(400).json(result);
     }
     let generatedImagePathInServer = "", generatedImageAsArrayBuffer, styleImageLink = "";
-    console.log(result)
     switch(position) {
         case "vertical": {
-            styleImageLink = result.data.imgSrcList[0];
+            styleImageLink = `https://api.tavlorify.se/${result.data.imgSrcList[0]}`;
             break;
         }
         case "horizontal": {
-            styleImageLink = result.data.imgSrcList[1];
+            styleImageLink = `https://api.tavlorify.se/${result.data.imgSrcList[1]}`;
             break;
         }
         default: {
-            styleImageLink = result.data.imgSrcList[2];
+            styleImageLink = `https://api.tavlorify.se/${result.data.imgSrcList[2]}`;
         }
     }
-    console.log(styleImageLink)
     try {
         const output = await runModel("yan-ops/face_swap:d5900f9ebed33e7ae08a07f17e0d98b4ebc68ab9528a70462afc3899cfe23bab",
             {
