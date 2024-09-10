@@ -61,8 +61,8 @@ async function saveNewGeneratedImage(generatedImageURL) {
 async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImageAsArrayBuffer) {
     try{
         const { width, height } = await sharp(generatedImageAsArrayBuffer).metadata();
+        let imageOrientation = "", size = "";
         if (generatingInfo.service === "image-to-image") {
-            let imageOrientation = "", size = "";
             if (width < height) {
                 imageOrientation = "vertical";
                 size = "50x70";
@@ -75,39 +75,24 @@ async function saveNewGeneratedImageDataGlobalFunc(generatingInfo, generatedImag
                 imageOrientation = "square";
                 size = "30x30";
             }
-            await saveNewGeneratedImageData({
-                service: generatingInfo.service,
-                uploadedImageURL: generatingInfo.imageLink,
-                categoryName: generatingInfo.categoryName,
-                styleName: generatingInfo.styleName,
-                paintingType: generatingInfo.paintingType,
-                position: imageOrientation,
-                size: size,
-                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
-                width: width,
-                height: height,
-                frameColor: generatingInfo.frameColor,
-                generatedImagePath: generatingInfo.generatedImageURL,
-            });
-        } else if (generatingInfo.service === "text-to-image") {
-            await saveNewGeneratedImageData({
-                service: generatingInfo.service,
-                textPrompt: generatingInfo.textPrompt,
-                categoryName: generatingInfo.categoryName,
-                styleName: generatingInfo.styleName,
-                paintingType: generatingInfo.paintingType,
-                position: generatingInfo.position,
-                size: generatingInfo.dimentionsInCm,
-                isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
-                width: width,
-                height: height,
-                frameColor: generatingInfo.frameColor,
-                generatedImagePath: generatingInfo.generatedImageURL,
-            });
         }
+        await saveNewGeneratedImageData({
+            service: generatingInfo.service,
+            ...( (generatingInfo.service === "image-to-image" || generatingInfo.service === "face-swap") && { uploadedImageURL: generatingInfo.imageLink } ),
+            ...( generatingInfo.service === "text-to-image" && { textPrompt: generatingInfo.textPrompt } ),
+            categoryName: generatingInfo.categoryName,
+            styleName: generatingInfo.styleName,
+            paintingType: generatingInfo.paintingType,
+            position: generatingInfo.service === "text-to-image" || generatingInfo.service === "face-swap" ? generatingInfo.position : imageOrientation,
+            size: generatingInfo.service === "text-to-image" || generatingInfo.service === "face-swap" ? generatingInfo.dimentionsInCm : size,
+            isExistWhiteBorder: generatingInfo.isExistWhiteBorder,
+            width: width,
+            height: height,
+            frameColor: generatingInfo.frameColor,
+            generatedImagePath: generatingInfo.generatedImageURL,
+        });
     }
     catch(err) {
-        console.log(err)
         throw err;
     }
 }
