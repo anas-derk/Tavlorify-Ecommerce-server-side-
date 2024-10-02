@@ -1,4 +1,5 @@
 /node_modules
+/assets/images/generatedImages
 /assets/images/uploadedImages
 /assets/images/cropedImages
 /assets/images/styles/faceSwap

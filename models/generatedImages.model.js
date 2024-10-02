@@ -19,7 +19,7 @@ async function getAllGeneratedImagesDataInsideThePage(pageNumber, pageSize, serv
         return {
             msg: `Get All Generated Images Data For ${service} Service Process Has Been Successfully !!`,
             error: false,
-            data: await generatedImageModel.find({ service }).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ imageGenerationDate: -1 })
+            data: await generatedImageModel.find({ service }).sort({ imageGenerationDate: -1 }).skip((pageNumber - 1) * pageSize).limit(pageSize)
         }
     }
     catch (err) {
