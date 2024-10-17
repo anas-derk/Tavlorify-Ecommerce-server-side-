@@ -5,8 +5,7 @@ function validateJWT(req, res, next) {
     const token = req.headers.authorization;
     verify(token, process.env.secretKey, async (err, decode) => {
         if (err) {
-            await res.status(401).json(getResponseObject("Unauthorized Error", true, {}));
-            return;
+            return res.status(401).json(getResponseObject("Unauthorized Error", true, {}));
         }
         req.data = decode;
         next();
@@ -16,24 +15,21 @@ function validateJWT(req, res, next) {
 function validateIsExistErrorInFiles(req, res, next) {
     const uploadError = req.uploadError;
     if (uploadError) {
-        res.status(400).json(getResponseObject(uploadError, true, {}));
-        return;
+        return res.status(400).json(getResponseObject(uploadError, true, {}));
     }
     next();
 }
 
 function validateEmail(email, res, nextFunc) {
     if (!isEmail(email)) {
-        res.status(400).json(getResponseObject("Sorry, Please Send Valid Email !!", true, {}));
-        return;
+        return res.status(400).json(getResponseObject("Sorry, Please Send Valid Email !!", true, {}));
     }
     nextFunc();
 }
 
 function validatePassword(password, res, nextFunc, errorMsg = "Sorry, Please Send Valid Password !!") {
     if (!isValidPassword(password)) {
-        res.status(400).json(getResponseObject(errorMsg, true, {}));
-        return;
+        return res.status(400).json(getResponseObject(errorMsg, true, {}));
     }
     nextFunc();
 }
@@ -48,8 +44,7 @@ function validateServiceName(service, res, nextFunc) {
 function validateNumbersIsPositive(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Greater Than Zero ) !!") {
     for(let i = 0; i < numbers.length; i++) {
         if (numbers[i] < 0) {
-            res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
-            return;
+            return res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
         }
     }
     nextFunc();
@@ -58,8 +53,7 @@ function validateNumbersIsPositive(numbers, res, nextFunc, errorMsgs, defaultMsg
 function validateNumbersIsNotFloat(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Not Float ) !!") {
     for(let i = 0; i < numbers.length; i++) {
         if (numbers[i] % 1 !== 0) {
-            res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
-            return;
+            return res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
         }
     }
     nextFunc();
@@ -67,7 +61,7 @@ function validateNumbersIsNotFloat(numbers, res, nextFunc, errorMsgs, defaultMsg
 
 function validateOrdersType(ordersType, res, nextFunc) {
     if (!["normal", "returned"].includes(ordersType)) {
-        return res.status(400).json(getResponseObject("Sorry, Please Send Valid Order Type ( 'order' Or 'returned'  ) !!", true, {}));
+        return res.status(400).json(getResponseObject("Sorry, Please Send Valid Order Type ( 'normal' Or 'returned'  ) !!", true, {}));
     }
     nextFunc();
 }

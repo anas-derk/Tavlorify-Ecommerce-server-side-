@@ -56,7 +56,7 @@ async function postNewOrder(ordersType, orderId) {
             const orderDetails = await orderModel.findById(orderId);
             if (orderDetails) {
                 const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
-                const newReturnedOrder = new returnedOrderModel({
+                await (new returnedOrderModel({
                     returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
                     orderNumber: orderDetails.orderNumber,
                     orderId,
@@ -68,8 +68,7 @@ async function postNewOrder(ordersType, orderId) {
                         phone: orderDetails.billing_address.phone,
                     },
                     order_lines: orderDetails.order_lines,
-                });
-                await newReturnedOrder.save();
+                })).save();
                 await orderModel.updateOne({ _id: orderId }, { isReturned: true });
                 return {
                     msg: "Creating New Returned Order Process Has Been Successfuly !!",
@@ -79,12 +78,11 @@ async function postNewOrder(ordersType, orderId) {
             }
         }
         const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
-        const newOrder = new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 });
-        const orderDetails = await newOrder.save();
+        const { _id } = await ((new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 }))).save();
         return {
             msg: "Creating New Order Process Has Been Successfuly !!",
             error: false,
-            data: orderDetails._id,
+            data: _id,
         }
     } catch (err) {
         throw Error(err);

@@ -35,7 +35,7 @@ ordersRouter.get("/all-orders-inside-the-page",
 ordersRouter.get("/order-details/:orderId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Orders Type", fieldValue: req.query.orderType, dataType: "string", isRequiredValue: true },
+            { fieldName: "Order Type", fieldValue: req.query.orderType, dataType: "string", isRequiredValue: true },
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
@@ -46,7 +46,7 @@ ordersRouter.get("/order-details/:orderId",
 ordersRouter.get("/order-details-from-klarna/:orderId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     ordersController.getOrderDetailsFromKlarnaInCheckoutPeriod
@@ -67,13 +67,19 @@ ordersRouter.post("/handle-klarna-checkout-complete/:orderId",
 
 ordersRouter.post("/create-new-order",
     (req, res, next) => {
-        const { ordersType, orderId } = req.query;
+        const { orderType, orderId } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Orders Type", fieldValue: ordersType, dataType: "string", isRequiredValue: true },
-            ...(ordersType === "returned" && { fieldName: "Order Id", fieldValue: orderId, dataType: "ObjectId", isRequiredValue: true })
+            { fieldName: "Order Type", fieldValue: orderType, dataType: "string", isRequiredValue: true },
+            ordersType === "returned" && { fieldName: "Order Id", fieldValue: orderId, dataType: "ObjectId", isRequiredValue: true }
         ], res, next);
     },
-    (req, res, next) => validateOrdersType(req.query.ordersType, res, next),
+    (req, res, next) => {
+        const { orderType } = req.query;
+        if (orderType) {
+            return validateOrdersType(orderType, res, next);
+        }
+        next();
+    },
     ordersController.postNewOrder
 );
 
