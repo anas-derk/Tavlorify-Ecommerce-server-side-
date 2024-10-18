@@ -18,11 +18,11 @@ const productPricesSchema = new mongoose.Schema({
             "30x30",
             "50x50",
             "70x70",
-            "21x29,7",
+            "21x30",
             "30x40",
             "50x70",
             "70x100",
-            "29,7x21",
+            "30x21",
             "40x30",
             "70x50",
             "100x70",
@@ -49,7 +49,7 @@ const productPricesModel = mongoose.model("prices", productPricesSchema);
 const productPricesData = [
     {
         productName: "poster",
-        dimentions: "21x29,7",
+        dimentions: "21x30",
         position: "vertical",
         priceBeforeDiscount: 399,
         priceAfterDiscount: 399,
@@ -77,7 +77,7 @@ const productPricesData = [
     },
     {
         productName: "poster",
-        dimentions: "29,7x21",
+        dimentions: "30x21",
         position: "horizontal",
         priceBeforeDiscount: 399,
         priceAfterDiscount: 399,
@@ -126,7 +126,7 @@ const productPricesData = [
     },
     {
         productName: "wooden-frame",
-        dimentions: "21x29,7",
+        dimentions: "21x30",
         position: "vertical",
         priceBeforeDiscount: 749,
         priceAfterDiscount: 749,
@@ -154,7 +154,7 @@ const productPricesData = [
     },
     {
         productName: "wooden-frame",
-        dimentions: "29,7x21",
+        dimentions: "30x21",
         position: "horizontal",
         priceBeforeDiscount: 199,
         priceAfterDiscount: 199,
@@ -203,7 +203,7 @@ const productPricesData = [
     },
     {
         productName: "hanger",
-        dimentions: "21x29,7",
+        dimentions: "21x30",
         position: "vertical",
         priceBeforeDiscount: 199,
         priceAfterDiscount: 199,
@@ -231,7 +231,7 @@ const productPricesData = [
     },
     {
         productName: "hanger",
-        dimentions: "29,7x21",
+        dimentions: "30x21",
         position: "horizontal",
         priceBeforeDiscount: 179,
         priceAfterDiscount: 179,
