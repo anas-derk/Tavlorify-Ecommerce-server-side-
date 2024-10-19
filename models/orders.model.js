@@ -89,9 +89,9 @@ async function postNewOrder(ordersType, orderId) {
     }
 }
 
-async function updateOrder(ordersType, orderId, newOrderDetails) {
+async function updateOrder(orderType, orderId, newOrderDetails) {
     try {
-        const order = ordersType === "normal" ? await orderModel.findOneAndUpdate({
+        const order = orderType === "normal" ? await orderModel.findOneAndUpdate({
             $or: [
                 {
                     _id: orderId,

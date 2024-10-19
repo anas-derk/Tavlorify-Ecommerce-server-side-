@@ -185,7 +185,7 @@ async function putKlarnaOrder(req, res) {
 
 async function putOrder(req, res) {
     try{
-        res.json(await ordersManagmentFunctions.updateOrder(req.query.ordersType, req.params.orderId, req.body));
+        res.json(await ordersManagmentFunctions.updateOrder(req.query.orderType, req.params.orderId, req.body));
     }
     catch(err){
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
