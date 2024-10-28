@@ -41,7 +41,7 @@ function validateServiceName(service, res, nextFunc) {
     nextFunc();
 }
 
-function validateNumbersIsPositive(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Greater Than Zero ) !!") {
+function validateNumbersIsGreaterThanZero(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Greater Than Zero ) !!") {
     for(let i = 0; i < numbers.length; i++) {
         if (numbers[i] < 0) {
             return res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
@@ -79,7 +79,7 @@ module.exports = {
     validateEmail,
     validatePassword,
     validateServiceName,
-    validateNumbersIsPositive,
+    validateNumbersIsGreaterThanZero,
     validateNumbersIsNotFloat,
     validateOrdersType,
     validateImageIndexForFaceSwap

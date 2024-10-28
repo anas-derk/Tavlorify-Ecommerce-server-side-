@@ -2,7 +2,7 @@ const ordersRouter = require("express").Router();
 
 const ordersController = require("../controllers/orders.controller");
 
-const { validateJWT, validateOrdersType } = require("../middlewares/global.middlewares");
+const { validateJWT, validateOrdersType, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -29,6 +29,8 @@ ordersRouter.get("/all-orders-inside-the-page",
         ], res, next);
     },
     (req, res, next) => validateOrdersType(req.query.ordersType, res, next),
+    (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     ordersController.getAllOrdersInsideThePage
 );
 
