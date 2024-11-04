@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                     <% for(let productInfo of order_lines) { %>
-                        <% if (productInfo.name !== "Tavlorify") {
+                        <% if (productInfo.name !== "Tavlorify") { %>
                             <tr>
                                 <td style="padding: 10px 0;">
                                     <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name %> Image" style="width: 100px; height: 100px;" />
@@ -40,7 +40,7 @@
                                     <%= productInfo.unit_price / 100 %> kr
                                 </td>
                             </tr>
-                        } %>
+                        <% } %>
                     <% } %>
                 </tbody>
             </table>
