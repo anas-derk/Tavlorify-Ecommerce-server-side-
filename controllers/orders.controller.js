@@ -150,7 +150,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
-                await sendPaymentConfirmationMessage(result.shipping_address.email, {
+                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
                     orderNumber: result1.data,
                     ...result,
                 });
