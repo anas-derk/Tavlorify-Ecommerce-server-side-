@@ -117,7 +117,7 @@ async function postKlarnaCheckoutComplete(req, res) {
             const order_lines_after_modify_unit_price_and_total_amount = result.order_lines.map((order_line) => {
                 return { ...order_line, unit_price: order_line.unit_price / 100, total_amount: order_line.total_amount / 100 };
             });
-            const result1 = await ordersManagmentFunctions.updateOrder(undefined, {
+            const result1 = await ordersManagmentFunctions.updateOrder("normal", undefined, {
                 klarnaOrderId: orderId,
                 klarnaReference: result.klarna_reference,
                 checkout_status: result.status,
