@@ -150,7 +150,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
-                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
+                await sendPaymentConfirmationMessage(result.shipping_address.email, {
                     orderNumber: result1.data,
                     ...result,
                 });
@@ -161,7 +161,6 @@ async function postKlarnaCheckoutComplete(req, res) {
         }
     }
     catch(err){
-        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
