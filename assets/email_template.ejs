@@ -1,142 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tavlorify - Order confirmation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
-        h1 {
-            width: fit-content;
-            margin: 0 auto;
-        }
-
-        body {
-            height: 100vh;
-            background-color: #EEE;
-        }
-
-        .page-content {
-            background-color: #FFF;
-            border-radius: 5px;
-            width: 75%;
-            margin: 0 auto;
-        }
-
-        ul {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
-
-        .order-products-info {
-            background-color: #EEE;
-        }
-
-        .order-products-info img {
-            max-width: 100%;
-            width: 100px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="page-content p-4">
-        <h1 class="text-center mb-4 pb-2 border-bottom border-2 border-dark fw-bold">Tavlorify</h1>
-        <h2 class="text-center mb-3 fw-bold">Payment Confirmation</h2>
-        <h6 class="fw-bold mb-5">Order Number: <%= orderNumber %>
-        </h6>
-        <section class="addresses-info mb-5">
-            <div class="row">
-                <div class="col-md-6">
-                    <h6 class="fw-bold mb-4 border p-2 border-2 border-dark">Billing Address</h6>
-                    <ul class="info-list border p-3 border-2 border-dark">
-                        <li class="mb-2"><span class="fw-bold">City</span>: <%= billing_address.city %>
-                        </li>
-                        <li class="mb-2"><span class="fw-bold">Email</span>: <%= billing_address.email %>
-                        </li>
-                        <li class="mb-2"><span class="fw-bold">Name</span>: <%= billing_address.given_name %>
-                        </li>
-                        <li class="mb-2"><span class="fw-bold">Family Name</span>: <%= billing_address.family_name %>
-                        </li>
-                        <li class="mb-2"><span class="fw-bold">Phone</span>: <%= billing_address.phone %>
-                        </li>
-                        <li class="mb-2"><span class="fw-bold">Postal Code</span>: <%= billing_address.postal_code %>
-                        </li>
-                        <li><span class="fw-bold">Street Address</span>: <%= billing_address.street_address %>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h6 class="fw-bold mb-4 border p-2 border-2 border-dark">Shipping Address</h6>
-                    <ul class="info-list border p-3 border-2 border-dark">
-                        <ul class="info-list border p-3 border-2 border-dark">
-                            <li class="mb-2"><span class="fw-bold">City</span>: <%= shipping_address.city %>
-                            </li>
-                            <li class="mb-2"><span class="fw-bold">Email</span>: <%= shipping_address.email %>
-                            </li>
-                            <li class="mb-2"><span class="fw-bold">Name</span>: <%= shipping_address.given_name %>
-                            </li>
-                            <li class="mb-2"><span class="fw-bold">Family Name</span>: <%= shipping_address.family_name
-                                    %>
-                            </li>
-                            <li class="mb-2"><span class="fw-bold">Phone</span>: <%= shipping_address.phone %>
-                            </li>
-                            <li class="mb-2"><span class="fw-bold">Postal Code</span>: <%= shipping_address.postal_code
-                                    %>
-                            </li>
-                            <li><span class="fw-bold">Street Address</span>: <%= shipping_address.street_address %>
-                            </li>
-                        </ul>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        <h6 class="fw-bold text-center mb-3">Order Products Information</h6>
-        <section class="order-products-info p-3">
-            <div class="row align-items-center">
-                <% for(let productInfo of order_lines) { %>
-                    <div class="col-md-2">
-                        <img src="<%= productInfo.image_url %>" alt="Product Image">
-                    </div>
-                    <div class="col-md-4">
-                        <h6 class="fw-bold mb-3">
-                            <%= productInfo.name %>
-                        </h6>
-
-                    </div>
-                    <div class="col-md-2">
-                        <h6 class="fw-bold mb-3">Quantity: <%= productInfo.quantity %>
-                        </h6>
-                        <h6 class="fw-bold mb-3">Unit Price: <%= productInfo.unit_price / 100 %> kr</h6>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <h6 class="fw-bold mb-3">Sub Total: <%= productInfo.total_amount / 100 %> kr</h6>
-                    </div>
+<div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0;">
+    <section class="begin" style="text-align: center; margin-bottom: 40px;">
+        <img src="./logo.jpg" alt="Tavlorify Logo" style="width: 250px; margin-top: 30px;">
+    </section>
+    <section class="content"
+            style="width: 80%; margin: auto; padding: 20px; line-height: 2;"
+    >
+        <h1 style="text-align: center;">Tack för ditt köp!</h1>
+        <p style="text-align: center;">Tack för att du valde Tavlorify för att skapa unika konstverk med hjälp av AI.</p>
+        <p style="text-align: center;">Din beställning är nu under behandling! Vi arbetar på att skapa din personliga tavla och skickar ett mejl med spårningslänk så snart din beställning har skickats.</p>
+        <h4>Din orderbekräftelse</h4>
+        <div class="preliminary-information" style="display: flex; flex-direction: row; text-align: center;">
+            <h5 style="flex-basis: 50%;">Ordernummer: <%= orderNumber %></h5>
+            <h5 style="flex-basis: 50%;">Datum: <%= orderNumber %></h5>
+        </div>
+        <hr />
+        <div class="products-info">
+            <h5 style="text-align: center;">Produkter</h5>
+            <table style="text-align: center; width: 100%;">
+                <thead>
+                    <th style="padding: 10px 0;">Produktbild</th>
+                    <th style="padding: 10px 0;">Produktnamn</th>
+                    <th style="padding: 10px 0;">antal</th>
+                    <th style="padding: 10px 0;">Pris</th>
+                </thead>
+                <tbody>
+                    <% for(let productInfo of order_lines) { %>
+                        <tr>
+                            <td style="padding: 10px 0;">
+                                <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name %> Image" style="width: 100px; height: 100px;" />
+                            </td>
+                            <td style="padding: 10px 0;">
+                                <%= productInfo.name %>
+                            </td>
+                            <td style="padding: 10px 0;">
+                                <%= productInfo.quantity %>
+                            </td>
+                            <td style="padding: 10px 0;">
+                                <%= productInfo.unit_price / 100 %> kr
+                            </td>
+                        </tr>
                     <% } %>
-            </div>
-            <hr />
-            <div class="row align-items-center text-center">
-                <div class="col-md-6">
-                    <h6 class="fw-bold">Summary</h6>
-                </div>
-                <div class="col-md-6 fw-bold">
-                    <div class="row">
-                        <div class="col-md-9 text-start content">Shipping</div>
-                        <div class="col-md-3 text-end content">0 kr</div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-9 text-start content">Total Price</div>
-                        <div class="col-md-3 text-end content">
-                            <%= order_amount / 100 %> kr
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-</body>
-
-</html>
+                </tbody>
+            </table>
+        </div>
+        <div class="summary">
+            <h4>Totalt: <%= order_amount / 100 %> kr</h4>
+        </div>
+        <div class="payment-method">
+            <h4>Betalningsmetod: Klarna</h4>
+        </div>
+        <div class="shipping-info">
+            <h4>Leveransinformation :</h4>
+            <ul class="info-list border p-3 border-2 border-dark">
+                <li class="mb-2"><span class="fw-bold">Stad</span>: <%= shipping_address.city %></li>
+                <li class="mb-2"><span class="fw-bold">E-postadress</span>: <%= shipping_address.email %></li>
+                <li class="mb-2"><span class="fw-bold">Namn</span>: <%= shipping_address.given_name %></li>
+                <li class="mb-2"><span class="fw-bold">Efternamn</span>: <%= shipping_address.family_name %></li>
+                <li class="mb-2"><span class="fw-bold">Telefonnummer</span>: <%= shipping_address.phone %></li>
+                <li class="mb-2"><span class="fw-bold">Postnummer</span>: <%= shipping_address.postal_code %></li>
+                <li><span class="fw-bold">Gatuadress</span>: <%= shipping_address.street_address %></li>
+            </ul>
+        </div>
+        <hr />
+        <div class="additional-information" style="text-align: center;">
+            <h4>Ytterligare information</h4>
+            <p>Din beställning kommer att hanteras inom 3-5 arbetsdagar.</p>
+            <p>Om du vill avbryta eller ändra din beställning, vänligen kontakta oss omedelbart på</p>
+            <a href="mailto:info@tavlorify.se" style="font-weight: bold;">info@tavlorify.se</a>
+            <h4>Frågor</h4>
+            <p>Vi finns här för att hjälpa dig. Du kan kontakta oss via e-post: <a href="mailto:info@tavlorify.se" style="font-weight: bold;">info@tavlorify.se</a></p>
+        </div>
+        <hr />
+        <p style="text-align: center;">Tack för att du handlade hos oss på Tavlorify. Vi ser fram emot att hjälpa dig att förvandla fler idéer till unika konstverk!</p>
+        <h4 style="text-align: center;">Hälsningar, Tavlorify-teamet</h4>
+    </section>
+</div>
