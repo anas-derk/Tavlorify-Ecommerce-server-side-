@@ -61,7 +61,7 @@ ordersRouter.post("/send-order-to-klarna", ordersController.postNewOrderToKlarna
 ordersRouter.post("/handle-klarna-checkout-complete/:orderId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "string", isRequiredValue: true },
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
     ordersController.postKlarnaCheckoutComplete
