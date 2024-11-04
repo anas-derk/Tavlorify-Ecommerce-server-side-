@@ -1,6 +1,6 @@
 <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0;">
     <section class="begin" style="text-align: center; margin-bottom: 40px;">
-        <img src="./logo.jpg" alt="Tavlorify Logo" style="width: 250px; margin-top: 30px;">
+        <img src="https://api.tavlorify.se/assets/images/logo/logo.jpg" alt="Tavlorify Logo" style="width: 250px; margin-top: 30px;">
     </section>
     <section class="content"
             style="width: 80%; margin: auto; padding: 20px; line-height: 2;"
@@ -25,20 +25,22 @@
                 </thead>
                 <tbody>
                     <% for(let productInfo of order_lines) { %>
-                        <tr>
-                            <td style="padding: 10px 0;">
-                                <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name %> Image" style="width: 100px; height: 100px;" />
-                            </td>
-                            <td style="padding: 10px 0;">
-                                <%= productInfo.name %>
-                            </td>
-                            <td style="padding: 10px 0;">
-                                <%= productInfo.quantity %>
-                            </td>
-                            <td style="padding: 10px 0;">
-                                <%= productInfo.unit_price / 100 %> kr
-                            </td>
-                        </tr>
+                        <% if (productInfo.name !== "Tavlorify") {
+                            <tr>
+                                <td style="padding: 10px 0;">
+                                    <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name %> Image" style="width: 100px; height: 100px;" />
+                                </td>
+                                <td style="padding: 10px 0;">
+                                    <%= productInfo.name %>
+                                </td>
+                                <td style="padding: 10px 0;">
+                                    <%= productInfo.quantity %>
+                                </td>
+                                <td style="padding: 10px 0;">
+                                    <%= productInfo.unit_price / 100 %> kr
+                                </td>
+                            </tr>
+                        } %>
                     <% } %>
                 </tbody>
             </table>
