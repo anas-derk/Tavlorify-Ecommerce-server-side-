@@ -25,7 +25,7 @@ async function getPriceByProductDetails(productName, position, dimentions) {
                 break;
             }
             case "canvas": {
-                productData = await productPricesModel.findOne({ productName, position, dimentions });
+                let productData = await productPricesModel.findOne({ productName, position, dimentions });
                 productPrices = { priceBeforeDiscount: productData.priceBeforeDiscount, priceAfterDiscount: productData.priceAfterDiscount };
                 break;
             }
