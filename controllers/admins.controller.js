@@ -11,7 +11,7 @@ async function getAdminLogin(req, res) {
         const { email, password } = req.query;
         const result = await adminsOPerationsManagmentFunctions.adminLogin(email.toLowerCase(), password);
         if (!result.error) {
-            await res.json({
+            res.json({
                 ...result,
                 data: {
                     token: sign(result.data, process.env.secretKey, {
@@ -21,10 +21,10 @@ async function getAdminLogin(req, res) {
             });
             return;
         }
-        await res.json(result);
+        res.json(result);
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
@@ -33,11 +33,11 @@ async function getAdminUserInfo(req, res) {
         await res.json(await adminsOPerationsManagmentFunctions.getAdminUserInfo(req.data._id));
     }
     catch(err){
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
 module.exports = {
     getAdminLogin,
     getAdminUserInfo,
-};
+}
