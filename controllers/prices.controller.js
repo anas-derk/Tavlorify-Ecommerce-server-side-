@@ -27,7 +27,6 @@ async function getPriceByProductDetails(req, res) {
         res.json(await pricesManagmentFunctions.getPriceByProductDetails(productName, position, dimentions));
     }
     catch(err) {
-        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
