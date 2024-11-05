@@ -4,41 +4,41 @@ const pricesManagmentFunctions = require("../models/prices.model");
 
 async function getPricesByProductName(req, res) {
     try{
-        const productName = req.query.productName;
+        const { productName } = req.query;
         if (
             productName !== "poster" &&
             productName !== "wooden-frame" &&
             productName !== "hanger" &&
             productName !== "canvas"
         ) {
-            await res.status(400).json(getResponseObject("Please Send Valid Product Name !!", true, {}));
+            res.status(400).json(getResponseObject("Please Send Valid Product Name !!", true, {}));
             return;
         }
-        await res.json(await pricesManagmentFunctions.getPricesByProductName(productName));
+        res.json(await pricesManagmentFunctions.getPricesByProductName(productName));
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
 async function getPriceByProductDetails(req, res) {
     try{
-        const productDetails = req.query;
-        await res.json(await pricesManagmentFunctions.getPriceByProductDetails(productDetails.productName, productDetails.position, productDetails.dimentions));
+        const { productName, position, dimentions } = req.query;
+        res.json(await pricesManagmentFunctions.getPriceByProductDetails(productName, position, dimentions));
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        console.log(err)
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
 async function putProductPrice(req, res) {
     try{
-        const productId = req.params.productId;
-        const prices = req.body;
-        await res.json(await pricesManagmentFunctions.updateProductPrice(req.params.productId, prices.newProductPriceBeforeDiscount, prices.newProductPriceAfterDiscount));
+        const { newProductPriceBeforeDiscount, newProductPriceAfterDiscount } = req.body;
+        res.json(await pricesManagmentFunctions.updateProductPrice(req.params.productId, newProductPriceBeforeDiscount, newProductPriceAfterDiscount));
     }
     catch(err) {
-        await res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
 
