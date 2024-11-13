@@ -164,7 +164,6 @@ stylesRouter.put("/update-style-image/:styleId",
     validateJWT,
     (req, res, next) => {
         const { service, imageIndex } = req.query;
-        console.log(req.query)
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
             service === "face-swap" && { fieldName: "Image Index", fieldValue: Number(imageIndex), dataType: "number", isRequiredValue: true }

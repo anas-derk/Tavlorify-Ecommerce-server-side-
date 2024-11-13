@@ -90,6 +90,61 @@ categoriesRouter.put("/update-category-data/:categoryId",
     categoriesController.putCategoryData
 );
 
+categoriesRouter.put("/update-category-image/:categoryId",
+    validateJWT,
+    (req, res, next) => {
+        const { service, imageIndex } = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Service Name", fieldValue: service, dataType: "string", isRequiredValue: true },
+            service === "face-swap" && { fieldName: "Image Index", fieldValue: Number(imageIndex), dataType: "number", isRequiredValue: true }
+        ], res, next);
+    },
+    (req, res, next) => validateServiceName(req.query.service, res, next),
+    (req, res, next) => {
+        const { service, imageIndex } = req.query;
+        if (service === "face-swap") {
+            validateImageIndexForFaceSwap(imageIndex, res, next);
+            return;
+        }
+        next();
+    },
+    multer({
+        storage: multer.diskStorage({
+            destination: (req, file, cb) => {
+                const { service } = req.query;
+                if (service === "text-to-image") {
+                    cb(null, "./assets/images/categories/textToImage");
+                }
+                else if (service === "image-to-image") {
+                    cb(null, "./assets/images/categories/imageToImage");
+                } else {
+                    cb(null, "./assets/images/categories/faceSwap");
+                }
+            },
+            filename: (req, file, cb) => {
+                cb(null, `${Math.random()}_${Date.now()}__${file.originalname}`);
+            },
+        }),
+        fileFilter: (req, file, cb) => {
+            if (!file) {
+                req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
+                return cb(null, false);
+            }
+            if (
+                file.mimetype !== "image/jpeg" &&
+                file.mimetype !== "image/png" &&
+                file.mimetype !== "image/webp"
+            ){
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                return cb(null, false);
+            }
+            cb(null, true);
+        }
+    }).single("categoryImage"),
+    validateIsExistErrorInFiles,
+    categoriesController.putCategoryImage
+);
+
 categoriesRouter.delete("/:categoryId",
     validateJWT,
     (req, res, next) => {;

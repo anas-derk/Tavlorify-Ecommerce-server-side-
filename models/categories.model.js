@@ -83,6 +83,29 @@ async function updateCategoryData(categoryId, service, newCategoryInfo) {
     }
 }
 
+async function updateCategoryImagePath(categoryId, newImagePath) {
+    try {
+        const categoryData = await categoryModel.findOneAndUpdate({ _id: categoryId }, { imgSrc: newImagePath });
+        if (!categoryData) {
+            return {
+                msg: "Sorry, This Category Is Not Found !!",
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: "Changing Category Image Process Has Been Successfully !!",
+            error: false,
+            data: {
+                imgSrc: categoryData.imgSrc,
+                newImagePath,
+            }
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function deleteCategoryData(categoryId) {
     try {
         const categoryData = await categoryModel.findById(categoryId);
@@ -122,8 +145,9 @@ async function deleteCategoryData(categoryId) {
 }
 
 module.exports = {
-    updateCategoryData,
     getAllCategoriesData,
     addNewCategory,
+    updateCategoryData,
+    updateCategoryImagePath,
     deleteCategoryData,
 }

@@ -42,6 +42,20 @@ async function putCategoryData(req, res) {
     }
 }
 
+async function putCategoryImage(req, res) {
+    try{
+        const { service } = req.query;
+        const result = service !== "face-swap" ? await categoriesManagmentFunctions.updateCategoryImagePath(req.params.categoryId, req.file.path) : await stylesManagmentFunctions.updateFaceSwapStyleImagePath(req.params.styleId, req.file.path, imageIndex);
+        if (!result.error) {
+            unlinkSync(result.data.imgSrc);
+        }
+        res.json(result);
+    }
+    catch(err) {
+        res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
+    }
+}
+
 async function deleteCategoryData(req, res) {
     try{
         const result = await categoriesManagmentFunctions.deleteCategoryData(req.params.categoryId);
@@ -62,5 +76,6 @@ module.exports = {
     getAllCategoriesData,
     addNewCategory,
     putCategoryData,
+    putCategoryImage,
     deleteCategoryData
 }

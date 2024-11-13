@@ -54,7 +54,7 @@ async function addNewStyle(styleData) {
                 modelName: styleData.modelName,
                 categoryName: styleData.categoryName,
                 sortNumber: await styleModel.countDocuments({ categoryName: styleData.categoryName, service: styleData.service }) + 1,
-                ...(categoryInfo.service === "image-to-image" && { ddim_steps: categoryInfo.ddim_steps, strength: categoryInfo.strength }),
+                ...(styleData.service === "image-to-image" && { ddim_steps: styleData.ddim_steps, strength: styleData.strength }),
             })).save();
         }
         return {
