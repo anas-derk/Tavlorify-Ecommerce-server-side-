@@ -62,6 +62,7 @@ async function getOrderDetailsFromKlarnaInCheckoutPeriod(req, res) {
         })).data);
     }
     catch(err) {
+        console.log(err);
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
