@@ -15,7 +15,7 @@
         </div>
         <hr />
         <div class="products-info">
-            <h5 style="text-align: center;">Produkter</h5>
+            <h4 style="text-align: center;">Produkter</h4>
             <table style="text-align: center; width: 100%;">
                 <thead>
                     <th style="padding: 10px 0;">Produktbild</th>
@@ -47,6 +47,9 @@
         </div>
         <div class="summary">
             <h4>Totalt: <%= order_amount / 100 %> kr</h4>
+        </div>
+        <div class="tax">
+            <h4>Moms: <%= (order_amount / 100) * 0.25 %> kr</h4>
         </div>
         <div class="payment-method">
             <h4>Betalningsmetod: Klarna</h4>

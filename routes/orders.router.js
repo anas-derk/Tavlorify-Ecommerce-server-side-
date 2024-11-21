@@ -45,14 +45,7 @@ ordersRouter.get("/order-details/:orderId",
     ordersController.getOrderDetails
 );
 
-ordersRouter.get("/order-details-from-klarna/:orderId",
-    (req, res, next) => {
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Order Id", fieldValue: req.params.orderId, dataType: "ObjectId", isRequiredValue: true },
-        ], res, next);
-    },
-    ordersController.getOrderDetailsFromKlarnaInCheckoutPeriod
-);
+ordersRouter.get("/order-details-from-klarna/:orderId", ordersController.getOrderDetailsFromKlarnaInCheckoutPeriod);
 
 ordersRouter.post("/send-order-to-gelato", ordersController.postNewOrderToGelato);
 
