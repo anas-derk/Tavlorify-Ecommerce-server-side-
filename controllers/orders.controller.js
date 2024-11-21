@@ -6,6 +6,11 @@ const ordersManagmentFunctions = require("../models/orders.model");
 
 const { v4 } = require("uuid");
 
+function getDateFormated(date) {
+    let generateDateInDateFormat = new Date(date);
+    return `${generateDateInDateFormat.getFullYear()} / ${generateDateInDateFormat.getMonth() + 1} / ${generateDateInDateFormat.getDate()}`;
+}
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -153,6 +158,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                 await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
                     orderNumber: result1.data,
                     ...result,
+                    created_at: getDateFormated(result.created_at)
                 });
             }
             res.json(result1);
