@@ -247,7 +247,7 @@ const orderSchema = new mongoose.Schema({
     }],
     added_date: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     orderNumber: Number,
     isReturned: {
@@ -363,7 +363,7 @@ const generatedImageSchema = new mongoose.Schema({
     },
     imageGenerationDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
 });
 
@@ -482,7 +482,7 @@ const returnedOrderSchema = new mongoose.Schema({
     }],
     added_date: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     isDeleted: {
         type: Boolean,

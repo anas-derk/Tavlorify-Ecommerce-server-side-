@@ -5,6 +5,7 @@ const generatedImagesManagmentFunctions = require("../models/generatedImages.mod
 const sharp = require("sharp");
 
 const Replicate = require("replicate");
+
 const { getStyleData } = require("../models/styles.model");
 
 const replicate = new Replicate({
