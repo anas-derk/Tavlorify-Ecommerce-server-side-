@@ -77,7 +77,7 @@ async function updateStyleData(service, styleId, categoryName, newCategoryStyleI
             negative_prompt: newCategoryStyleInfo.newNegativePrompt,
             sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber,
             modelName: newCategoryStyleInfo.newModelName,
-            ...(newCategoryStyleInfo.service === "image-to-image" && { ddim_steps: newCategoryStyleInfo.newDdimSteps, newStrength: newCategoryStyleInfo.strength }),
+            ...(service === "image-to-image" && { ddim_steps: newCategoryStyleInfo.newDdimSteps, strength: newCategoryStyleInfo.newStrength }),
         }, { returnOriginal: true }) : await faceSwapStyleModel.findOneAndUpdate({ _id: styleId }, {
             sortNumber: newCategoryStyleInfo.newCategoryStyleSortNumber,
         }, { returnOriginal: true });
