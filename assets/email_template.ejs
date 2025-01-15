@@ -28,7 +28,7 @@
                         <% if (productInfo) { %>
                             <tr>
                                 <td style="padding: 10px 0;">
-                                    <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name[0] %> Image" style="width: 100px; height: 100px;" />
+                                    <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name[0] %> Image" width="<%= productInfo.width %>" height="<%= productInfo.height %>" />
                                 </td>
                                 <td style="padding: 10px 0;">
                                     <% for(let info of productInfo.name) { %>
