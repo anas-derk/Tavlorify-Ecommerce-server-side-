@@ -25,13 +25,15 @@
                 </thead>
                 <tbody>
                     <% for(let productInfo of order_lines) { %>
-                        <% if (productInfo.name !== "Tavlorify") { %>
+                        <% if (productInfo) { %>
                             <tr>
                                 <td style="padding: 10px 0;">
-                                    <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name %> Image" style="width: 100px; height: 100px;" />
+                                    <img src="<%= productInfo.image_url %>" alt="<%= productInfo.name[0] %> Image" style="width: 100px; height: 100px;" />
                                 </td>
                                 <td style="padding: 10px 0;">
-                                    <%= productInfo.name %>
+                                    <% for(let info of productInfo.name) { %>
+                                        <h4 style="margin-bottom: 15px;"><%= info %></h4>
+                                    <% } %>
                                 </td>
                                 <td style="padding: 10px 0;">
                                     <%= productInfo.quantity %>

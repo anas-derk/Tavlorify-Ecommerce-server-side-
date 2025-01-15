@@ -108,6 +108,14 @@ async function postNewOrder(req, res) {
     }
 }
 
+function getSuitableWidthAndHeightToImageInEmail(direction) {
+    switch (direction) {
+        case "Stående": return { width: 83, height: 117 };
+        case "Liggande": return { width: 117, height: 83 };
+        default: return { width: 117, height: 117 };
+    }
+}
+
 async function postKlarnaCheckoutComplete(req, res) {
     try{
         const orderId = req.params.orderId;
@@ -156,7 +164,18 @@ async function postKlarnaCheckoutComplete(req, res) {
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
-                await sendPaymentConfirmationMessage(result.billing_address.email, {
+                // result.billing_address.email
+                result.order_lines = result.order_lines.map((product) => {
+                    if (product.name !== "Tavlorify") {
+                        product.name = product.name.split(", ");
+                        const dimentions = getSuitableWidthAndHeightToImageInEmail(product.name[3]);
+                        product.width = dimentions.width;
+                        product.height = dimentions.height;
+                        return product;
+                    }
+                    return null;
+                });
+                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
                     orderNumber: result1.data,
                     ...result,
                     created_at: getDateFormated(result.created_at)
@@ -168,6 +187,7 @@ async function postKlarnaCheckoutComplete(req, res) {
         }
     }
     catch(err){
+        console.log(err)
         res.status(500).json(getResponseObject("Internal Server Error !!", true, {}));
     }
 }
