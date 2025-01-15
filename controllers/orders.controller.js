@@ -164,7 +164,6 @@ async function postKlarnaCheckoutComplete(req, res) {
                         "Klarna-Idempotency-Key": v4(),
                     },
                 });
-                // result.billing_address.email
                 result.order_lines = result.order_lines.map((product) => {
                     if (product.name !== "Tavlorify") {
                         product.name = product.name.split(", ");
@@ -175,7 +174,7 @@ async function postKlarnaCheckoutComplete(req, res) {
                     }
                     return null;
                 });
-                await sendPaymentConfirmationMessage("anas.derk2023@gmail.com", {
+                await sendPaymentConfirmationMessage(result.billing_address.email, {
                     orderNumber: result1.data,
                     ...result,
                     created_at: getDateFormated(result.created_at)
